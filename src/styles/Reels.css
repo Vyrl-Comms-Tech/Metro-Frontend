@@ -1,0 +1,329 @@
+.reels {
+  --step: 440px;
+  --card-w: 360px;
+  --card-h: 596px;
+  padding: 80px 24px 72px;
+  background: var(--brand-white);
+  color: var(--brand-black);
+  overflow: hidden;
+}
+
+/* heading */
+.reels .reels-head {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.reels .reels-head .reels-eyebrow {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--brand-green);
+}
+
+.reels .reels-head h2 {
+  margin: 0 0 12px;
+  font-size: 34px;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+
+.reels .reels-head p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--brand-muted);
+}
+
+/* stage: cards are stacked in the middle and shifted by their offset */
+.reels .reels-stage {
+  position: relative;
+  height: var(--card-h);
+  max-width: 1400px;
+  margin: 0 auto;
+  outline: 0;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.reels .reels-stage:focus-visible {
+  outline: 2px solid var(--brand-green);
+  outline-offset: 3px;
+}
+
+.reels .reels-stage .reel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--card-w);
+  height: var(--card-h);
+  border-radius: 8px;
+  overflow: hidden;
+  background: linear-gradient(165deg, var(--t1), var(--t2)) center / cover
+    no-repeat;
+  --abs: max(var(--off), calc(var(--off) * -1));
+  transform: translate(-50%, -50%) translateX(calc(var(--off) * var(--step)))
+    scale(calc(1 - var(--abs) * 0.16));
+  filter: blur(calc(var(--abs) * 6px));
+  opacity: calc(1 - var(--abs) * 0.45);
+  visibility: visible;
+  cursor: pointer;
+  transition:
+    transform 0.5s cubic-bezier(0.22, 0.8, 0.3, 1),
+    filter 0.5s,
+    opacity 0.5s;
+  z-index: calc(10 - var(--abs));
+}
+
+/* only one card either side of the centre stays visible */
+.reels .reels-stage .reel[aria-hidden="true"] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.reels .reels-stage .reel.is-active {
+  cursor: default;
+  box-shadow: 0 18px 40px var(--brand-shadow);
+}
+
+.reels .reel .reel-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Instagram's embed has a profile bar on top and a footer below the 4:5 video:
+   the frame shows only that video area and the iframe is pushed up past the bar */
+.reels .reel .reel-embed-crop {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--brand-black);
+}
+
+.reels .reel .reel-embed-crop .reel-embed-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 4.95;
+  overflow: hidden;
+}
+
+.reels .reel .reel-embed-crop iframe {
+  position: absolute;
+  top: -56px;
+  left: 0;
+  width: 100%;
+  height: 1000px;
+  border: 0;
+}
+
+.reels .reel .reel-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--brand-white-strong);
+  color: var(--brand-black);
+}
+
+.reels .reel .reel-mute {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--brand-scrim);
+  color: var(--brand-white);
+  cursor: pointer;
+}
+
+.reels .reel .reel-mute:hover {
+  background: var(--brand-scrim-strong);
+}
+
+/* glass info panel */
+.reels .reel .reel-info {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  padding: 16px 14px 14px;
+  border-radius: 8px;
+  color: var(--brand-white);
+  background: var(--brand-glass);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 0.4s 0.15s,
+    transform 0.4s 0.15s;
+}
+
+.reels .reel.is-active .reel-info {
+  opacity: 1;
+  transform: none;
+}
+
+.reels .reel .reel-info h3 {
+  margin: 0 0 12px;
+  font-size: 19px;
+  font-weight: 400;
+}
+
+.reels .reel .reel-info ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+  margin: 0 0 14px;
+  padding: 0;
+}
+
+.reels .reel .reel-info li {
+  padding: 5px 9px;
+  border-radius: 4px;
+  background: var(--brand-white-soft);
+  font-size: 11.5px;
+}
+
+.reels .reel .reel-info a {
+  color: var(--brand-white);
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.reels .reel .reel-info a:hover {
+  color: var(--brand-green-light);
+}
+
+.reels .reel .reel-info a:focus-visible {
+  outline: 2px solid var(--brand-green-light);
+  outline-offset: 3px;
+}
+
+/* index numbers beside the centre card */
+.reels .reels-stage .reels-num {
+  position: absolute;
+  top: 50%;
+  z-index: 11;
+  margin-top: -14px;
+  font-size: 26px;
+  font-weight: 300;
+  font-variant-numeric: tabular-nums;
+}
+
+.reels .reels-stage .reels-num.left {
+  left: calc(50% - var(--card-w) / 2 - 76px);
+}
+
+.reels .reels-stage .reels-num.right {
+  left: calc(50% + var(--card-w) / 2 + 36px);
+}
+
+/* controls */
+.reels .reels-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 40px;
+}
+
+.reels .reels-controls > button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--brand-line);
+  border-radius: 50%;
+  background: var(--brand-white);
+  color: var(--brand-black);
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+}
+
+.reels .reels-controls > button:hover {
+  background: var(--brand-green);
+  border-color: var(--brand-green);
+  color: var(--brand-white);
+}
+
+.reels .reels-controls button:focus-visible {
+  outline: 2px solid var(--brand-green);
+  outline-offset: 3px;
+}
+
+.reels .reels-controls .reels-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.reels .reels-controls .reels-dots button {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--brand-line);
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    width 0.2s;
+}
+
+.reels .reels-controls .reels-dots button.on {
+  width: 24px;
+  border-radius: 4px;
+  background: var(--brand-green);
+}
+
+@media (max-width: 900px) {
+  .reels {
+    --step: 250px;
+    --card-w: 280px;
+    --card-h: 480px;
+    padding: 56px 16px;
+  }
+
+  .reels .reels-stage .reels-num {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .reels {
+    --step: 62vw;
+    --card-w: 66vw;
+    --card-h: 112vw;
+  }
+
+  .reels .reels-head h2 {
+    font-size: 26px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reels .reels-stage .reel,
+  .reels .reel .reel-info {
+    transition: none;
+  }
+}

@@ -1,0 +1,143 @@
+.gold {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 24px 24px 72px;
+  color: var(--brand-black);
+}
+
+.gold h2 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 300;
+}
+
+/* header row */
+.gold .gold-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.gold .gold-head .gold-sub {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--brand-muted);
+}
+
+.gold .gold-ranges {
+  display: flex;
+  gap: 4px;
+  border: 1px solid var(--brand-line);
+  border-radius: 6px;
+  padding: 3px;
+}
+
+.gold .gold-ranges button {
+  background: none;
+  border: 0;
+  border-radius: 4px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--brand-muted);
+  cursor: pointer;
+}
+
+.gold .gold-ranges button:hover {
+  color: var(--brand-black);
+}
+
+.gold .gold-ranges button.on {
+  background: var(--brand-green);
+  color: var(--brand-white);
+}
+
+/* price + change */
+.gold .gold-stats {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 24px 0 8px;
+}
+
+.gold .gold-stats strong {
+  font-size: 32px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.gold .gold-stats .gold-change {
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.gold .gold-stats .gold-change em {
+  font-style: normal;
+  color: var(--brand-muted);
+  margin-left: 4px;
+}
+
+.gold .gold-stats .gold-change.up {
+  color: var(--brand-success);
+}
+
+.gold .gold-stats .gold-change.down {
+  color: var(--brand-danger);
+}
+
+.gold .gold-stats .gold-date {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--brand-muted);
+}
+
+/* chart */
+.gold .gold-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  cursor: crosshair;
+}
+
+.gold .gold-svg .gold-grid {
+  stroke: var(--brand-line-soft);
+  stroke-width: 1;
+}
+
+.gold .gold-svg .gold-axis {
+  font-size: 11px;
+  fill: var(--brand-subtle);
+}
+
+.gold .gold-svg .gold-line {
+  fill: none;
+  stroke: var(--brand-gold);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.gold .gold-svg .gold-cross {
+  stroke: var(--brand-gold);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.gold .gold-svg .gold-dot {
+  fill: var(--brand-white);
+  stroke: var(--brand-gold);
+  stroke-width: 2;
+}
+
+@media (max-width: 560px) {
+  .gold {
+    padding: 16px 16px 48px;
+  }
+
+  .gold .gold-stats .gold-date {
+    margin-left: 0;
+  }
+}

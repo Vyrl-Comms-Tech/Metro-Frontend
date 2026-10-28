@@ -1,0 +1,84 @@
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 560px;
+  height: calc(100svh - 190px);
+  max-height: 812px;
+  overflow: hidden;
+  background: var(--brand-sand);
+}
+
+/* blend the photo's left edge into the flat background */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 34%;
+  width: 14%;
+  background: linear-gradient(to right, var(--brand-sand), transparent);
+  pointer-events: none;
+}
+
+.hero .hero-photo {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 66%;
+  object-fit: cover;
+  object-position: left center;
+}
+
+.hero .hero-copy {
+  position: relative;
+  z-index: 1;
+  padding-left: 10%;
+  color: var(--brand-black);
+}
+
+.hero .hero-copy h1 {
+  margin: 0 0 32px;
+  font-size: clamp(30px, 2.6vw, 42px);
+  font-weight: 300;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+.hero .hero-copy .hero-btn {
+  display: inline-block;
+  padding: 14px 32px;
+  background: var(--brand-white);
+  color: var(--brand-black);
+  border-radius: 3px;
+  font-size: 14px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+
+.hero .hero-copy .hero-btn:hover {
+  background: var(--brand-green);
+  color: var(--brand-white);
+}
+
+@media (max-width: 800px) {
+  .hero {
+    min-height: 480px;
+  }
+
+  .hero::after {
+    display: none;
+  }
+
+  .hero .hero-photo {
+    width: 100%;
+    opacity: 0.55;
+  }
+
+  .hero .hero-copy {
+    padding: 0 24px;
+  }
+}

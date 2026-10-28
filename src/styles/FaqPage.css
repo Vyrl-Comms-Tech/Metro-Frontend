@@ -1,0 +1,125 @@
+.faqpage {
+  color: var(--brand-black);
+}
+
+/* banner */
+.faqpage .faqpage-banner {
+  padding: 72px 24px 64px;
+  text-align: center;
+  background: linear-gradient(
+    100deg,
+    var(--brand-banner-1),
+    var(--brand-banner-2) 60%,
+    var(--brand-banner-3)
+  );
+}
+
+.faqpage .faqpage-banner h1 {
+  margin: 0 0 14px;
+  font-size: 40px;
+  font-weight: 300;
+  letter-spacing: 0.01em;
+}
+
+.faqpage .faqpage-banner p {
+  margin: 0 auto;
+  max-width: 560px;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* body */
+.faqpage .faqpage-body {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 24px 96px;
+}
+
+/* category chips */
+.faqpage .faqpage-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 56px;
+}
+
+.faqpage .faqpage-nav a {
+  padding: 9px 18px;
+  border: 1px solid var(--brand-line);
+  border-radius: 30px;
+  font-size: 13px;
+  color: var(--brand-black);
+  text-decoration: none;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+}
+
+.faqpage .faqpage-nav a:hover {
+  background: var(--brand-green);
+  border-color: var(--brand-green);
+  color: var(--brand-white);
+}
+
+/* category sections */
+.faqpage .faqpage-cat {
+  margin-bottom: 56px;
+  scroll-margin-top: 24px;
+}
+
+.faqpage .faqpage-cat h2 {
+  margin: 0 0 8px;
+  padding-bottom: 14px;
+  font-size: 24px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.faqpage .faqpage-cat h2::before {
+  content: "";
+  width: 28px;
+  height: 2px;
+  background: var(--brand-green);
+}
+
+/* help box */
+.faqpage .faqpage-help {
+  margin-top: 24px;
+  text-align: center;
+  padding: 40px 16px;
+  background: var(--brand-green-tint);
+  border-radius: 8px;
+}
+
+.faqpage .faqpage-help p {
+  margin: 0 0 18px;
+  color: var(--brand-muted);
+}
+
+@media (max-width: 560px) {
+  .faqpage .faqpage-banner {
+    padding: 48px 16px 40px;
+  }
+
+  .faqpage .faqpage-banner h1 {
+    font-size: 28px;
+  }
+
+  .faqpage .faqpage-body {
+    padding: 28px 16px 64px;
+  }
+
+  .faqpage .faqpage-cat h2 {
+    font-size: 20px;
+  }
+}
+
+.faqpage .faqpage-status {
+  margin: 0 0 40px;
+  text-align: center;
+  color: var(--brand-muted);
+}

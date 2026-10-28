@@ -1,0 +1,70 @@
+:root {
+  /* brand colours: white primary, deep forest green secondary */
+  --brand-white: #fff;
+  --brand-black: #111;
+  --brand-green: #00351d;
+  --brand-green-light: #7fc9a0;
+  --brand-green-tint: #eef4f0;
+  --brand-sand: #ecc89c;
+  --brand-sale: #e0314b;
+  --brand-whatsapp: #25d366;
+  --brand-gold: #b8902f;
+  --brand-success: #1a7f4b;
+  --brand-danger: #c93b3b;
+
+  /* neutrals */
+  --brand-text: #333;
+  --brand-text-soft: #5a5a5a;
+  --brand-muted: #6b6b6b;
+  --brand-subtle: #8a8a8a;
+  --brand-line: #d9d9d9;
+  --brand-line-soft: #e3e3e3;
+  --brand-surface: #f6f6f6;
+  --brand-surface-alt: #e8e8e8;
+
+  /* banner + placeholder tones */
+  --brand-banner-1: #c9ad98;
+  --brand-banner-2: #d9bfae;
+  --brand-banner-3: #c4a48f;
+  --brand-card-1: #efe6df;
+  --brand-card-2: #cdb9a8;
+
+  /* translucent overlays */
+  --brand-shadow: rgba(0, 0, 0, 0.12);
+  --brand-scrim: rgba(0, 0, 0, 0.55);
+  --brand-scrim-strong: rgba(0, 0, 0, 0.8);
+  --brand-glass: rgba(40, 32, 26, 0.45);
+  --brand-white-soft: rgba(255, 255, 255, 0.2);
+  --brand-white-glow: rgba(255, 255, 255, 0.35);
+  --brand-white-strong: rgba(255, 255, 255, 0.85);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  background: var(--brand-white);
+  color: var(--brand-black);
+  font-family: "Montserrat", system-ui, "Segoe UI", sans-serif;
+}
+
+/* form controls don't inherit the page font by default */
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+#root {
+  min-height: 100svh;
+}

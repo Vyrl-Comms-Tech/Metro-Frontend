@@ -1,0 +1,224 @@
+.categories {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 80px 24px;
+  color: var(--brand-black);
+}
+
+/* heading */
+.categories .cat-head {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.categories .cat-head .cat-eyebrow {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--brand-green);
+}
+
+.categories .cat-head h2 {
+  margin: 0 0 12px;
+  font-size: 34px;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+
+.categories .cat-head p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--brand-muted);
+}
+
+/* grid: 3 per row */
+.categories .cat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.categories .cat-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--brand-line-soft);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--brand-white);
+  color: inherit;
+  text-decoration: none;
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease,
+    box-shadow 0.25s,
+    border-color 0.25s;
+  transition-delay: calc(var(--i) * 80ms), calc(var(--i) * 80ms), 0s, 0s;
+}
+
+/* scroll-in reveal */
+.categories .cat-grid.is-in .cat-card {
+  opacity: 1;
+  transform: none;
+}
+
+.categories .cat-grid.is-in .cat-card:hover {
+  transform: translateY(-4px);
+  transition-delay: 0s;
+  border-color: var(--brand-line);
+  box-shadow: 0 14px 30px var(--brand-shadow);
+}
+
+/* card image */
+.categories .cat-card .cat-img {
+  position: relative;
+  aspect-ratio: 4 / 3.4;
+  overflow: hidden;
+  background: linear-gradient(
+      160deg,
+      var(--t1, var(--brand-card-1)),
+      var(--t2, var(--brand-card-2))
+    )
+    center / cover no-repeat;
+}
+
+/* zoom the photo on hover without resizing the frame */
+.categories .cat-card .cat-img::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  transition: transform 0.6s ease;
+}
+
+.categories .cat-card:hover .cat-img::before {
+  transform: scale(1.06);
+}
+
+.categories .cat-card .cat-img::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--brand-shadow), transparent 45%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.categories .cat-card:hover .cat-img::after {
+  opacity: 1;
+}
+
+.categories .cat-card .cat-img .cat-tag {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 1;
+  padding: 5px 12px;
+  background: var(--brand-white);
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* card body */
+.categories .cat-card .cat-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 20px 22px;
+}
+
+.categories .cat-card .cat-body h3 {
+  margin: 0 0 6px;
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.categories .cat-card .cat-body p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--brand-muted);
+}
+
+.categories .cat-card .cat-arrow {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--brand-line);
+  border-radius: 50%;
+  transition:
+    background 0.25s,
+    color 0.25s,
+    border-color 0.25s,
+    transform 0.25s;
+}
+
+.categories .cat-card:hover .cat-arrow {
+  background: var(--brand-green);
+  border-color: var(--brand-green);
+  color: var(--brand-white);
+  transform: translateX(3px);
+}
+
+/* footer button */
+.categories .cat-foot {
+  margin-top: 48px;
+  text-align: center;
+}
+
+.categories .cat-foot .cat-all {
+  display: inline-block;
+  padding: 14px 36px;
+  border: 1px solid var(--brand-black);
+  border-radius: 3px;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--brand-black);
+  text-decoration: none;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+
+.categories .cat-foot .cat-all:hover {
+  background: var(--brand-green);
+  color: var(--brand-white);
+}
+
+@media (max-width: 900px) {
+  .categories .cat-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 560px) {
+  .categories {
+    padding: 56px 16px;
+  }
+
+  .categories .cat-head h2 {
+    font-size: 28px;
+  }
+
+  .categories .cat-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .categories .cat-card {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
