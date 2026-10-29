@@ -120,7 +120,9 @@ export default function Header() {
           </button>
         </div>
 
-        <Link to="/" className="logo">FERGUS JAMES</Link>
+        <Link to="/" className="logo" aria-label="Metro Jewellers">
+          <img src="/black-logo.png" alt="Metro Jewellers" />
+        </Link>
 
         <div className="hd-right">
           <button className="icon-btn" aria-label="Messages">

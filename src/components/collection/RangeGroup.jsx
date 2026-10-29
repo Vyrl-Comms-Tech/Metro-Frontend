@@ -38,6 +38,9 @@ export default function RangeGroup({ title, bounds, value, onChange, ticks }) {
       </div>
       <div className="rng-slider">
         <div className="rng-track" />
+        {ticks.map((t) => (
+          <span key={t} className="rng-tick" style={{ left: `${pct(t)}%` }} />
+        ))}
         <div
           className="rng-fill"
           style={{ left: `${pct(lo)}%`, right: `${100 - pct(hi)}%` }}
@@ -63,7 +66,9 @@ export default function RangeGroup({ title, bounds, value, onChange, ticks }) {
       </div>
       <div className="rng-ticks" aria-hidden="true">
         {ticks.map((t) => (
-          <span key={t}>{compact(t)}</span>
+          <span key={t} style={{ left: `${pct(t)}%` }}>
+            {compact(t)}
+          </span>
         ))}
       </div>
     </Collapsible>

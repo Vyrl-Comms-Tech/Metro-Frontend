@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { ArrowRight, ChevronUp, Mail, MessageCircle, Phone } from 'lucide-react'
 import { useSite } from '../context/siteContext'
 import '../styles/Footer.css'
 
@@ -17,14 +18,14 @@ const COLUMNS = [
   {
     title: 'Customer Care',
     links: [
-      { label: 'info@fergusjames.com', href: 'mailto:info@fergusjames.com' },
-      { label: '+971 52 360 6874', href: 'tel:+971523606874' },
+      { label: 'info@metrojewellers.com', href: 'mailto:info@metrojewellers.com', icon: Mail },
+      { label: '+971 52 360 6874', href: 'tel:+971523606874', icon: Phone },
       { label: 'Terms & Conditions', to: '#' },
       { label: 'Privacy Policy', to: '#' },
     ],
   },
   {
-    title: 'FJ Guarantee',
+    title: 'Our Guarantee',
     links: [
       { label: 'Worldwide Shipping', to: '#' },
       { label: '30 days returns', to: '#' },
@@ -36,7 +37,7 @@ const COLUMNS = [
   {
     title: 'Explore',
     links: [
-      { label: 'About Fergus James', to: '#' },
+      { label: 'About Metro Jewellers', to: '#' },
       { label: 'Celebrity Clients', to: '#' },
       { label: 'FAQs', to: '/faqs' },
       { label: 'Blog', to: '#' },
@@ -55,7 +56,15 @@ const SOCIALS = [
 ]
 
 function FooterLink({ link }) {
-  if (link.href) return <a href={link.href}>{link.label}</a>
+  const Icon = link.icon
+  if (link.href) {
+    return (
+      <a href={link.href}>
+        {Icon && <Icon size={15} strokeWidth={1.7} aria-hidden="true" />}
+        {link.label}
+      </a>
+    )
+  }
   return <Link to={link.to}>{link.label}</Link>
 }
 
@@ -78,7 +87,7 @@ function Newsletter({ text, instagram }) {
       <form onSubmit={submit}>
         <input type="email" required placeholder="Enter your email" value={email} onChange={(e) => { setEmail(e.target.value); setDone(false) }} aria-label="Email address" />
         <button type="submit" aria-label="Subscribe">
-          <svg {...svg}><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          <ArrowRight size={18} strokeWidth={1.7} aria-hidden="true" />
         </button>
       </form>
       {done && <p className="ft-thanks" role="status">Thank you for subscribing!</p>}
@@ -104,13 +113,10 @@ function FloatingButtons({ whatsapp }) {
   return (
     <>
       <a className="fab fab-wa" href={`https://wa.me/${whatsapp}`} target="_blank" rel="noreferrer" aria-label="Chat on WhatsApp">
-        <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-          <path d="M4 20l1.2-4A8 8 0 1 1 8 18.8L4 20Z" />
-          <path d="M9.2 8.8c.3 2.6 2.4 4.8 5 5.4l1-1.2-1.6-.9-.7.6c-.9-.3-1.7-1.1-2-2l.6-.7-.9-1.6-1.4.4Z" />
-        </svg>
+        <MessageCircle size={28} strokeWidth={1.8} aria-hidden="true" />
       </a>
       <button className={`fab fab-top ${showTop ? 'show' : ''}`} aria-label="Back to top" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-        <svg {...svg} width="20" height="20" strokeWidth="2"><path d="m6 14 6-6 6 6" /></svg>
+        <ChevronUp size={20} strokeWidth={2} aria-hidden="true" />
       </button>
     </>
   )
@@ -132,8 +138,8 @@ export default function Footer() {
       return {
         ...col,
         links: [
-          { label: contact.email, href: `mailto:${contact.email}` },
-          { label: contact.phone, href: `tel:${contact.phone.replace(/[^\d+]/g, '')}` },
+          { label: contact.email, href: `mailto:${contact.email}`, icon: Mail },
+          { label: contact.phone, href: `tel:${contact.phone.replace(/[^\d+]/g, '')}`, icon: Phone },
           ...col.links.slice(2),
         ],
       }
@@ -157,7 +163,7 @@ export default function Footer() {
         </div>
 
         <div className="ft-bottom">
-          <p>© Fergus James {new Date().getFullYear()}</p>
+          <p>© Metro Jewellers {new Date().getFullYear()}</p>
         </div>
       </div>
       <FloatingButtons whatsapp={contact.whatsapp} />

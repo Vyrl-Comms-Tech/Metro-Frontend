@@ -145,7 +145,7 @@
   font-size: 14px;
 }
 
-.collection .col-group input {
+.collection .col-group input[type="checkbox"] {
   position: absolute;
   opacity: 0;
   pointer-events: none;
@@ -291,12 +291,26 @@
   outline-offset: 2px;
 }
 
+.collection .rng-slider .rng-tick {
+  position: absolute;
+  top: 6px;
+  width: 1px;
+  height: 8px;
+  background: var(--brand-text);
+  transform: translateX(-50%);
+}
+
 .collection .rng-ticks {
-  display: flex;
-  justify-content: space-between;
-  margin: 8px 0 0;
+  position: relative;
+  height: 14px;
+  margin: 8px 8px 0;
   font-size: 10px;
   color: var(--brand-subtle);
+}
+
+.collection .rng-ticks span {
+  position: absolute;
+  transform: translateX(-50%);
 }
 
 /* toolbar */
@@ -312,6 +326,13 @@
   margin: 0;
   font-size: 14px;
   color: var(--brand-text);
+}
+
+.collection .col-preview-note {
+  margin: 0 0 22px;
+  color: var(--brand-muted);
+  font-size: 13px;
+  line-height: 1.5;
 }
 
 .collection .col-toolbar .col-sort {
@@ -490,4 +511,8 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.collection .col-banner h1 {
+  color: var(--brand-white);
 }

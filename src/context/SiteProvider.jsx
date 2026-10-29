@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { categoriesApi, contentApi } from '../api/resources'
 import { useAsync } from '../api/useAsync'
 import { mergeContent } from '../data/siteDefaults'
+import { withCategoryFallbacks } from '../data/categoryFallbacks'
 import { SiteContext } from './siteContext'
 
 // loads the collections and site content once, for the whole site
@@ -18,6 +19,7 @@ export default function SiteProvider({ children }) {
   const value = useMemo(
     () => ({
       categories: data?.[0].items ?? [],
+      publicCategories: withCategoryFallbacks(data?.[0].items),
       content: mergeContent(data?.[1]),
       loaded: Boolean(data) || Boolean(error),
       error,

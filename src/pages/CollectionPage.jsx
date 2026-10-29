@@ -17,6 +17,7 @@ import { useWishlist } from "../context/wishlistContext";
 import { assetUrl } from "../api/client";
 import { listProducts } from "../api/products";
 import { useAsync } from "../api/useAsync";
+import { previewProductsFor } from "../data/previewProducts";
 import bannerImg from "../assets/hero-photo.jpg";
 import "../styles/Collection.css";
 
@@ -31,8 +32,9 @@ function Banner({ title, image }) {
 
 export default function CollectionPage() {
   const { slug } = useParams();
-  const { categories, loaded } = useSite();
-  const collection = categories.find((c) => c.slug === slug);
+  const { publicCategories, loaded } = useSite();
+  const collection = publicCategories.find((c) => c.slug === slug);
+  const previewItems = previewProductsFor(slug);
   const { data, error, loading } = useAsync(
     () => listProducts({ collectionSlug: slug, limit: 500 }),
     [slug],
@@ -47,7 +49,7 @@ export default function CollectionPage() {
   }
   if (!collection) return <Navigate to="/" replace />;
 
-  if (loading || error) {
+  if (loading || (error && previewItems.length === 0)) {
     return (
       <main className="collection">
         <Banner title={collection.title} image={collection.banner} />
@@ -58,7 +60,8 @@ export default function CollectionPage() {
     );
   }
 
-  return <CollectionView key={slug} collection={collection} items={data.items} />;
+  const items = data?.items?.length ? data.items : previewItems;
+  return <CollectionView key={slug} collection={collection} items={items} />;
 }
 
 function CollectionView({ collection, items }) {
@@ -174,6 +177,10 @@ function CollectionView({ collection, items }) {
               <Chevron />
             </div>
           </div>
+
+          {items[0]?.preview && (
+            <p className="col-preview-note">Sample products shown while this collection is being prepared.</p>
+          )}
 
           {products.length === 0 ? (
             <p className="col-empty">

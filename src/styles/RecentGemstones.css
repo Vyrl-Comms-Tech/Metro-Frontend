@@ -1,0 +1,237 @@
+.recent-gemstones {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: var(--section-y) var(--section-x);
+  color: var(--brand-black);
+}
+
+.recent-gemstones .rg-head {
+  margin-bottom: var(--section-head-gap);
+  text-align: center;
+}
+
+.recent-gemstones .rg-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 13px;
+  color: var(--brand-green);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+.recent-gemstones .rg-eyebrow::before,
+.recent-gemstones .rg-eyebrow::after {
+  content: '';
+  width: 32px;
+  height: 1px;
+  background: var(--brand-line);
+}
+
+.recent-gemstones .rg-head h2 {
+  margin: 0 0 12px;
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 300;
+  letter-spacing: 0.01em;
+}
+
+.recent-gemstones .rg-head p {
+  margin: 0;
+  color: var(--brand-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.recent-gemstones .rg-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.recent-gemstones .rg-card {
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--brand-white);
+  border: 1px solid var(--brand-line-soft);
+  border-radius: 8px;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.recent-gemstones .rg-card:hover {
+  border-color: var(--brand-green-light);
+  box-shadow: 0 12px 32px var(--brand-shadow);
+  transform: translateY(-3px);
+}
+
+.recent-gemstones .rg-image-wrap {
+  position: relative;
+  aspect-ratio: 1.15;
+  overflow: hidden;
+  background: var(--brand-green-tint);
+}
+
+.recent-gemstones .rg-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.45s;
+}
+
+.recent-gemstones .rg-card:hover .rg-image-wrap img {
+  transform: scale(1.04);
+}
+
+.recent-gemstones .rg-wish {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--brand-white);
+  color: var(--brand-text);
+  box-shadow: 0 2px 8px var(--brand-shadow);
+  cursor: pointer;
+}
+
+.recent-gemstones .rg-wish:hover,
+.recent-gemstones .rg-wish.is-saved {
+  color: var(--brand-green);
+}
+
+.recent-gemstones .rg-wish.is-saved svg {
+  fill: var(--brand-green-tint);
+}
+
+.recent-gemstones .rg-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 18px 16px 16px;
+}
+
+.recent-gemstones .rg-body h3 {
+  margin: 0 0 5px;
+  font-size: 19px;
+  font-weight: 400;
+}
+
+.recent-gemstones .rg-meta {
+  min-height: 18px;
+  margin: 0 0 13px;
+  color: var(--brand-muted);
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.recent-gemstones .rg-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.recent-gemstones .rg-tags span {
+  padding: 6px 8px;
+  border-radius: 4px;
+  background: var(--brand-green-tint);
+  color: var(--brand-green);
+  font-size: 11px;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.recent-gemstones .rg-details {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  min-height: 42px;
+  margin-top: auto;
+  border: 1px solid var(--brand-green);
+  border-radius: 3px;
+  color: var(--brand-green);
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+
+.recent-gemstones .rg-details:hover {
+  background: var(--brand-green);
+  color: var(--brand-white);
+}
+
+.recent-gemstones .rg-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.recent-gemstones .rg-view-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 34px;
+  border: 1px solid var(--brand-green);
+  border-radius: 3px;
+  background: var(--brand-green);
+  color: var(--brand-white);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background 0.2s, color 0.2s;
+}
+
+.recent-gemstones .rg-view-all:hover {
+  background: transparent;
+  color: var(--brand-green);
+}
+
+.recent-gemstones .rg-view-all:focus-visible,
+.recent-gemstones .rg-details:focus-visible,
+.recent-gemstones .rg-wish:focus-visible {
+  outline: 2px solid var(--brand-green);
+  outline-offset: 3px;
+}
+
+@media (max-width: 1100px) {
+  .recent-gemstones .rg-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .recent-gemstones .rg-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .recent-gemstones .rg-body {
+    padding: 14px 12px;
+  }
+}
+
+@media (max-width: 400px) {
+  .recent-gemstones .rg-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .recent-gemstones .rg-card,
+  .recent-gemstones .rg-image-wrap img {
+    transition: none;
+  }
+}

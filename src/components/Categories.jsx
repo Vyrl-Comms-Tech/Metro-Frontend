@@ -1,12 +1,26 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { assetUrl } from "../api/client";
-import { useSite } from "../context/siteContext";
 import "../styles/Categories.css";
 
+const featuredCategories = [
+  {
+    title: "Loose Diamond",
+    slug: "loose-diamond",
+    description: "Explore natural and lab grown loose diamonds.",
+  },
+  {
+    title: "Diamonds",
+    slug: "diamonds",
+    description: "Discover natural and lab grown diamonds.",
+  },
+  {
+    title: "Jewellery",
+    slug: "jewellery",
+    description: "Explore the full collection of fine jewellery.",
+  },
+];
+
 export default function Categories() {
-  const categories = useSite().categories.filter((c) => c.showOnHome);
-  const hasItems = categories.length > 0;
   const ref = useRef(null);
   const [seen, setSeen] = useState(false);
 
@@ -28,37 +42,25 @@ export default function Categories() {
     );
     io.observe(el);
     return () => io.disconnect();
-  }, [hasItems]);
-
-  // no collections set up yet
-  if (!hasItems) return null;
+  }, []);
 
   return (
-    <section className="categories" ref={ref}>
+    <section className="categories" ref={ref} aria-labelledby="categories-title">
       <header className="cat-head">
         <span className="cat-eyebrow">Our Collections</span>
-        <h2>Shop by Category</h2>
+        <h2 id="categories-title">Shop by Category</h2>
         <p>Handcrafted diamond jewellery, made to order in Dubai.</p>
       </header>
 
       <div className={`cat-grid ${seen ? "is-in" : ""}`}>
-        {categories.map((c, i) => (
+        {featuredCategories.map((c, i) => (
           <Link
-            key={c.id}
+            key={c.slug}
             to={`/collections/${c.slug}`}
             className="cat-card"
-            style={{ "--i": i }}
+            style={{ "--i": i, "--panel-position": `${i * 50}%` }}
           >
-            <div
-              className="cat-img"
-              style={{
-                ...(c.image
-                  ? { backgroundImage: `url(${assetUrl(c.image)})` }
-                  : {}),
-              }}
-            >
-              {c.tag && <span className="cat-tag">{c.tag}</span>}
-            </div>
+            <div className="cat-img" aria-hidden="true" />
             <div className="cat-body">
               <div>
                 <h3>{c.title}</h3>
@@ -83,11 +85,6 @@ export default function Categories() {
         ))}
       </div>
 
-      <div className="cat-foot">
-        <Link to="/collections/jewellery" className="cat-all">
-          View All Jewellery
-        </Link>
-      </div>
     </section>
   );
 }

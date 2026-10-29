@@ -120,4 +120,18 @@ Build a premium digital jewellery catalogue that enhances Metro Jewellers' onlin
  - natural diamond
  - lab grown diamond
 
+4.jewellery 
+- rings
+- earrings
+- necklaces
+- bracelets
+- exclusive pieces
 
+<!-- 5.gold jewellery [on hold]
+- rings
+- earrings
+- necklaces
+- bracelets
+- exclusive pieces -->
+
+<!-- 6.Custom jewellery -->

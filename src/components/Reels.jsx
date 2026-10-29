@@ -63,7 +63,7 @@ function ReelCarousel({ reels }) {
   return (
     <section className="reels" aria-roledescription="carousel" aria-label="Customer reels">
       <header className="reels-head">
-        <span className="reels-eyebrow">@fergusjames</span>
+        <span className="reels-eyebrow">@metrojewellers</span>
         <h2>Loved by Our Clients</h2>
         <p>Real stories, real sparkle — straight from Instagram.</p>
       </header>

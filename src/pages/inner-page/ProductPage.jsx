@@ -4,6 +4,7 @@ import ProductArt from "../../components/collection/ProductArt";
 import { assetUrl } from "../../api/client";
 import { getProduct } from "../../api/products";
 import { useAsync } from "../../api/useAsync";
+import { previewProductById } from "../../data/previewProducts";
 import { productEnquiry, whatsappLink } from "../../utils/whatsapp";
 import { useSite } from "../../context/siteContext";
 import { useWishlist } from "../../context/wishlistContext";
@@ -23,7 +24,10 @@ const SPECS = [
 
 export default function ProductPage() {
   const { id } = useParams();
-  const { data: product, error, loading } = useAsync(() => getProduct(id), [id]);
+  const { data: product, error, loading } = useAsync(
+    () => Promise.resolve(previewProductById(id) || getProduct(id)),
+    [id],
+  );
 
   if (loading) return <main className="product"><p className="pd-status">Loading…</p></main>;
   if (error) return <Navigate to="/" replace />;
@@ -33,8 +37,8 @@ export default function ProductPage() {
 function ProductView({ product }) {
   const { has, toggle } = useWishlist();
   const saved = has(product.id);
-  const { categories, content } = useSite();
-  const collection = categories.find((c) => c.slug === product.collectionSlug);
+  const { publicCategories, content } = useSite();
+  const collection = publicCategories.find((c) => c.slug === product.collectionSlug);
   const images = (product.images ?? []).map((src) => ({ src: assetUrl(src), alt: product.name }));
   const specs = SPECS.filter(([, key]) => product[key] != null && product[key] !== "");
 
@@ -127,7 +131,9 @@ function ProductView({ product }) {
 
           {product.description && <p className="pd-desc">{product.description}</p>}
 
-          <a className="pd-whatsapp" href={enquiry} target="_blank" rel="noreferrer">
+          {product.preview ? (
+            <p className="pd-preview-note">This is a sample product. Real product details will appear here when the collection is added.</p>
+          ) : <a className="pd-whatsapp" href={enquiry} target="_blank" rel="noreferrer">
             <svg
               viewBox="0 0 24 24"
               width="22"
@@ -143,7 +149,7 @@ function ProductView({ product }) {
               <path d="M9.2 8.8c.3 2.6 2.4 4.8 5 5.4l1-1.2-1.6-.9-.7.6c-.9-.3-1.7-1.1-2-2l.6-.7-.9-1.6-1.4.4Z" />
             </svg>
             Enquire on WhatsApp
-          </a>
+          </a>}
 
           {specs.length > 0 && (
             <>

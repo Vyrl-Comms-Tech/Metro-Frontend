@@ -59,7 +59,9 @@ export default function MobileMenu({ open, onClose }) {
         onClick={(e) => e.target.closest('a') && onClose()}
       >
         <div className="mobile-head">
-          <Link to="/" className="mobile-logo">FERGUS JAMES</Link>
+          <Link to="/" className="mobile-logo" aria-label="Metro Jewellers">
+            <img src="/black-logo.png" alt="Metro Jewellers" />
+          </Link>
           <button className="mobile-close" onClick={onClose} aria-label="Close menu">
             <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden="true">
               <path d="M6 6l12 12M18 6 6 18" />

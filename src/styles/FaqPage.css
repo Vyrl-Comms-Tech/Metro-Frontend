@@ -123,3 +123,8 @@
   text-align: center;
   color: var(--brand-muted);
 }
+
+.faqpage .faqpage-banner h1,
+.faqpage .faqpage-banner p {
+  color: var(--brand-white);
+}

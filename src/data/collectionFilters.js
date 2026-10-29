@@ -31,12 +31,12 @@ export const RANGE_GROUPS = [
     key: "width",
     title: "Width",
     bounds: RANGES.width,
-    ticks: [0, 1, 2, 3, 4, 5, 6, 7],
+    ticks: [0, 1, 2, 3, 4, 5, 6, 7, 8],
   },
   {
     key: "carat",
     title: "Carat Weight",
     bounds: RANGES.carat,
-    ticks: [0, 3, 6, 9, 12, 15, 18, 21, 24, 27],
+    ticks: [0, 1, 2, 3],
   },
 ];

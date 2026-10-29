@@ -221,3 +221,12 @@
   }
 
 }
+.product .pd-preview-note {
+  margin: 24px 0;
+  padding: 14px 16px;
+  border-left: 3px solid var(--brand-green);
+  background: var(--brand-green-tint);
+  color: var(--brand-text);
+  font-size: 13px;
+  line-height: 1.6;
+}

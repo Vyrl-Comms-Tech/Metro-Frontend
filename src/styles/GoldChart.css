@@ -1,7 +1,7 @@
 .gold {
   max-width: 1240px;
   margin: 0 auto;
-  padding: 24px 24px 72px;
+  padding: var(--section-y) var(--section-x);
   color: var(--brand-black);
 }
 
@@ -26,9 +26,82 @@
   color: var(--brand-muted);
 }
 
-.gold .gold-ranges {
+.gold .gold-title {
   display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.gold .gold-icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--brand-green-tint);
+  color: var(--brand-green);
+}
+
+.gold .gold-currency {
+  position: relative;
+  display: flex;
+  align-items: center;
+  color: var(--brand-muted);
+}
+
+.gold .gold-currency select {
+  appearance: none;
+  min-width: 220px;
+  padding: 11px 38px 11px 16px;
+  border: 1px solid var(--brand-line);
+  border-radius: 8px;
+  background: var(--brand-white);
+  color: var(--brand-text);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.gold .gold-currency select:focus-visible {
+  outline: 2px solid var(--brand-green);
+  outline-offset: 2px;
+}
+
+.gold .gold-currency svg {
+  position: absolute;
+  right: 14px;
+  pointer-events: none;
+}
+
+.gold .gold-unit {
+  margin: 0 0 18px;
+  font-size: 13px;
+  color: var(--brand-muted);
+}
+
+.gold .gold-note {
+  margin: 8px 0 32px;
+  padding: 40px 16px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--brand-muted);
+  border: 1px dashed var(--brand-line);
+  border-radius: 8px;
+}
+
+.gold .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.gold .gold-ranges {
+  display: inline-flex;
   gap: 4px;
+  margin-bottom: 20px;
   border: 1px solid var(--brand-line);
   border-radius: 6px;
   padding: 3px;
@@ -133,10 +206,6 @@
 }
 
 @media (max-width: 560px) {
-  .gold {
-    padding: 16px 16px 48px;
-  }
-
   .gold .gold-stats .gold-date {
     margin-left: 0;
   }

@@ -52,10 +52,10 @@
   border-bottom: 1px solid var(--brand-line-soft);
 }
 
-.mobile-menu .mobile-logo {
-  font-size: 18px;
-  letter-spacing: 0.3em;
-  white-space: nowrap;
+.mobile-menu .mobile-logo img {
+  display: block;
+  height: 44px;
+  width: auto;
 }
 
 .mobile-menu .mobile-close {

@@ -1,4 +1,9 @@
 :root {
+  /* shared section rhythm: top/bottom padding, side gutter, gap under section headings */
+  --section-y: 72px;
+  --section-x: 24px;
+  --section-head-gap: 44px;
+
   /* brand colours: white primary, deep forest green secondary */
   --brand-white: #fff;
   --brand-black: #111;
@@ -6,7 +11,7 @@
   --brand-green-light: #7fc9a0;
   --brand-green-tint: #eef4f0;
   --brand-sand: #ecc89c;
-  --brand-sale: #e0314b;
+  --brand-sale: #00351d;
   --brand-whatsapp: #25d366;
   --brand-gold: #b8902f;
   --brand-success: #1a7f4b;
@@ -19,24 +24,39 @@
   --brand-subtle: #8a8a8a;
   --brand-line: #d9d9d9;
   --brand-line-soft: #e3e3e3;
-  --brand-surface: #f6f6f6;
+  --brand-surface: #f5f8f6;
   --brand-surface-alt: #e8e8e8;
 
   /* banner + placeholder tones */
-  --brand-banner-1: #c9ad98;
-  --brand-banner-2: #d9bfae;
-  --brand-banner-3: #c4a48f;
-  --brand-card-1: #efe6df;
-  --brand-card-2: #cdb9a8;
+  --brand-banner-1: #00351d;
+  --brand-banner-2: #0a4a2c;
+  --brand-banner-3: #002a17;
+  --brand-card-1: #eef4f0;
+  --brand-card-2: #c9d9cf;
 
   /* translucent overlays */
-  --brand-shadow: rgba(0, 0, 0, 0.12);
-  --brand-scrim: rgba(0, 0, 0, 0.55);
-  --brand-scrim-strong: rgba(0, 0, 0, 0.8);
-  --brand-glass: rgba(40, 32, 26, 0.45);
+  --brand-shadow: rgba(0, 53, 29, 0.14);
+  --brand-scrim: rgba(0, 28, 15, 0.55);
+  --brand-scrim-strong: rgba(0, 28, 15, 0.8);
+  --brand-glass: rgba(0, 53, 29, 0.55);
   --brand-white-soft: rgba(255, 255, 255, 0.2);
-  --brand-white-glow: rgba(255, 255, 255, 0.35);
+  --brand-white-glow: rgba(255, 255, 255, 0.12);
   --brand-white-strong: rgba(255, 255, 255, 0.85);
+}
+
+@media (max-width: 900px) {
+  :root {
+    --section-y: 60px;
+    --section-head-gap: 36px;
+  }
+}
+
+@media (max-width: 560px) {
+  :root {
+    --section-y: 48px;
+    --section-x: 16px;
+    --section-head-gap: 28px;
+  }
 }
 
 *,

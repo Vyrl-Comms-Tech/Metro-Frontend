@@ -24,6 +24,6 @@ export const GEMSTONES = [
 
 // slider bounds (width in mm, carat)
 export const RANGES = {
-  width: { min: 0, max: 7, step: 0.5 },
-  carat: { min: 0, max: 27, step: 0.5 },
+  width: { min: 0, max: 8, step: 0.5 },
+  carat: { min: 0, max: 3, step: 0.25 },
 };
