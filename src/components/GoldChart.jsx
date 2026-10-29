@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { api } from "../api/client";
-import { useAsync } from "../api/useAsync";
+import axiosClient from "../utils/axiosClient";
+import { useAsync } from "../utils/useAsync";
 import "../styles/GoldChart.css";
 
 const RANGES = [
@@ -75,7 +75,7 @@ export default function GoldChart() {
   const [hover, setHover] = useState(null);
 
   const { data, error } = useAsync(
-    () => api.get(`/gold?range=${range.label}`),
+    () => axiosClient.get('/gold', { params: { range: range.label } }),
     [range.label],
   );
 
@@ -115,7 +115,8 @@ export default function GoldChart() {
     ? `${line} L${points.at(-1).x},${H - PAD.bottom} L${points[0].x},${H - PAD.bottom} Z`
     : "";
 
-  const current = data ? data.current.usd * rate : null;
+  const currentUsd = data?.current?.usd ?? series.at(-1)?.price / rate;
+  const current = Number.isFinite(currentUsd) ? currentUsd * rate : null;
   const first = series[0]?.price ?? current;
   const change = current != null ? current - first : 0;
   const pct = first ? (change / first) * 100 : 0;
@@ -145,7 +146,7 @@ export default function GoldChart() {
 
   const h = hasChart && hover !== null ? points[hover] : null;
   const shownPrice = h ? h.price : current;
-  const shownDate = h ? h.date : data ? new Date(data.current.updatedAt) : null;
+  const shownDate = h ? h.date : data?.current?.updatedAt ? new Date(data.current.updatedAt) : null;
 
   if (error) {
     return (

@@ -123,8 +123,9 @@ function FloatingButtons({ whatsapp }) {
 }
 
 export default function Footer() {
-  const { content, categories } = useSite()
+  const { content, categories: allCategories } = useSite()
   const { contact, footer } = content
+  const categories = allCategories.filter((c) => c.active !== false)
 
   // top categories follow the collections set up in the admin; fall back to the built-in list
   const columns = COLUMNS.map((col) => {

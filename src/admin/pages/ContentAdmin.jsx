@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { contentApi } from "../../api/resources";
 import { useSite } from "../../context/siteContext";
 import PageHeader from "../components/PageHeader";
 import Field from "../components/Field";
 import FileField from "../components/FileField";
+import axiosClient from "../../utils/axiosClient";
 
 // each block is one editable part of the public site; `name` is the key inside the block
 const BLOCKS = [
@@ -77,7 +77,7 @@ function ContentBlock({ block, saved, onSaved }) {
     e.preventDefault();
     setStatus({ busy: true, message: "", error: false });
     try {
-      await contentApi.save({ ...content, [block.key]: values });
+      await axiosClient.put('/content', { ...content, [block.key]: values });
       onSaved();
       setStatus({ busy: false, message: "Saved", error: false });
     } catch (err) {

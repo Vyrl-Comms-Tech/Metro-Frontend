@@ -9,6 +9,9 @@ import ProductPage from './pages/inner-page/ProductPage'
 import ContactPage from './pages/ContactPage'
 import WishlistPage from './pages/WishlistPage'
 import AdminLayout from './admin/AdminLayout'
+import LoginPage from './admin/LoginPage'
+import ProtectedRoute from './admin/ProtectedRoute'
+import AuthProvider from './context/AuthProvider'
 import Overview from './admin/pages/Overview'
 import ProductsAdmin from './admin/pages/ProductsAdmin'
 import CategoriesAdmin from './admin/pages/CategoriesAdmin'
@@ -41,6 +44,7 @@ function SiteLayout() {
 function App() {
   return (
     <BrowserRouter>
+      <AuthProvider>
       <SiteProvider>
       <WishlistProvider>
         <ScrollToTop />
@@ -55,17 +59,22 @@ function App() {
             <Route path="*" element={<HomePage />} />
           </Route>
 
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<Overview />} />
-            <Route path="products" element={<ProductsAdmin />} />
-            <Route path="categories" element={<CategoriesAdmin />} />
-            <Route path="content" element={<ContentAdmin />} />
-            <Route path="faqs" element={<FaqsAdmin />} />
-            <Route path="reels" element={<ReelsAdmin />} />
+          <Route path="/admin/login" element={<LoginPage />} />
+
+          <Route path="/admin" element={<ProtectedRoute />}>
+            <Route element={<AdminLayout />}>
+              <Route index element={<Overview />} />
+              <Route path="products" element={<ProductsAdmin />} />
+              <Route path="categories" element={<CategoriesAdmin />} />
+              <Route path="content" element={<ContentAdmin />} />
+              <Route path="faqs" element={<FaqsAdmin />} />
+              <Route path="reels" element={<ReelsAdmin />} />
+            </Route>
           </Route>
         </Routes>
       </WishlistProvider>
       </SiteProvider>
+      </AuthProvider>
     </BrowserRouter>
   )
 }

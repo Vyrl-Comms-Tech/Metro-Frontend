@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { reelsApi } from "../../api/resources";
 import Modal from "./Modal";
 import Field from "./Field";
 import FileField from "./FileField";
+import axiosClient from "../../utils/axiosClient";
 
 // add / edit dialog; `reel` is {} for a new one
 export default function ReelModal({ reel, nextOrder, onClose, onSaved }) {
@@ -14,9 +14,6 @@ export default function ReelModal({ reel, nextOrder, onClose, onSaved }) {
   });
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
 
-  // an uploaded video is a "/uploads/…" path; anything else is a pasted URL
-  const uploaded = form.video.startsWith("/");
-
   const save = async () => {
     const data = {
       name: form.name.trim(),
@@ -24,8 +21,8 @@ export default function ReelModal({ reel, nextOrder, onClose, onSaved }) {
       video: form.video.trim(),
       poster: form.poster,
     };
-    if (reel.id) await reelsApi.update(reel.id, data);
-    else await reelsApi.create({ ...data, order: nextOrder });
+    if (reel.id) await axiosClient.put(`/reels/${reel.id}`, data);
+    else await axiosClient.post('/reels', { ...data, order: nextOrder });
     onSaved();
   };
 
@@ -41,12 +38,9 @@ export default function ReelModal({ reel, nextOrder, onClose, onSaved }) {
         label="Video (optional)"
         kind="video"
         hint="Upload the original video for muted autoplay in the carousel. The Instagram link remains the Watch Reel destination."
-        value={uploaded ? form.video : ""}
+        value={form.video}
         onChange={(video) => setForm((f) => ({ ...f, video }))}
       />
-      <Field label="Direct video file URL (optional)" hint="Use a direct .mp4 or other browser-playable video file URL for muted autoplay, not an Instagram reel link.">
-        <input type="url" value={uploaded ? "" : form.video} onChange={set("video")} />
-      </Field>
       <FileField
         label="Poster image (optional)"
         value={form.poster}

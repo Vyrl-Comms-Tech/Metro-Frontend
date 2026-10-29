@@ -1,34 +1,40 @@
 import { useState } from "react";
-import { faqsApi } from "../../api/resources";
-import { useAsync } from "../../api/useAsync";
 import PageHeader from "../components/PageHeader";
 import FaqModal from "../components/FaqModal";
+import DataTable from "../components/DataTable";
+import TableActions from "../components/TableActions";
+import axiosClient from "../../utils/axiosClient";
+import { useAsync } from "../../utils/useAsync";
 
 export default function FaqsAdmin() {
   const [editing, setEditing] = useState(null); // null = closed, {} = new, faq = edit
   const [reload, setReload] = useState(0);
   const [actionError, setActionError] = useState("");
 
-  const { data, error, loading } = useAsync(() => faqsApi.list({ limit: 500 }), [reload]);
+  const { data, error, loading } = useAsync(() => axiosClient.get('/faqs', { params: { limit: 500 } }), [reload]);
   const faqs = data?.items ?? [];
 
-  // group by category, in the order they first appear
-  const groups = [...new Set(faqs.map((f) => f.category))].map((title) => ({
-    title,
-    items: faqs.filter((f) => f.category === title),
-  }));
+  const faqCategories = [...new Set(faqs.map((faq) => faq.category))];
   const nextOrder = faqs.length ? Math.max(...faqs.map((f) => f.order ?? 0)) + 1 : 0;
 
   const remove = async (faq) => {
     if (!window.confirm(`Remove "${faq.question}"?`)) return;
     setActionError("");
     try {
-      await faqsApi.remove(faq.id);
+      await axiosClient.delete(`/faqs/${faq.id}`);
       setReload((n) => n + 1);
     } catch (err) {
       setActionError(err.message);
     }
   };
+
+  const columns = [
+    { key: 'question', label: 'Question', render: (faq) => <span className="ad-primary-text">{faq.question}</span> },
+    { key: 'category', label: 'Category' },
+    { key: 'answer', label: 'Answer', render: (faq) => <span className="ad-table-summary">{faq.answer}</span> },
+    { key: 'featured', label: 'Home page', render: (faq) => faq.featured ? <span className="ad-status">Featured</span> : '—' },
+    { key: 'actions', label: '', cellClassName: 'ad-actions-cell', render: (faq) => <TableActions name={faq.question} onEdit={() => setEditing(faq)} onRemove={() => remove(faq)} /> },
+  ];
 
   return (
     <>
@@ -42,39 +48,14 @@ export default function FaqsAdmin() {
         <p className="ad-error" role="alert">{error?.message ?? actionError}</p>
       )}
 
-      {!loading && groups.length === 0 && !error && (
-        <section className="ad-card">
-          <p className="ad-empty">No FAQs yet. Click “Add FAQ”.</p>
-        </section>
-      )}
-
-      {groups.map((group) => (
-        <section key={group.title} className="ad-card">
-          <h2>{group.title}</h2>
-          <ul className="ad-list">
-            {group.items.map((faq) => (
-              <li key={faq.id}>
-                <div>
-                  <strong>{faq.question}</strong>
-                  {faq.featured && <span className="ad-tag">Featured</span>}
-                  <p>{faq.answer}</p>
-                </div>
-                <div className="ad-row-actions">
-                  <button onClick={() => setEditing(faq)}>Edit</button>
-                  <button className="danger" onClick={() => remove(faq)}>
-                    Remove
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ))}
+      <section className="ad-card ad-table-card">
+        <DataTable caption="FAQs" columns={columns} rows={faqs} loading={loading} empty="No FAQs yet. Add a question to get started." />
+      </section>
 
       {editing && (
         <FaqModal
           faq={editing}
-          categories={groups.map((g) => g.title)}
+          categories={faqCategories}
           nextOrder={nextOrder}
           onClose={() => setEditing(null)}
           onSaved={() => setReload((n) => n + 1)}

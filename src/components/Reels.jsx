@@ -1,8 +1,7 @@
 import { useRef, useState } from 'react'
-import { assetUrl } from '../api/client'
-import { reelsApi } from '../api/resources'
-import { useAsync } from '../api/useAsync'
 import '../styles/Reels.css'
+import axiosClient from '../utils/axiosClient'
+import { useAsync } from '../utils/useAsync'
 
 const pad = (n) => String(n + 1).padStart(2, '0')
 
@@ -22,12 +21,12 @@ const offsetOf = (i, active, n) => {
 }
 
 export default function Reels() {
-  const { data } = useAsync(() => reelsApi.list({ limit: 100 }), [])
+  const { data } = useAsync(() => axiosClient.get('/reels', { params: { limit: 100 } }), [])
   const reels = (data?.items ?? []).map((r) => ({
     ...r,
     tint: r.tint?.length >= 2 ? r.tint : DEFAULT_TINT,
-    video: assetUrl(r.video),
-    poster: assetUrl(r.poster),
+    video: r.video,
+    poster: r.poster,
   }))
 
   // no reels added in the admin yet

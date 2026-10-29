@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useSite } from "../../context/siteContext";
-import { assetUrl } from "../../api/client";
-import { deleteProduct, listProducts } from "../../api/products";
-import { useAsync } from "../../api/useAsync";
 import ProductArt from "../../components/collection/ProductArt";
 import PageHeader from "../components/PageHeader";
 import ProductModal from "../components/ProductModal";
+import DataTable from "../components/DataTable";
+import TableActions from "../components/TableActions";
+import axiosClient from "../../utils/axiosClient";
+import { useAsync } from "../../utils/useAsync";
 
 const PAGE_SIZE = 10;
 
@@ -28,7 +29,7 @@ export default function ProductsAdmin() {
   }, [search]);
 
   const { data, error, loading } = useAsync(
-    () => listProducts({ q: query, collectionSlug: collection, page, limit: PAGE_SIZE }),
+    () => axiosClient.get('/products', { params: { q: query, collectionSlug: collection, page, limit: PAGE_SIZE } }),
     [query, collection, page, reload],
   );
 
@@ -40,7 +41,7 @@ export default function ProductsAdmin() {
     if (!window.confirm(`Remove "${p.name}"?`)) return;
     setActionError("");
     try {
-      await deleteProduct(p.id);
+      await axiosClient.delete(`/products/${p.id}`);
       // step back a page if that was the last product on it
       if (items.length === 1 && page > 1) setPage(page - 1);
       else setReload((n) => n + 1);
@@ -48,6 +49,18 @@ export default function ProductsAdmin() {
       setActionError(err.message);
     }
   };
+
+  const columns = [
+    {
+      key: 'name', label: 'Product', cellClassName: 'ad-cell-main',
+      render: (p) => <div className="ad-record"><span className="ad-thumb">{p.images?.[0] ? <img src={p.images[0]} alt="" /> : <ProductArt metal={p.metal} />}</span><span>{p.name}</span></div>,
+    },
+    { key: 'collectionSlug', label: 'Collection', render: (p) => collections.find((c) => c.slug === p.collectionSlug)?.title ?? p.collectionSlug },
+    { key: 'category', label: 'Category' },
+    { key: 'metal', label: 'Metal' },
+    { key: 'type', label: 'Type' },
+    { key: 'actions', label: '', cellClassName: 'ad-actions-cell', render: (p) => <TableActions name={p.name} onEdit={() => setEditing(p)} onRemove={() => remove(p)} /> },
+  ];
 
   return (
     <>
@@ -92,55 +105,13 @@ export default function ProductsAdmin() {
           </p>
         )}
 
-        <div className="ad-table-wrap">
-          <table className="ad-table">
-            <thead>
-              <tr>
-                <th>Product</th>
-                <th>Collection</th>
-                <th>Category</th>
-                <th>Metal</th>
-                <th>Type</th>
-                <th aria-label="Actions" />
-              </tr>
-            </thead>
-            <tbody>
-              {items.map((p) => (
-                <tr key={p.id}>
-                  <td className="ad-cell-main">
-                    <span className="ad-thumb">
-                      {p.images?.[0] ? (
-                        <img src={assetUrl(p.images[0])} alt="" />
-                      ) : (
-                        <ProductArt metal={p.metal} />
-                      )}
-                    </span>
-                    {p.name}
-                  </td>
-                  <td>{collections.find((c) => c.slug === p.collectionSlug)?.title ?? p.collectionSlug}</td>
-                  <td>{p.category ?? "-"}</td>
-                  <td>{p.metal ?? "-"}</td>
-                  <td>{p.type ?? "-"}</td>
-                  <td className="ad-row-actions">
-                    <button onClick={() => setEditing(p)}>Edit</button>
-                    <button className="danger" onClick={() => remove(p)}>
-                      Remove
-                    </button>
-                  </td>
-                </tr>
-              ))}
-              {!loading && items.length === 0 && (
-                <tr>
-                  <td colSpan="6" className="ad-empty">
-                    {query || collection
-                      ? "No products found."
-                      : "No products yet. Click “Add product” to upload your first one."}
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+        <DataTable
+          caption="Products"
+          columns={columns}
+          rows={items}
+          loading={loading}
+          empty={query || collection ? 'No products found.' : 'No products yet. Add your first product to get started.'}
+        />
 
         <div className="ad-pager">
           <span>

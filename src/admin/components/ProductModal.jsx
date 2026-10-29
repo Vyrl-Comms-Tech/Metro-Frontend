@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { GEMSTONES, METALS, SHAPES, TYPES } from "../../data/collections";
 import { useSite } from "../../context/siteContext";
-import { assetUrl, uploadFiles } from "../../api/client";
-import { createProduct, updateProduct } from "../../api/products";
+import axiosClient from "../../utils/axiosClient";
 import Modal from "./Modal";
 import Field from "./Field";
 
@@ -44,7 +43,12 @@ export default function ProductModal({ product, onClose, onSaved }) {
     collections.find((c) => c.slug === form.collectionSlug)?.subCategories ?? [];
 
   const save = async () => {
-    const uploaded = await uploadFiles(files);
+    let uploaded = [];
+    if (files.length) {
+      const form = new FormData();
+      files.forEach((f) => form.append("files", f));
+      ({ urls: uploaded } = await axiosClient.post("/uploads", form));
+    }
     const data = {
       name: form.name.trim(),
       collectionSlug: form.collectionSlug,
@@ -59,8 +63,8 @@ export default function ProductModal({ product, onClose, onSaved }) {
       images: [...images, ...uploaded],
     };
 
-    if (product?.id) await updateProduct(product.id, data);
-    else await createProduct(data);
+    if (product?.id) await axiosClient.put(`/products/${product.id}`, data);
+    else await axiosClient.post("/products", data);
     onSaved();
   };
 
@@ -129,7 +133,7 @@ export default function ProductModal({ product, onClose, onSaved }) {
         <ul className="ad-previews">
           {images.map((src) => (
             <li key={src}>
-              <img src={assetUrl(src)} alt="" />
+              <img src={src} alt="" />
               <button type="button" aria-label="Remove image" onClick={() => setImages(images.filter((i) => i !== src))}>
                 ×
               </button>

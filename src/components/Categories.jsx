@@ -1,30 +1,22 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import axiosClient from "../utils/axiosClient";
+import { useAsync } from "../utils/useAsync";
 import "../styles/Categories.css";
 
-const featuredCategories = [
-  {
-    title: "Loose Diamond",
-    slug: "loose-diamond",
-    description: "Explore natural and lab grown loose diamonds.",
-  },
-  {
-    title: "Diamonds",
-    slug: "diamonds",
-    description: "Discover natural and lab grown diamonds.",
-  },
-  {
-    title: "Jewellery",
-    slug: "jewellery",
-    description: "Explore the full collection of fine jewellery.",
-  },
-];
-
 export default function Categories() {
+  const { data, error, loading } = useAsync(
+    () => axiosClient.get("/categories/getAll", { params: { limit: 100 } }),
+    [],
+  );
+  const loaded = !loading || Boolean(error);
+  // tolerate either { items: [...] } or a bare array from the API
+  const categories = Array.isArray(data?.items) ? data.items : Array.isArray(data) ? data : [];
+  // only collections the admin has switched on for the home page
+  const featuredCategories = categories.filter((c) => c.active !== false && c.showOnHome !== false);
   const ref = useRef(null);
   const [seen, setSeen] = useState(false);
 
-  // fade the cards in the first time the section scrolls into view
   useEffect(() => {
     const el = ref.current;
     if (!el || !("IntersectionObserver" in window)) {
@@ -52,6 +44,10 @@ export default function Categories() {
         <p>Handcrafted diamond jewellery, made to order in Dubai.</p>
       </header>
 
+      {loaded && featuredCategories.length === 0 && (
+        <p className="cat-empty">Collections are coming soon.</p>
+      )}
+
       <div className={`cat-grid ${seen ? "is-in" : ""}`}>
         {featuredCategories.map((c, i) => (
           <Link
@@ -60,11 +56,15 @@ export default function Categories() {
             className="cat-card"
             style={{ "--i": i, "--panel-position": `${i * 50}%` }}
           >
-            <div className="cat-img" aria-hidden="true" />
+            <div
+              className={`cat-img ${c.image ? "has-photo" : ""}`}
+              style={c.image ? { backgroundImage: `url("${c.image}")` } : undefined}
+              aria-hidden="true"
+            />
             <div className="cat-body">
               <div>
                 <h3>{c.title}</h3>
-                <p>{c.description}</p>
+                {c.description && <p>{c.description}</p>}
               </div>
               <span className="cat-arrow" aria-hidden="true">
                 <svg

@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom'
 import FaqList from './FaqList'
-import { faqsApi } from '../api/resources'
-import { useAsync } from '../api/useAsync'
 import { toFaqItem } from '../utils/faq'
 import '../styles/Faq.css'
+import axiosClient from '../utils/axiosClient'
+import { useAsync } from '../utils/useAsync'
 
 export default function Faq() {
-  const { data } = useAsync(() => faqsApi.list({ featured: true, limit: 100 }), [])
+  const { data } = useAsync(() => axiosClient.get('/faqs', { params: { featured: true, limit: 100 } }), [])
   const items = (data?.items ?? []).map(toFaqItem)
 
   // nothing marked "featured" in the admin yet

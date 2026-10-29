@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/authContext";
 import "../styles/Admin.css";
 
 const LINKS = [
@@ -54,13 +55,23 @@ const Icon = ({ d }) => (
 
 export default function AdminLayout() {
   const [open, setOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+
+  const signOut = async () => {
+    await logout().catch(() => {});
+    navigate("/admin/login", { replace: true });
+  };
 
   return (
-    <div className={`admin ${open ? "menu-open" : ""}`}>
+    <div
+      className={`admin ${open ? "menu-open" : ""} ${collapsed ? "collapsed" : ""}`}
+    >
       <aside className="ad-side">
         <div className="ad-brand">
           <span>METRO</span>
-          <small>Admin</small>
+          <small>JEWELLERS</small>
         </div>
 
         <nav
@@ -71,14 +82,29 @@ export default function AdminLayout() {
           {LINKS.map((l) => (
             <NavLink key={l.to} to={l.to} end={l.end}>
               <Icon d={l.icon} />
-              {l.label}
+              <span className="ad-nav-label">{l.label}</span>
             </NavLink>
           ))}
         </nav>
 
-        <NavLink to="/" className="ad-site-link">
-          ← View website
-        </NavLink>
+        <button
+          type="button"
+          className="ad-site-link"
+          onClick={signOut}
+        >
+          Logout
+        </button>
+
+        <button
+          type="button"
+          className="ad-collapse"
+          onClick={() => setCollapsed((c) => !c)}
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          aria-expanded={!collapsed}
+        >
+          <Icon d={collapsed ? "m9 6 6 6-6 6" : "m15 6-6 6 6 6"} />
+          <span className="ad-nav-label">Collapse</span>
+        </button>
       </aside>
 
       <div className="ad-backdrop" onClick={() => setOpen(false)} />
@@ -92,14 +118,9 @@ export default function AdminLayout() {
           >
             <Icon d="M4 7h16M4 12h16M4 17h16" />
           </button>
-          <span className="ad-user">Admin</span>
+          <span className="ad-top-label">Management dashboard</span>
+          <span className="ad-user"><span aria-hidden="true">M</span> Admin</span>
         </header>
-
-        {/* TODO: remove once the dashboard is connected to a backend */}
-        <p className="ad-notice" role="note">
-          Dashboard preview: forms and buttons are in place, but changes are not
-          saved yet.
-        </p>
 
         <main className="ad-content">
           <Outlet />

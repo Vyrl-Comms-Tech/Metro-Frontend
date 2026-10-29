@@ -1,15 +1,15 @@
 import FaqList from "../components/FaqList";
-import { faqsApi } from "../api/resources";
-import { useAsync } from "../api/useAsync";
 import { useSite } from "../context/siteContext";
 import { groupByCategory } from "../utils/faq";
 import "../styles/Faq.css";
 import "../styles/FaqPage.css";
+import axiosClient from "../utils/axiosClient";
+import { useAsync } from "../utils/useAsync";
 
 export default function FaqPage() {
   const { content } = useSite();
   const { data, error, loading } = useAsync(
-    () => faqsApi.list({ limit: 500 }),
+    () => axiosClient.get('/faqs', { params: { limit: 500 } }),
     [],
   );
   const groups = groupByCategory(data?.items ?? []);

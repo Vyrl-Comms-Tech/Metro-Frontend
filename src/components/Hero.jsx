@@ -1,5 +1,4 @@
 import heroPhoto from "../assets/hero-photo.jpg";
-import { assetUrl } from "../api/client";
 import { useSite } from "../context/siteContext";
 import "../styles/Hero.css";
 
@@ -10,7 +9,7 @@ export default function Hero() {
     <section className="hero">
       <img
         className="hero-photo"
-        src={assetUrl(homeBanner.image) || heroPhoto}
+        src={homeBanner.image || heroPhoto}
         alt="Model wearing diamond rings, bracelet and necklace"
       />
       <div className="hero-copy">

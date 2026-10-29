@@ -14,18 +14,17 @@ import ProductArt from "../components/collection/ProductArt";
 import RangeGroup from "../components/collection/RangeGroup";
 import { useSite } from "../context/siteContext";
 import { useWishlist } from "../context/wishlistContext";
-import { assetUrl } from "../api/client";
-import { listProducts } from "../api/products";
-import { useAsync } from "../api/useAsync";
 import { previewProductsFor } from "../data/previewProducts";
 import bannerImg from "../assets/hero-photo.jpg";
 import "../styles/Collection.css";
+import axiosClient from "../utils/axiosClient";
+import { useAsync } from "../utils/useAsync";
 
 function Banner({ title, image }) {
   return (
     <section className="col-banner">
       <h1>{title}</h1>
-      <img className="col-banner-img" src={assetUrl(image) || bannerImg} alt="" />
+      <img className="col-banner-img" src={image || bannerImg} alt="" />
     </section>
   );
 }
@@ -36,7 +35,7 @@ export default function CollectionPage() {
   const collection = publicCategories.find((c) => c.slug === slug);
   const previewItems = previewProductsFor(slug);
   const { data, error, loading } = useAsync(
-    () => listProducts({ collectionSlug: slug, limit: 500 }),
+    () => axiosClient.get('/products', { params: { collectionSlug: slug, limit: 500 } }),
     [slug],
   );
 
@@ -194,7 +193,7 @@ function CollectionView({ collection, items }) {
                 <article key={p.id} className="prod">
                   <Link to={`/product/${p.id}`} className="prod-img">
                     {p.images?.[0] ? (
-                      <img src={assetUrl(p.images[0])} alt="" />
+                      <img src={p.images[0]} alt="" />
                     ) : (
                       <ProductArt metal={p.metal} />
                     )}
@@ -208,7 +207,7 @@ function CollectionView({ collection, items }) {
                         id: p.id,
                         name: p.name,
                         metal: p.metal,
-                        image: p.images?.[0] ? assetUrl(p.images[0]) : undefined,
+                        image: p.images?.[0] ? p.images[0] : undefined,
                         to: `/product/${p.id}`,
                       })
                     }

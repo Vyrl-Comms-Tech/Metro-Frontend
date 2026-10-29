@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { faqsApi } from "../../api/resources";
 import Modal from "./Modal";
 import Field from "./Field";
+import axiosClient from "../../utils/axiosClient";
 
 const NEW = "__new__";
 
@@ -29,8 +29,8 @@ export default function FaqModal({ faq, categories, nextOrder, onClose, onSaved 
       answer: form.answer.trim(),
       featured: form.featured,
     };
-    if (faq.id) await faqsApi.update(faq.id, data);
-    else await faqsApi.create({ ...data, order: nextOrder });
+    if (faq.id) await axiosClient.put(`/faqs/${faq.id}`, data);
+    else await axiosClient.post('/faqs', { ...data, order: nextOrder });
     onSaved();
   };
 

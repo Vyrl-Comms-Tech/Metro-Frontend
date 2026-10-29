@@ -1,15 +1,14 @@
 import { Navigate, useParams } from "react-router-dom";
 import Breadcrumb from "../../components/Breadcrumb";
 import ProductArt from "../../components/collection/ProductArt";
-import { assetUrl } from "../../api/client";
-import { getProduct } from "../../api/products";
-import { useAsync } from "../../api/useAsync";
 import { previewProductById } from "../../data/previewProducts";
 import { productEnquiry, whatsappLink } from "../../utils/whatsapp";
 import { useSite } from "../../context/siteContext";
 import { useWishlist } from "../../context/wishlistContext";
 import ProductGallery from "./ProductGallery";
 import "../../styles/Product.css";
+import axiosClient from "../../utils/axiosClient";
+import { useAsync } from "../../utils/useAsync";
 
 // label + product field shown in the details list
 const SPECS = [
@@ -25,7 +24,7 @@ const SPECS = [
 export default function ProductPage() {
   const { id } = useParams();
   const { data: product, error, loading } = useAsync(
-    () => Promise.resolve(previewProductById(id) || getProduct(id)),
+    () => Promise.resolve(previewProductById(id) || axiosClient.get(`/products/${id}`)),
     [id],
   );
 
@@ -39,7 +38,7 @@ function ProductView({ product }) {
   const saved = has(product.id);
   const { publicCategories, content } = useSite();
   const collection = publicCategories.find((c) => c.slug === product.collectionSlug);
-  const images = (product.images ?? []).map((src) => ({ src: assetUrl(src), alt: product.name }));
+  const images = (product.images ?? []).map((src) => ({ src: src, alt: product.name }));
   const specs = SPECS.filter(([, key]) => product[key] != null && product[key] !== "");
 
   const enquiry = whatsappLink(

@@ -26,10 +26,12 @@ const FALLBACK_CATEGORIES = [
   },
 ]
 
-export function withCategoryFallbacks(categories = []) {
+// `hidden` = slugs of inactive categories, which must not come back through the fallbacks
+export function withCategoryFallbacks(categories = [], hidden = []) {
   const bySlug = new Map(categories.map((category) => [category.slug, category]))
 
   for (const fallback of FALLBACK_CATEGORIES) {
+    if (hidden.includes(fallback.slug)) continue
     const existing = bySlug.get(fallback.slug)
     bySlug.set(fallback.slug, existing
       ? {

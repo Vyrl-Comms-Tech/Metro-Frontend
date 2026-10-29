@@ -194,3 +194,14 @@
     transition: none;
   }
 }
+
+/* a photo uploaded from the dashboard fills the card instead of the shared triptych */
+.categories .cat-card .cat-img.has-photo {
+  background-position: center;
+  background-size: cover;
+}
+
+.categories .cat-empty {
+  text-align: center;
+  color: var(--brand-muted);
+}

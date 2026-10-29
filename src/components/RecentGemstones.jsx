@@ -1,10 +1,9 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight, Gem, Heart } from 'lucide-react'
-import { assetUrl } from '../api/client'
-import { listProducts } from '../api/products'
-import { useAsync } from '../api/useAsync'
 import { useWishlist } from '../context/wishlistContext'
 import '../styles/RecentGemstones.css'
+import axiosClient from '../utils/axiosClient'
+import { useAsync } from '../utils/useAsync'
 
 const placeholder = '/gemstone-placeholder.png'
 
@@ -17,7 +16,7 @@ const previewGemstones = [
 ]
 
 export default function RecentGemstones() {
-  const { data } = useAsync(() => listProducts({ collectionSlug: 'gemstones', limit: 5 }), [])
+  const { data } = useAsync(() => axiosClient.get('/products', { params: { collectionSlug: 'gemstones', limit: 5 } }), [])
   const { has, toggle } = useWishlist()
   const isPreview = !data?.items?.length
   const gemstones = isPreview ? previewGemstones : data.items
@@ -32,7 +31,7 @@ export default function RecentGemstones() {
 
       <div className="rg-grid">
         {gemstones.map((gemstone) => {
-          const image = assetUrl(gemstone.images?.[0]) || placeholder
+          const image = gemstone.images?.[0] || placeholder
           const to = isPreview ? '/collections/gemstones' : `/product/${gemstone.id}`
           const title = gemstone.name
           const shape = gemstone.shape ? `${gemstone.shape} Cut` : ''

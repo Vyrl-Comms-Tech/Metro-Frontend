@@ -135,3 +135,10 @@ Build a premium digital jewellery catalogue that enhances Metro Jewellers' onlin
 - exclusive pieces -->
 
 <!-- 6.Custom jewellery -->
+
+
+
+
+
+
+<!-- Category Added is done on dashboard  -->
