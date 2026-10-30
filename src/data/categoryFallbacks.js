@@ -1,4 +1,5 @@
 // Temporary catalogue categories shown until they are available from the API.
+// A subcategory is { title, options }; options is its own third-level list.
 const FALLBACK_CATEGORIES = [
   {
     title: 'Gemstones',
@@ -9,19 +10,24 @@ const FALLBACK_CATEGORIES = [
   {
     title: 'Loose Diamond',
     slug: 'loose-diamond',
-    subCategories: ['Natural Diamond', 'Lab Grown Diamond'],
+    subCategories: [{ title: 'Natural Diamond', options: [] }, { title: 'Lab Grown Diamond', options: [] }],
     description: 'Explore natural and lab grown loose diamonds',
   },
   {
     title: 'Diamonds',
     slug: 'diamonds',
-    subCategories: ['Natural Diamond', 'Lab Grown Diamond'],
+    subCategories: [{ title: 'Natural Diamond', options: [] }, { title: 'Lab Grown Diamond', options: [] }],
     description: 'Discover natural and lab grown diamonds',
   },
   {
     title: 'Jewellery',
     slug: 'jewellery',
-    subCategories: ['Rings', 'Earrings', 'Necklaces', 'Bracelets', 'Exclusive Pieces'],
+    subCategories: [
+      { title: 'Earrings', options: ['Diamond Studs', 'Diamond Hoops', 'Fashion Drops', 'Fashion Studs', 'Letter Studs'] },
+      { title: 'Necklaces', options: ['Diamond Pendants', 'Fashion Pendants', 'English Letter Pendants', 'Arabic Letter Pendants'] },
+      { title: 'Rings', options: ['Plain', 'Diamond', 'Exclusive Engagement Rings', 'Eternity Rings', 'Gemstone Rings', 'Fashion Rings', 'Constellation Rings', 'Fancy Coloured Diamond Rings'] },
+      { title: 'Bracelets', options: ['Tennis Bracelets', 'Letter Bracelets'] },
+    ],
     description: 'Explore the full collection',
   },
 ]
@@ -31,16 +37,8 @@ export function withCategoryFallbacks(categories = [], hidden = []) {
   const bySlug = new Map(categories.map((category) => [category.slug, category]))
 
   for (const fallback of FALLBACK_CATEGORIES) {
-    if (hidden.includes(fallback.slug)) continue
-    const existing = bySlug.get(fallback.slug)
-    bySlug.set(fallback.slug, existing
-      ? {
-          ...existing,
-          subCategories: [
-            ...new Set([...(existing.subCategories ?? []), ...fallback.subCategories]),
-          ],
-        }
-      : { ...fallback, id: `fallback-${fallback.slug}`, showOnHome: true })
+    if (hidden.includes(fallback.slug) || bySlug.has(fallback.slug)) continue
+    bySlug.set(fallback.slug, { ...fallback, id: `fallback-${fallback.slug}`, showOnHome: true })
   }
 
   return [...bySlug.values()]

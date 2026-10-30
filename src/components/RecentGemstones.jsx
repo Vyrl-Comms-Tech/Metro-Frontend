@@ -16,7 +16,7 @@ const previewGemstones = [
 ]
 
 export default function RecentGemstones() {
-  const { data } = useAsync(() => axiosClient.get('/products', { params: { collectionSlug: 'gemstones', limit: 5 } }), [])
+  const { data } = useAsync(() => axiosClient.get('/products/getAll', { params: { mainCategory: 'gemstones', limit: 5 } }), [])
   const { has, toggle } = useWishlist()
   const isPreview = !data?.items?.length
   const gemstones = isPreview ? previewGemstones : data.items

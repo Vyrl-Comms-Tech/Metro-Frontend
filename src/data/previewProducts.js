@@ -5,7 +5,7 @@ export const PREVIEW_PRODUCTS = [
   {
     id: 'preview-loose-natural',
     name: 'Natural Round Loose Diamond',
-    collectionSlug: 'loose-diamond',
+    mainCategory: 'loose-diamond',
     category: 'Natural Diamond',
     type: 'Natural',
     shape: 'Round',
@@ -18,7 +18,7 @@ export const PREVIEW_PRODUCTS = [
   {
     id: 'preview-loose-lab',
     name: 'Lab Grown Oval Loose Diamond',
-    collectionSlug: 'loose-diamond',
+    mainCategory: 'loose-diamond',
     category: 'Lab Grown Diamond',
     type: 'Lab Grown',
     shape: 'Oval',
@@ -31,7 +31,7 @@ export const PREVIEW_PRODUCTS = [
   {
     id: 'preview-diamonds-natural',
     name: 'Natural Diamond Selection',
-    collectionSlug: 'diamonds',
+    mainCategory: 'diamonds',
     category: 'Natural Diamond',
     type: 'Natural',
     shape: 'Emerald',
@@ -44,7 +44,7 @@ export const PREVIEW_PRODUCTS = [
   {
     id: 'preview-diamonds-lab',
     name: 'Lab Grown Diamond Selection',
-    collectionSlug: 'diamonds',
+    mainCategory: 'diamonds',
     category: 'Lab Grown Diamond',
     type: 'Lab Grown',
     shape: 'Pear',
@@ -57,7 +57,7 @@ export const PREVIEW_PRODUCTS = [
   {
     id: 'preview-jewellery-rings',
     name: 'Diamond Ring',
-    collectionSlug: 'jewellery',
+    mainCategory: 'jewellery',
     category: 'Rings',
     metal: '18k Rose Gold',
     gemstone: 'Diamond',
@@ -68,7 +68,7 @@ export const PREVIEW_PRODUCTS = [
   {
     id: 'preview-jewellery-earrings',
     name: 'Diamond Earrings',
-    collectionSlug: 'jewellery',
+    mainCategory: 'jewellery',
     category: 'Earrings',
     metal: '18k White Gold',
     gemstone: 'Diamond',
@@ -79,7 +79,7 @@ export const PREVIEW_PRODUCTS = [
   {
     id: 'preview-jewellery-necklaces',
     name: 'Diamond Necklace',
-    collectionSlug: 'jewellery',
+    mainCategory: 'jewellery',
     category: 'Necklaces',
     metal: '18k Yellow Gold',
     gemstone: 'Diamond',
@@ -90,7 +90,7 @@ export const PREVIEW_PRODUCTS = [
   {
     id: 'preview-jewellery-bracelets',
     name: 'Diamond Bracelet',
-    collectionSlug: 'jewellery',
+    mainCategory: 'jewellery',
     category: 'Bracelets',
     metal: '18k Yellow Gold',
     gemstone: 'Diamond',
@@ -101,7 +101,7 @@ export const PREVIEW_PRODUCTS = [
   {
     id: 'preview-jewellery-exclusive',
     name: 'Exclusive Diamond Piece',
-    collectionSlug: 'jewellery',
+    mainCategory: 'jewellery',
     category: 'Exclusive Pieces',
     metal: '18k White Gold',
     gemstone: 'Diamond',
@@ -111,5 +111,5 @@ export const PREVIEW_PRODUCTS = [
   },
 ]
 
-export const previewProductsFor = (slug) => PREVIEW_PRODUCTS.filter((product) => product.collectionSlug === slug)
+export const previewProductsFor = (slug) => PREVIEW_PRODUCTS.filter((product) => product.mainCategory === slug)
 export const previewProductById = (id) => PREVIEW_PRODUCTS.find((product) => product.id === id)

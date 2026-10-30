@@ -20,7 +20,8 @@ const useTotal = (collection) => {
 
 export default function Overview() {
   const { categories } = useSite();
-  const products = useTotal("products");
+  const { data: productList } = useAsync(() => axiosClient.get("/products/getAll", { params: { limit: 1 } }), []);
+  const products = productList?.total ?? "-";
   const faqs = useTotal("faqs");
   const reels = useTotal("reels");
 

@@ -51,7 +51,11 @@ function MegaMenu({ item }) {
               <h4>{col.title}</h4>
               <ul>
                 {col.links.map((l) => (
-                  <li key={l}><a href="#">{l}</a></li>
+                  <li key={l}>
+                    {col.title === 'Bracelets'
+                      ? <Link to="/collections/bracelets">{l}</Link>
+                      : <a href="#">{l}</a>}
+                  </li>
                 ))}
               </ul>
             </div>

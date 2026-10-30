@@ -16,12 +16,19 @@ export default function Modal({
 
   useEffect(() => {
     const previousFocus = document.activeElement;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    // lock the page scroll on <html>: the site sets overflow-x: clip there, so locking <body> would turn it into
+    // its own scroll container and break the sticky sidebar. The padding replaces the scrollbar that disappears.
+    const root = document.documentElement;
+    const previousOverflow = root.style.overflow;
+    const previousPadding = root.style.paddingRight;
+    const scrollbar = window.innerWidth - root.clientWidth;
+    root.style.overflow = 'hidden';
+    if (scrollbar > 0) root.style.paddingRight = `${scrollbar}px`;
     (formRef.current?.querySelector('.ad-modal-body input, .ad-modal-body select, .ad-modal-body textarea')
       ?? formRef.current?.querySelector('button'))?.focus();
     return () => {
-      document.body.style.overflow = previousOverflow;
+      root.style.overflow = previousOverflow;
+      root.style.paddingRight = previousPadding;
       previousFocus?.focus?.();
     };
   }, []);

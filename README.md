@@ -111,7 +111,7 @@ Build a premium digital jewellery catalogue that enhances Metro Jewellers' onlin
 ---
 
 1. gemstone
-
+   
 2.loose diamond
  - natural diamond
  - lab grown diamond

@@ -1,11 +1,12 @@
 import Collapsible from './Collapsible'
 import { compact } from '../../utils/collection'
 
-// two number boxes + a dual-thumb slider with tick labels
 export default function RangeGroup({ title, bounds, value, onChange, ticks }) {
   const { min, max, step } = bounds
   const [lo, hi] = value
   const pct = (v) => ((v - min) / (max - min)) * 100
+  // every tick gets a mark, but only ~6 get a number so the labels never crowd the sidebar
+  const labelEvery = Math.ceil(ticks.length / 6)
 
   const setLo = (v) => onChange([Math.min(Math.max(v, min), hi), hi])
   const setHi = (v) => onChange([lo, Math.max(Math.min(v, max), lo)])
@@ -65,11 +66,13 @@ export default function RangeGroup({ title, bounds, value, onChange, ticks }) {
         />
       </div>
       <div className="rng-ticks" aria-hidden="true">
-        {ticks.map((t) => (
-          <span key={t} style={{ left: `${pct(t)}%` }}>
-            {compact(t)}
-          </span>
-        ))}
+        {ticks.map((t, i) =>
+          i % labelEvery === 0 ? (
+            <span key={t} style={{ left: `${pct(t)}%` }}>
+              {compact(t)}
+            </span>
+          ) : null,
+        )}
       </div>
     </Collapsible>
   )

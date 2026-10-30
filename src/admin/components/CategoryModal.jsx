@@ -4,9 +4,17 @@ import Field from "./Field";
 import FileField from "./FileField";
 import axiosClient from "../../utils/axiosClient";
 
+// a subcategory row in the form: its name and its categories as a comma list
+const toRow = (s) =>
+  typeof s === "string" ? { title: s, options: "" } : { title: s.title, options: (s.options ?? []).join(", ") };
+const fromRow = (r) => ({
+  title: r.title.trim(),
+  options: r.options.split(",").map((o) => o.trim()).filter(Boolean),
+});
+
 const toForm = (c = {}) => ({
   title: c.title ?? "",
-  subCategories: (c.subCategories ?? []).join(", "),
+  subCategories: (c.subCategories ?? []).map(toRow),
   description: c.description ?? "",
   tag: c.tag ?? "",
   image: c.image ?? "",
@@ -20,11 +28,13 @@ const toForm = (c = {}) => ({
 export default function CategoryModal({ category, nextOrder, onClose, onSaved }) {
   const [form, setForm] = useState(() => toForm(category));
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
+  const setSub = (i, patch) =>
+    setForm((f) => ({ ...f, subCategories: f.subCategories.map((r, n) => (n === i ? { ...r, ...patch } : r)) }));
 
   const save = async () => {
     const data = {
       title: form.title.trim(),
-      subCategories: form.subCategories.split(",").map((s) => s.trim()).filter(Boolean),
+      subCategories: form.subCategories.map(fromRow).filter((s) => s.title),
       description: form.description.trim(),
       tag: form.tag.trim(),
       image: form.image,
@@ -50,9 +60,43 @@ export default function CategoryModal({ category, nextOrder, onClose, onSaved })
           <Field label="Short description" optional hint="A short line that introduces this collection.">
             <input value={form.description} onChange={set("description")} placeholder="Explore the collection" />
           </Field>
-          <Field label="Subcategories" optional hint="Separate names with commas. Products can be assigned to one of these.">
-            <textarea rows="2" value={form.subCategories} onChange={set("subCategories")} placeholder="Natural Diamond, Lab Grown Diamond" />
-          </Field>
+          <div className="ad-subs">
+            <span className="ad-subs-title">
+              Subcategories <em className="ad-optional">(optional)</em>
+            </span>
+            {form.subCategories.map((row, i) => (
+              <div className="ad-sub-row" key={i}>
+                <input
+                  value={row.title}
+                  onChange={(e) => setSub(i, { title: e.target.value })}
+                  placeholder="Name, e.g. Rings"
+                  aria-label="Subcategory name"
+                />
+                <input
+                  value={row.options}
+                  onChange={(e) => setSub(i, { options: e.target.value })}
+                  placeholder="Categories, e.g. Plain, Diamond"
+                  aria-label="Categories of this subcategory"
+                />
+                <button
+                  type="button"
+                  className="ad-sub-remove"
+                  aria-label="Remove subcategory"
+                  onClick={() => setForm((f) => ({ ...f, subCategories: f.subCategories.filter((_, n) => n !== i) }))}
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              className="ad-btn ghost"
+              onClick={() => setForm((f) => ({ ...f, subCategories: [...f.subCategories, { title: "", options: "" }] }))}
+            >
+              + Add subcategory
+            </button>
+            <small>The categories are the choices shown under a subcategory when adding a product. Leave them empty if it has none.</small>
+          </div>
           <div className="ad-grid-2">
             <Field label="Card badge" optional hint="Such as New In.">
               <input value={form.tag} onChange={set("tag")} placeholder="Optional" />

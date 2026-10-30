@@ -6,7 +6,9 @@ export const compact = (n) => (n >= 1000 ? `${Math.round(n / 1000)}k` : `${n}`)
 
 export const emptyFilters = () => ({
   type: [],
+  subCategory: [],
   category: [],
+  pendantType: [],
   shape: [],
   metal: [],
   gemstone: [],
@@ -44,7 +46,8 @@ export const countOptions = (products, filters) => {
 export const sortProducts = (list, sort) => {
   if (sort === 'az') return [...list].sort((a, b) => a.name.localeCompare(b.name))
   if (sort === 'za') return [...list].sort((a, b) => b.name.localeCompare(a.name))
-  if (sort === 'new') return [...list].reverse()
+  if (sort === 'priceAsc') return [...list].sort((a, b) => (a.price ?? Infinity) - (b.price ?? Infinity))
+  if (sort === 'priceDesc') return [...list].sort((a, b) => (b.price ?? -Infinity) - (a.price ?? -Infinity))
   return list
 }
 

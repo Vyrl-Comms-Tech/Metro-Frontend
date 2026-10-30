@@ -215,7 +215,7 @@
 /* overview */
 .admin .ad-stats {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 16px;
   margin: 0 0 24px;
   padding: 0;
@@ -1418,4 +1418,166 @@
   font-size: 11px;
   font-style: normal;
   font-weight: 400;
+}
+
+.admin .ad-variants-title {
+  margin: 8px 0 4px;
+  font-size: 15px;
+}
+
+.admin .ad-variants-hint {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: var(--brand-muted, #666);
+}
+
+.admin .ad-variant {
+  margin-bottom: 14px;
+  padding: 14px 14px 10px;
+  border: 1px solid var(--brand-line-soft);
+  border-radius: 6px;
+}
+
+.admin .ad-variant-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  font-size: 13px;
+}
+
+.admin .ad-add-variant {
+  margin-bottom: 16px;
+}
+
+.admin .ad-subs {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 17px;
+}
+
+.admin .ad-subs-title {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.admin .ad-subs small {
+  color: var(--brand-muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.admin .ad-sub-row {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.admin .ad-sub-row input {
+  margin: 0;
+}
+
+.admin .ad-sub-remove {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--brand-line-soft);
+  border-radius: 6px;
+  background: none;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.admin .ad-subs .ad-btn {
+  justify-self: start;
+}
+
+@media (max-width: 560px) {
+  .admin .ad-sub-row {
+    grid-template-columns: 1fr auto;
+  }
+
+  .admin .ad-sub-row input:nth-child(2) {
+    grid-column: 1;
+  }
+}
+
+.admin .ad-modal-box .ad-modal-body {
+  overscroll-behavior: contain;
+}
+
+.admin .ad-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.admin .ad-filters select {
+  flex: 1 1 130px;
+  min-width: 0;
+}
+
+.admin .ad-filters select.on {
+  border-color: var(--brand-green);
+  background-color: #f3f8f4;
+}
+
+.admin .ad-filters .ad-btn {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.admin .ad-filters select:disabled {
+  opacity: 0.5;
+}
+
+/* hover box with the variation breakdown, e.g. under the product count */
+.admin .ad-hover {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted currentColor;
+  cursor: help;
+}
+
+.admin .ad-hover-box {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 20;
+  display: none;
+  min-width: 290px;
+  padding: 12px 14px;
+  border: 1px solid var(--brand-line-soft);
+  border-radius: 8px;
+  background: var(--brand-white);
+  box-shadow: 0 12px 32px rgba(9, 24, 15, 0.14);
+  color: var(--brand-black);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.admin .ad-hover:hover .ad-hover-box,
+.admin .ad-hover:focus .ad-hover-box {
+  display: block;
+}
+
+.admin .ad-hover-box > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 3px 0;
+}
+
+.admin .ad-hover-box b {
+  font-weight: 500;
+}
+
+.admin .ad-hover-box .ad-hover-total {
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px solid var(--brand-line-soft);
+  font-weight: 500;
 }

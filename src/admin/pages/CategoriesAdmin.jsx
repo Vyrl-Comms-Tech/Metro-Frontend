@@ -68,7 +68,7 @@ export default function CategoriesAdmin() {
                 </div>
                 <div className="ad-category-subcategories">
                   <span className="ad-category-label">Subcategories</span>
-                  <span>{category.subCategories?.length ? category.subCategories.join(', ') : 'None added'}</span>
+                  <span>{category.subCategories?.length ? category.subCategories.map((s) => (typeof s === 'string' ? s : s.title)).join(', ') : 'None added'}</span>
                 </div>
                 <div className="ad-category-visibility">
                   <span className="ad-category-label">Home page</span>
