@@ -16,10 +16,11 @@ const metalCode = (metal) =>
 const subTitle = (s) => (typeof s === "string" ? s : s.title);
 const subOptions = (s) => (typeof s === "string" ? [] : (s.options ?? []));
 
-const emptyVariant = () => ({ type: "", metal: METALS[0], productCode: "", price: "", compareAtPrice: "", images: [], files: [] });
+const emptyVariant = () => ({ name: "", type: "", metal: METALS[0], productCode: "", price: "", compareAtPrice: "", images: [], files: [] });
 
 const toVariant = (v) => ({
   ...v, // keeps details / sourceUrl of an existing variant
+  name: v.name ?? "",
   type: v.type ?? "",
   price: v.price ?? "",
   compareAtPrice: v.compareAtPrice ?? "",
@@ -28,7 +29,6 @@ const toVariant = (v) => ({
 });
 
 const toForm = (p = {}, defaultMain = "") => ({
-  name: p.name ?? "",
   mainCategory: p.mainCategory ?? defaultMain,
   subCategory: p.subCategory ?? "",
   category: p.category ?? "",
@@ -82,18 +82,18 @@ export default function ProductModal({ product, onClose, onSaved }) {
   const setVariant = (i, patch) => setVariants((list) => list.map((v, n) => (n === i ? { ...v, ...patch } : v)));
 
   const save = async () => {
-    if (!form.name.trim()) throw new Error("Name is required");
     if (subs.length && !form.subCategory) throw new Error("Choose a sub category");
     if (options.length && !form.category) throw new Error("Choose a category");
-    if (variants.some((v) => !v.productCode.trim() || v.price === "")) {
-      throw new Error("Every variant needs a product code and a price");
+    if (variants.some((v) => !v.name.trim() || !v.productCode.trim() || v.price === "")) {
+      throw new Error("Every variant needs a name, a product code and a price");
     }
 
     const saved = [];
     for (const v of variants) {
-      const { files, images, ...rest } = v;
+      const { files, images, slug, ...rest } = v; // the slug is made from the name by the server
       saved.push({
         ...rest,
+        name: v.name.trim(),
         type: text(v.type),
         productCode: v.productCode.trim(),
         metalCode: metalCode(v.metal),
@@ -104,7 +104,6 @@ export default function ProductModal({ product, onClose, onSaved }) {
     }
 
     const data = {
-      name: form.name.trim(),
       mainCategory: form.mainCategory,
       subCategory: text(form.subCategory),
       category: text(form.category),
@@ -126,10 +125,6 @@ export default function ProductModal({ product, onClose, onSaved }) {
 
   return (
     <Modal title={product?.id ? "Edit product" : "Add product"} onClose={onClose} onSave={save}>
-      <Field label="Name">
-        <input value={form.name} onChange={set("name")} required />
-      </Field>
-
       <div className="ad-grid-2">
         <Field label="Main category">
           <select
@@ -209,6 +204,9 @@ export default function ProductModal({ product, onClose, onSaved }) {
               </button>
             )}
           </div>
+          <Field label="Name" hint="The link (slug) is made from this name.">
+            <input value={v.name} onChange={(e) => setVariant(i, { name: e.target.value })} />
+          </Field>
           <div className="ad-grid-2">
             <Field label="Diamond type" optional hint="Lab Grown or Natural. Leave as None for pieces without one.">
               <Select value={v.type} onChange={(e) => setVariant(i, { type: e.target.value })} options={TYPES} blank="None" />

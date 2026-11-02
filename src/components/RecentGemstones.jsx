@@ -1,11 +1,9 @@
 import { Link } from 'react-router-dom'
-import { ArrowRight, Gem, Heart } from 'lucide-react'
-import { useWishlist } from '../context/wishlistContext'
+import { ArrowRight, Gem } from 'lucide-react'
+import StoneCard from './StoneCard'
 import '../styles/RecentGemstones.css'
 import axiosClient from '../utils/axiosClient'
 import { useAsync } from '../utils/useAsync'
-
-const placeholder = '/gemstone-placeholder.png'
 
 const previewGemstones = [
   { id: 'preview-sapphire', name: 'Sapphire', type: 'Natural', shape: 'Oval', carat: 2.15, color: 'Blue' },
@@ -17,7 +15,6 @@ const previewGemstones = [
 
 export default function RecentGemstones() {
   const { data } = useAsync(() => axiosClient.get('/products/getAll', { params: { mainCategory: 'gemstones', limit: 5 } }), [])
-  const { has, toggle } = useWishlist()
   const isPreview = !data?.items?.length
   const gemstones = isPreview ? previewGemstones : data.items
 
@@ -30,43 +27,14 @@ export default function RecentGemstones() {
       </header>
 
       <div className="rg-grid">
-        {gemstones.map((gemstone) => {
-          const image = gemstone.images?.[0] || placeholder
-          const to = isPreview ? '/collections/gemstones' : `/product/${gemstone.id}`
-          const title = gemstone.name
-          const shape = gemstone.shape ? `${gemstone.shape} Cut` : ''
-          const details = [gemstone.type, shape].filter(Boolean).join(' · ')
-
-          return (
-            <article className="rg-card" key={gemstone.id}>
-              <div className="rg-image-wrap">
-                <img src={image} alt={`${title} gemstone`} loading="lazy" />
-                <button
-                  className={`rg-wish ${has(gemstone.id) ? 'is-saved' : ''}`}
-                  type="button"
-                  aria-label={`${has(gemstone.id) ? 'Remove' : 'Add'} ${title} ${has(gemstone.id) ? 'from' : 'to'} wishlist`}
-                  aria-pressed={has(gemstone.id)}
-                  onClick={() => toggle({ id: gemstone.id, name: title, image, to })}
-                >
-                  <Heart size={19} strokeWidth={1.7} aria-hidden="true" />
-                </button>
-              </div>
-
-              <div className="rg-body">
-                <h3>{title}</h3>
-                {details && <p className="rg-meta">{details}</p>}
-                <div className="rg-tags">
-                  {gemstone.carat != null && <span>{Number(gemstone.carat).toFixed(2)} Carat</span>}
-                  {gemstone.shape && <span>{gemstone.shape}</span>}
-                  {(gemstone.color || gemstone.gemstone) && <span>{gemstone.color || gemstone.gemstone}</span>}
-                </div>
-                <Link className="rg-details" to={to}>
-                  {isPreview ? 'Explore Gemstones' : 'View Details'} <ArrowRight size={15} aria-hidden="true" />
-                </Link>
-              </div>
-            </article>
-          )
-        })}
+        {gemstones.map((gemstone) => (
+          <StoneCard
+            key={gemstone.id}
+            stone={gemstone}
+            to={isPreview ? '/collections/gemstones' : `/product/${gemstone.id}`}
+            linkLabel={isPreview ? 'Explore Gemstones' : 'View Details'}
+          />
+        ))}
       </div>
 
       <div className="rg-footer">

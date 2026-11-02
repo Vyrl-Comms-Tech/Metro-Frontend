@@ -100,6 +100,7 @@
   padding: 4px 0 24px;
   border-bottom: 1px solid var(--brand-line-soft);
   margin-bottom: 20px;
+  
 }
 
 .collection .col-group:last-child {
@@ -128,9 +129,11 @@
 }
 
 .collection .col-group ul.scroll {
-  max-height: 170px;
+  max-height: 230px;
   overflow-y: auto;
   padding-right: 8px;
+
+  scrollbar-width: 0.3px;
 }
 
 .collection .col-group li {

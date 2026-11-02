@@ -42,3 +42,17 @@ export const RANGES = {
   width: { min: 0, max: 20, step: 0.5 },
   carat: { min: 0, max: 3, step: 0.25 },
 };
+
+// per-page slider bounds, keyed by collection slug; pages not listed use RANGES
+const PAGE_RANGES = {
+  bracelets: {
+    width: { min: 0, max: 7, step: 0.5 },
+    carat: { min: 0, max: 27, step: 0.25 },
+  },
+  "wedding-rings": {
+    width: { min: 1, max: 8, step: 0.5 },
+    carat: { min: 0, max: 3, step: 0.25 },
+  },
+};
+
+export const rangesFor = (slug) => ({ ...RANGES, ...PAGE_RANGES[slug] });

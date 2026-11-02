@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { columnLink } from './menuData'
 import { useNav } from './useNav'
 import '../styles/MobileMenu.css'
 
@@ -14,7 +15,10 @@ function groupsOf(item) {
   if (menu.type === 'columns') {
     return menu.columns.map((col) => ({
       title: col.title,
-      links: col.links.map((label) => ({ label, href: '#' })),
+      links: [
+        ...col.options.map((label) => ({ label, to: columnLink(col.title, label) })),
+        { label: `View All ${col.title}`, to: columnLink(col.title) },
+      ],
     }))
   }
   return [

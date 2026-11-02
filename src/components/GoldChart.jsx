@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
 import { ChevronDown } from "lucide-react";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import axiosClient from "../utils/axiosClient";
 import { useAsync } from "../utils/useAsync";
 import "../styles/GoldChart.css";
@@ -157,6 +159,27 @@ export default function GoldChart() {
     );
   }
 
+  if (!data) {
+    return (
+      <section className="gold" aria-busy="true" aria-label="Loading gold price">
+        <div className="gold-head">
+          <div className="gold-title">
+            <Skeleton circle width={34} height={34} />
+            <div>
+              <Skeleton width={120} height={22} />
+              <Skeleton width={240} height={14} />
+            </div>
+          </div>
+          <Skeleton width={150} height={38} />
+        </div>
+        <Skeleton width={220} height={34} style={{ marginTop: 16 }} />
+        <Skeleton width={180} height={14} />
+        <Skeleton width={200} height={34} style={{ margin: "16px 0" }} />
+        <Skeleton height={H} />
+      </section>
+    );
+  }
+
   return (
     <section className="gold">
       <div className="gold-head">
@@ -215,9 +238,7 @@ export default function GoldChart() {
 
       {!hasChart ? (
         <p className="gold-note">
-          {data
-            ? "The price chart builds up as prices are recorded. Check back soon."
-            : "Loading gold price…"}
+          The price chart builds up as prices are recorded. Check back soon.
         </p>
       ) : (
         <svg

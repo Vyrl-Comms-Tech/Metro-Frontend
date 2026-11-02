@@ -1,7 +1,9 @@
 import { useCallback, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { columnLink } from './menuData'
 import { useNav } from './useNav'
 import MobileMenu from './MobileMenu'
+import SearchBar from './SearchBar'
 import { useWishlist } from '../context/wishlistContext'
 import '../styles/Header.css'
 
@@ -50,13 +52,10 @@ function MegaMenu({ item }) {
             <div key={col.title} className="mm-col">
               <h4>{col.title}</h4>
               <ul>
-                {col.links.map((l) => (
-                  <li key={l}>
-                    {col.title === 'Bracelets'
-                      ? <Link to="/collections/bracelets">{l}</Link>
-                      : <a href="#">{l}</a>}
-                  </li>
+                {col.options.map((o) => (
+                  <li key={o}><Link to={columnLink(col.title, o)}>{o}</Link></li>
                 ))}
+                <li><Link to={columnLink(col.title)}>View All {col.title}</Link></li>
               </ul>
             </div>
           ))}
@@ -95,10 +94,12 @@ function MegaMenu({ item }) {
 export default function Header() {
   const [active, setActive] = useState(null)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
   const { count } = useWishlist()
   const nav = useNav()
   const timer = useRef(null)
   const closeMenu = useCallback(() => setMenuOpen(false), [])
+  const closeSearch = useCallback(() => setSearchOpen(false), [])
 
   const open = (i) => {
     clearTimeout(timer.current)
@@ -119,16 +120,15 @@ export default function Header() {
           <button className="icon-btn hd-menu-btn" aria-label="Open menu" aria-expanded={menuOpen} onClick={() => setMenuOpen(true)}>
             <Icon><path d="M4 7h16M4 12h16M4 17h16" /></Icon>
           </button>
-          <button className="icon-btn" aria-label="Search">
-            <Icon><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></Icon>
-          </button>
+          <Link to="/" className="logo" aria-label="Metro Jewellers">
+            <img src="/black-logo.png" alt="Metro Jewellers" />
+          </Link>
         </div>
 
-        <Link to="/" className="logo" aria-label="Metro Jewellers">
-          <img src="/black-logo.png" alt="Metro Jewellers" />
-        </Link>
-
         <div className="hd-right">
+          <button className="icon-btn" aria-label="Search" aria-expanded={searchOpen} onClick={() => setSearchOpen((o) => !o)}>
+            <Icon><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></Icon>
+          </button>
           <button className="icon-btn" aria-label="Messages">
             <Icon><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></Icon>
           </button>
@@ -159,6 +159,8 @@ export default function Header() {
       </nav>
 
       <MobileMenu open={menuOpen} onClose={closeMenu} />
+
+      {searchOpen && <SearchBar onClose={closeSearch} />}
 
       {current?.menu && (
         <div className="mega" onMouseEnter={() => clearTimeout(timer.current)}>

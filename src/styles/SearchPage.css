@@ -1,0 +1,7 @@
+.search-page {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 40px 24px 60px;
+}
+.search-page h1 { margin: 0 0 6px; font-size: 26px; font-weight: 400; }
+.search-page .search-count { margin: 0 0 28px; color: #666; font-size: 14px; }

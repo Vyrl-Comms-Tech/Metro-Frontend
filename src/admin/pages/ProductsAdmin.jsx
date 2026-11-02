@@ -85,7 +85,7 @@ export default function ProductsAdmin() {
   const columns = [
     {
       key: 'name', label: 'Product', cellClassName: 'ad-cell-main',
-      render: (p) => <div className="ad-record"><span className="ad-thumb">{p.images?.[0] ? <img src={p.images[0]} alt="" /> : <ProductArt metal={p.metal} />}</span><span>{p.name}</span></div>,
+      render: (p) => <div className="ad-record"><span className="ad-thumb">{p.images?.[0] ? <img src={p.images[0]} alt="" /> : <ProductArt metal={p.metal} />}</span><span>{p.variants?.[0]?.name ?? p.name}</span></div>,
     },
     { key: 'mainCategory', label: 'Main category', render: (p) => collections.find((c) => c.slug === p.mainCategory)?.title ?? p.mainCategory },
     { key: 'subCategory', label: 'Sub category' },

@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { CHECK_GROUPS, CHECK_KEYS, RANGE_GROUPS, RANGE_KEYS, SORTS } from "../data/collectionFilters";
-import { RANGES } from "../data/collections";
+import { rangesFor } from "../data/collections";
 import {
   countActive,
   countOptions,
@@ -9,6 +9,9 @@ import {
   matchesFilters,
   sortProducts,
 } from "../utils/collection";
+import { categoryFromSlug } from "../components/menuData";
+import { productPath } from "../utils/productPath";
+import { useSessionState } from "../utils/useSessionState";
 import CheckGroup from "../components/collection/CheckGroup";
 import Chevron from "../components/collection/Chevron";
 import ProductArt from "../components/collection/ProductArt";
@@ -42,57 +45,83 @@ const SUBCATEGORY_PAGES = {
   rings: { title: "Rings" },
 };
 
+// the wedding rings are a category of Rings of their own, listed one card per ring (not per metal): View All Rings leaves them out
+const WEDDING = "Wedding Rings";
+const WEDDING_GROUPS = ["gender", "category", "ringCovering", "style", "metal"];
+
 const FACET_KEY = { type: "diamondType" };
 const facetOf = (group, facets) => facets?.[FACET_KEY[group.key] ?? group.key] ?? [];
 
+
 // the active filters as getAll params: checkboxes join with commas, sliders only send the end the user moved
-const filterParams = (filters, sort) => {
+const filterParams = (filters, sort, ranges) => {
   const params = sort ? { sort } : {};
   for (const key of CHECK_KEYS) {
     if (key !== "subCategory" && filters[key].length) params[FACET_KEY[key] ?? key] = filters[key].join(",");
   }
   for (const key of RANGE_KEYS) {
     const [lo, hi] = filters[key];
-    if (lo !== RANGES[key].min) params[`${key}Min`] = lo;
-    if (hi !== RANGES[key].max) params[`${key}Max`] = hi;
+    if (lo !== ranges[key].min) params[`${key}Min`] = lo;
+    if (hi !== ranges[key].max) params[`${key}Max`] = hi;
   }
   return params;
 };
 
-function SubCategoryPage({ slug, sub }) {
-  const collection = { title: sub.title, slug, subCategories: [] };
+function SubCategoryPage({ slug, sub, category }) {
+  const wedding = category === WEDDING;
+  const collection = { title: wedding ? WEDDING : sub.title, slug, subCategories: [] };
   const [facets, setFacets] = useState(null);
-  const [filters, setFilters] = useState(emptyFilters);
-  const [sort, setSort] = useState("");
+  const ranges = useMemo(() => rangesFor(wedding ? "wedding-rings" : slug), [slug, wedding]);
+  // which products the page is about: the wedding rings (Plain / Diamond), or the rest of Rings
+  const scope = useMemo(
+    () => (wedding ? { onlyCategory: "Plain,Diamond", perProduct: true } : slug === "rings" ? { notCategory: "Plain,Diamond" } : {}),
+    [slug, wedding],
+  );
+  // each category keeps its own filters, sort and loaded pages for the session
+  const store = `sub:${slug}${category ? `:${category}` : ""}`;
+  const [savedFilters, setFilters] = useSessionState(`${store}:filters`, () => ({ ...emptyFilters(ranges), category: category && !wedding ? [category] : [] }));
+  // filters saved before a new filter existed lack its key
+  const filters = useMemo(() => ({ ...emptyFilters(ranges), ...savedFilters }), [ranges, savedFilters]);
+  const [sort, setSort] = useSessionState(`${store}:sort`, "");
+  const [savedPages, setSavedPages] = useSessionState(`${store}:pages`, 1);
+  const restorePages = useRef(savedPages); // the pages to load again on the first visit
   const [items, setItems] = useState([]);
   const [meta, setMeta] = useState({ page: 0, hasNext: false, total: 0 });
   const [state, setState] = useState({ loading: true, refreshing: false, loadingMore: false, error: null });
-  const params = useMemo(() => filterParams(filters, sort), [filters, sort]);
+  const params = useMemo(() => filterParams(filters, sort, ranges), [filters, sort, ranges]);
 
   const fetchPage = useCallback(
-    (page) =>
+    (page, limit = PER_PAGE) =>
       axiosClient.get("/products/getAll", {
-        params: { limit: PER_PAGE, mainCategory: "jewellery", subCategory: sub.title, withVariation: true, cardDetails: true, page, ...params },
+        params: { limit, mainCategory: "jewellery", subCategory: sub.title, withVariation: !wedding, cardDetails: true, page, ...scope, ...params },
       }),
-    [sub.title, params],
+    [sub.title, scope, params, wedding],
   );
 
-  // the filter options for this page, loaded once
-  useEffect(() => {
-    axiosClient
-      .get("/products/filters", { params: { mainCategory: "jewellery", subCategory: sub.title } })
-      .then(setFacets)
-      .catch(() => setFacets({}));
-  }, [sub.title]);
-
-  // the first page, again whenever a filter changes
+  // the filter options with their counts, loaded again whenever a filter changes so they match the chosen filters
+  const facetParams = useMemo(() => filterParams(filters, "", ranges), [filters, ranges]);
   useEffect(() => {
     let live = true;
-    fetchPage(1)
+    axiosClient
+      .get("/products/filters", { params: { mainCategory: "jewellery", subCategory: sub.title, ...scope, ...facetParams } })
+      .then((res) => live && setFacets(res))
+      .catch(() => live && setFacets((prev) => prev ?? {}));
+    return () => {
+      live = false;
+    };
+  }, [sub.title, scope, facetParams]);
+
+  // the first page, again whenever a filter changes; coming back, every page that was loaded before in one request
+  useEffect(() => {
+    let live = true;
+    const pages = Math.min(restorePages.current, Math.floor(500 / PER_PAGE)); // the server returns at most 500 per request
+    fetchPage(1, PER_PAGE * pages)
       .then((res) => {
         if (!live) return;
+        restorePages.current = 1;
         setItems(res.items ?? []);
-        setMeta({ page: res.page, hasNext: res.hasNext, total: res.total });
+        setMeta({ page: pages, hasNext: res.hasNext, total: res.total });
+        setSavedPages(pages);
         setState({ loading: false, refreshing: false, loadingMore: false, error: null });
       })
       .catch((error) => live && setState({ loading: false, refreshing: false, loadingMore: false, error }));
@@ -104,11 +133,13 @@ function SubCategoryPage({ slug, sub }) {
   // shows the skeleton while the filtered list loads
   const changeFilters = (next) => {
     setState((st) => ({ ...st, refreshing: true }));
+    setSavedPages(1);
     setFilters(next);
   };
 
   const changeSort = (next) => {
     setState((st) => ({ ...st, refreshing: true }));
+    setSavedPages(1);
     setSort(next);
   };
 
@@ -118,6 +149,7 @@ function SubCategoryPage({ slug, sub }) {
       .then((res) => {
         setItems((prev) => [...prev, ...(res.items ?? [])]);
         setMeta({ page: res.page, hasNext: res.hasNext, total: res.total });
+        setSavedPages(res.page);
         setState((st) => ({ ...st, loadingMore: false }));
       })
       .catch((error) => setState((st) => ({ ...st, loadingMore: false, error })));
@@ -134,8 +166,10 @@ function SubCategoryPage({ slug, sub }) {
   return (
     <CollectionView
       collection={collection}
+      ranges={ranges}
       items={items}
       facets={facets}
+      groups={wedding ? WEDDING_GROUPS : undefined}
       filterState={[filters, changeFilters]}
       sortState={[sort, changeSort]}
       paging={{ total: meta.total, hasNext: meta.hasNext, loadingMore: state.loadingMore, refreshing: state.refreshing, onMore: loadMore }}
@@ -144,9 +178,10 @@ function SubCategoryPage({ slug, sub }) {
 }
 
 export default function CollectionPage() {
-  const { slug } = useParams();
+  const { slug, option } = useParams();
+  const category = option ? categoryFromSlug(slug, option) : null;
   const sub = SUBCATEGORY_PAGES[slug];
-  if (sub) return <SubCategoryPage key={slug} slug={slug} sub={sub} />;
+  if (sub) return <SubCategoryPage key={`${slug}/${category}`} slug={slug} sub={sub} category={category} />;
   return <GenericCollectionPage slug={slug} />;
 }
 
@@ -191,14 +226,16 @@ const optionsFor = (group, collection) => {
 };
 
 // with `filterState` the server does the filtering (sub category pages); without it the loaded items are filtered here
-function CollectionView({ collection, items, facets, paging, filterState, sortState }) {
-  const own = useState(emptyFilters);
-  const [filters, setFilters] = filterState ?? own;
+function CollectionView({ collection, items, facets, groups, paging, filterState, sortState, ranges = rangesFor(collection.slug) }) {
+  // the other collections filter in the browser: their filters, sort and shown count are kept per collection for the session
+  const [ownFilters, setOwnFilters] = useSessionState(`collection:${collection.slug}:filters`, () => emptyFilters(ranges));
+  const mergedOwn = useMemo(() => ({ ...emptyFilters(ranges), ...ownFilters }), [ranges, ownFilters]);
+  const [filters, setFilters] = filterState ?? [mergedOwn, setOwnFilters];
   const serverSide = Boolean(filterState);
-  const ownSort = useState("");
+  const ownSort = useSessionState(`collection:${collection.slug}:sort`, "");
   const [sort, setSort] = sortState ?? ownSort;
   const [showFilters, setShowFilters] = useState(false);
-  const [shown, setShown] = useState(PER_PAGE);
+  const [shown, setShown] = useSessionState(`collection:${collection.slug}:shown`, PER_PAGE);
   const { has, toggle: toggleWish } = useWishlist();
 
   const toggle = (key, value) =>
@@ -210,35 +247,35 @@ function CollectionView({ collection, items, facets, paging, filterState, sortSt
     }));
 
   const counts = useMemo(
-    () => (serverSide ? {} : countOptions(items, filters)),
-    [filters, items, serverSide],
+    () => (serverSide ? {} : countOptions(items, filters, ranges)),
+    [filters, items, serverSide, ranges],
   );
 
   const products = useMemo(
     () =>
       sortProducts(
-        (serverSide ? items : items.filter((p) => matchesFilters(p, filters))),
+        (serverSide ? items : items.filter((p) => matchesFilters(p, filters, undefined, ranges))),
         serverSide ? "" : sort,
       ),
-    [filters, sort, items, serverSide],
+    [filters, sort, items, serverSide, ranges],
   );
 
 
   const checkGroups = facets
     ? CHECK_GROUPS.map((g) => ({ ...g, facet: facetOf(g, facets) }))
-      .filter((g) => g.facet.length > 0)
+      .filter((g) => g.facet.length > 0 && (!groups || groups.includes(g.key)))
       .map((g) => ({
         ...g,
         options: g.facet.map((f) => f.value),
         counts: Object.fromEntries(g.facet.map((f) => [f.value, f.count])),
       }))
-    : CHECK_GROUPS.filter((g) => g.key !== "pendantType" || items.some((p) => p.pendantType)).map((g) => ({
+    : CHECK_GROUPS.filter((g) => !g.serverOnly && (g.key !== "pendantType" || items.some((p) => p.pendantType))).map((g) => ({
       ...g,
       options: optionsFor(g, collection),
       counts: counts[g.key],
     }));
 
-  const active = countActive(filters);
+  const active = countActive(filters, ranges);
   const visible = paging ? products : products.slice(0, shown);
   const totalVariations =
     serverSide
@@ -277,7 +314,7 @@ function CollectionView({ collection, items, facets, paging, filterState, sortSt
             {active > 0 && (
               <button
                 className="col-clear"
-                onClick={() => setFilters(emptyFilters())}
+                onClick={() => setFilters(emptyFilters(ranges))}
               >
                 Clear all filters
               </button>
@@ -300,8 +337,8 @@ function CollectionView({ collection, items, facets, paging, filterState, sortSt
               <RangeGroup
                 key={g.key}
                 title={g.title}
-                bounds={g.bounds}
-                ticks={g.ticks}
+                bounds={ranges[g.key]}
+                ticks={Array.from({ length: Math.floor(ranges[g.key].max - ranges[g.key].min) + 1 }, (_, i) => ranges[g.key].min + i)}
                 value={filters[g.key]}
                 onChange={(v) => setFilters((f) => ({ ...f, [g.key]: v }))}
               />
@@ -349,7 +386,7 @@ function CollectionView({ collection, items, facets, paging, filterState, sortSt
             <div className="col-grid">
               {visible.map((p) => (
                 <article key={p.productCode ?? p.id} className="prod">
-                  <Link to={`/product/${p.id}`} className="prod-img">
+                  <Link to={productPath(p)} className="prod-img">
                     {p.images?.[0] || p.image ? (
                       <>
                         <img src={p.images?.[0] ?? p.image} alt="" />
@@ -369,7 +406,7 @@ function CollectionView({ collection, items, facets, paging, filterState, sortSt
                         name: p.name,
                         metal: p.metal,
                         image: p.images?.[0] ?? p.image,
-                        to: `/product/${p.id}`,
+                        to: productPath(p),
                       })
                     }
                   >
@@ -386,7 +423,7 @@ function CollectionView({ collection, items, facets, paging, filterState, sortSt
                     </svg>
                   </button>
                   <h3>
-                    <Link to={`/product/${p.id}`}>{p.name}</Link>
+                    <Link to={productPath(p)}>{p.name}</Link>
                   </h3>
                 </article>
               ))}

@@ -22,7 +22,7 @@
 /* top row */
 .site-header .hd-top {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: 1fr auto;
   align-items: center;
   max-width: 1240px;
   margin: 0 auto;
@@ -49,7 +49,7 @@
 .site-header .hd-top .logo img {
   display: block;
   /* height: 64px; */
-  width: 145px;
+  width: 125px;
 }
 
 .site-header .hd-top .icon-btn {
@@ -320,7 +320,7 @@
     gap: 12px;
   }
 
-  .site-header .hd-top .hd-right .icon-btn:first-child {
+  .site-header .hd-top .hd-right .icon-btn[aria-label="Messages"] {
     display: none;
   }
 }

@@ -8,7 +8,7 @@ import axiosClient from "../../utils/axiosClient";
 
 export default function CategoriesAdmin() {
   const { categories, reload } = useSite();
-  const [editing, setEditing] = useState(null); // null = closed, {} = new, category = edit
+  const [editing, setEditing] = useState(null); 
   const [actionError, setActionError] = useState("");
 
   const nextOrder = categories.length ? Math.max(...categories.map((c) => c.order ?? 0)) + 1 : 0;
@@ -54,7 +54,7 @@ export default function CategoriesAdmin() {
             <p>Add your first collection to organise products on the site.</p>
           </div>
         ) : (
-          <ul className="ad-category-list">
+          <ul className="ad-category-list"> 
             {categories.map((category) => (
               <li key={category.id} className={category.active === false ? 'is-inactive' : ''}>
                 <div className="ad-category-identity">
