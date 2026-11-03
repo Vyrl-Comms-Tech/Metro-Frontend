@@ -761,6 +761,21 @@
 }
 
 /* on / off switch (category status) */
+.admin .ad-switch-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  white-space: nowrap;
+}
+
+.admin .ad-switch-row .ad-switch {
+  flex: none;
+}
+
+.admin .ad-switch-row .ad-switch-label {
+  margin-left: 0;
+}
+
 .admin .ad-switch {
   position: relative;
   width: 38px;

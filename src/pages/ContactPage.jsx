@@ -30,7 +30,7 @@ export default function ContactPage() {
 
       <div className="ct-layout">
         <div className="ct-photo">
-          <img src="/d2.webp" alt="Model wearing Metro Jewellers diamond jewellery" />
+          <img src="/contact-us.jpg" alt="Model wearing Metro Jewellers diamond jewellery" />
         </div>
 
         <section className="ct-form">

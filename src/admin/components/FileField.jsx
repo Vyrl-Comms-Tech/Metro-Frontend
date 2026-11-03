@@ -1,6 +1,8 @@
 import { useState } from "react";
 import axiosClient from "../../utils/axiosClient";
 
+const MAX_IMAGE_SIZE = 2 * 1024 * 1024; // matches the backend limit
+
 // Uploads the chosen file straight away and reports its stored path via onChange.
 // `value` is the current path or URL; kind is "image" or "video".
 export default function FileField({ label, hint, optional, value, onChange, kind = "image" }) {
@@ -10,6 +12,11 @@ export default function FileField({ label, hint, optional, value, onChange, kind
   const pick = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
+    if (file.type.startsWith("image/") && file.size > MAX_IMAGE_SIZE) {
+      setError(`${file.name} is larger than 2 MB`);
+      e.target.value = "";
+      return;
+    }
     setBusy(true);
     setError("");
     try {
@@ -36,7 +43,7 @@ export default function FileField({ label, hint, optional, value, onChange, kind
         <span className="ad-upload-icon" aria-hidden="true">↑</span>
         <span className="ad-upload-copy">
           <strong>{busy ? 'Uploading…' : value ? `Replace ${kind}` : `Choose ${kind}`}</strong>
-          <small>{kind === 'image' ? 'JPG, PNG or WebP' : 'Video file'}</small>
+          <small>{kind === 'image' ? 'JPG, PNG or WebP, max 2 MB' : 'Video file'}</small>
         </span>
       </label>
       {hint && <small>{hint}</small>}

@@ -13,7 +13,7 @@ export default function HomePage() {
       <GoldChart />
       <RecentGemstones />
       <Categories />
-      <GalleryGrid />
+      <GalleryGrid limit={12} />
       <Reels />
       <Faq />
     </>

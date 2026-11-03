@@ -1,10 +1,17 @@
 import { useSite } from '../context/siteContext'
-import { GALLERY_IMAGES } from '../data/galleryImages'
+import axiosClient from '../utils/axiosClient'
+import { useAsync } from '../utils/useAsync'
 import '../styles/GalleryGrid.css'
 
-export default function GalleryGrid() {
+export default function GalleryGrid({ limit = 12}) {
   const { content } = useSite()
   const href = content.footer?.instagram || '#'
+  const { data } = useAsync(() => axiosClient.get('/custom-jewellery', { params: { limit, active: true } }), [limit])
+
+  const tiles = (data?.items ?? []).map((i) => ({ key: i.id, src: i.image, video: i.video, alt: i.title || 'Custom jewellery' }))
+
+  // nothing added in the admin yet
+  if (tiles.length === 0) return null
 
   return (
     <section className="gallery-grid" aria-labelledby="gallery-title">
@@ -15,9 +22,13 @@ export default function GalleryGrid() {
       </header>
 
       <div className="gg-grid">
-        {GALLERY_IMAGES.map((image, i) => (
-          <a className="gg-tile" key={i} href={href} target="_blank" rel="noreferrer" aria-label={image.alt}>
-            <img src={image.src} alt={image.alt} loading="lazy" />
+        {tiles.map((t) => (
+          <a className="gg-tile" key={t.key} href={href} target="_blank" rel="noreferrer" aria-label={t.alt}>
+            {t.video ? (
+              <video src={t.video} poster={t.src || undefined} autoPlay loop muted playsInline preload="metadata" />
+            ) : (
+              <img src={t.src} alt={t.alt} loading="lazy" />
+            )}
           </a>
         ))}
       </div>

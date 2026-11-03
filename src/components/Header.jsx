@@ -132,9 +132,6 @@ export default function Header() {
           <button className="icon-btn" aria-label="Messages">
             <Icon><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></Icon>
           </button>
-          <button className="icon-btn" aria-label="Account">
-            <Icon><circle cx="12" cy="8" r="4" /><path d="M4 21c0-4 4-6 8-6s8 2 8 6" /></Icon>
-          </button>
           <Link to="/wishlist" className="icon-btn" aria-label={`Wishlist, ${count} saved`}>
             <Icon><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z" /></Icon>
             {count > 0 && <i className="badge">{count}</i>}

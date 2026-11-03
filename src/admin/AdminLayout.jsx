@@ -31,6 +31,11 @@ const LINKS = [
     icon: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5M12 17h.01",
   },
   {
+    to: "/admin/custom-jewellery",
+    label: "Custom Jewellery",
+    icon: "M12 3 4 9l8 12 8-12zM4 9h16M9 9l3 12 3-12",
+  },
+  {
     to: "/admin/reels",
     label: "Instagram Reels",
     icon: "M5 4h14v16H5zM10 9l5 3-5 3z",

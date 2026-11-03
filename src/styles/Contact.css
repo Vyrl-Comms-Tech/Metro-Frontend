@@ -10,11 +10,12 @@
   margin: 0 auto;
   padding: 48px 24px 96px;
   align-items: stretch;
+  height: 75vh;
 }
 
 /* left image */
 .contact .ct-photo {
-  min-height: 480px;
+  height: 100%;
   background: var(--brand-surface);
   overflow: hidden;
 }

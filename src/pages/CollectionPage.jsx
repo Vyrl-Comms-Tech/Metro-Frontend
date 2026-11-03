@@ -12,6 +12,7 @@ import {
 import { categoryFromSlug } from "../components/menuData";
 import { productPath } from "../utils/productPath";
 import { useSessionState } from "../utils/useSessionState";
+import Banner from "../components/collection/Banner";
 import CheckGroup from "../components/collection/CheckGroup";
 import Chevron from "../components/collection/Chevron";
 import ProductArt from "../components/collection/ProductArt";
@@ -21,19 +22,9 @@ import RangeGroup from "../components/collection/RangeGroup";
 import { useSite } from "../context/siteContext";
 import { useWishlist } from "../context/wishlistContext";
 import { previewProductsFor } from "../data/previewProducts";
-import bannerImg from "../assets/hero-photo.jpg";
 import "../styles/Collection.css";
 import axiosClient from "../utils/axiosClient";
 import { useAsync } from "../utils/useAsync";
-
-function Banner({ title, image }) {
-  return (
-    <section className="col-banner">
-      <h1>{title}</h1>
-      <img className="col-banner-img" src={image || bannerImg} alt="" />
-    </section>
-  );
-}
 
 const PER_PAGE = 15;
 

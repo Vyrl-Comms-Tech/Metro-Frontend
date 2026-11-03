@@ -56,7 +56,7 @@ axiosClient.interceptors.response.use(
         onSessionEnd()
       }
     }
-    if (!response) throw new Error('Cannot reach the server. Is the backend running?')
+    if (!response) throw new Error('Cannot reach the server')
     throw new Error(response.data?.message ?? `Request failed (${response.status})`)
   },
 )

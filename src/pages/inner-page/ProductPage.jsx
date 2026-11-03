@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import {
   BadgeCheck,
   Box,
   Gift,
   HelpCircle,
+  MessageCircle,
   ScrollText,
   Share2,
   Star,
@@ -68,16 +69,25 @@ function ProductPageSkeleton() {
   );
 }
 
-function DetailRow({ title, icon: Icon, children }) {
+function DetailRow({ title, icon: Icon, open, onToggle, children }) {
   return (
-    <details className="pd-detail">
-      <summary>
-        <Icon size={18} strokeWidth={1.5} />
+    <div className={`pd-detail ${open ? "open" : ""}`}>
+      <button
+        className="pd-detail-head"
+        type="button"
+        aria-expanded={open}
+        onClick={onToggle}
+      >
+        <Icon size={24} strokeWidth={1.5} />
         <span>{title}</span>
         <span className="pd-plus" aria-hidden="true" />
-      </summary>
-      <div className="pd-detail-body">{children}</div>
-    </details>
+      </button>
+      <div className="pd-detail-panel" inert={!open}>
+        <div>
+          <div className="pd-detail-body">{children}</div>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -145,18 +155,26 @@ function ProductView({ product, slug }) {
     variant.images?.length ? variant.images : (product.images ?? [])
   ).map((src) => ({ src, alt: variantName }));
   const details = variant.details ?? {};
-  const specs = [
-    ["Category", product.subCategory ?? product.category],
-    ["Diamond type", selectedType],
-    ["Carat weight", selectedCarat != null ? `${selectedCarat}ct` : null],
-    ["Gemstone", product.gemstone],
-    ["Width", product.width != null ? `${product.width}mm` : null],
-    ["Metal", selectedMetal],
-    ["Product code", variant.productCode],
-    ...Object.entries(details)
-      .filter(([key]) => !["width", "metal"].includes(key.toLowerCase()))
-      .map(([key, value]) => [key, value]),
-  ].filter(([, value]) => value != null && value !== "");
+  // per-variation details: the stone/size lines first, then packaging, weights and origin
+  const footerKeys = ["packaging", "weights", "made in"];
+  const detailEntries = Object.entries(details).filter(
+    ([, value]) => value != null && value !== "",
+  );
+  const infoLines = detailEntries.filter(([key]) => !footerKeys.includes(key.toLowerCase()));
+  const footerLines = footerKeys
+    .map((key) => detailEntries.find(([name]) => name.toLowerCase() === key))
+    .filter(Boolean);
+  const upperFirst = (text) =>
+    (text.charAt(0).toUpperCase() + text.slice(1)).replace(/\b(igi|gia)\b/gi, (word) =>
+      word.toUpperCase(),
+    );
+
+  // only one detail row is open at a time
+  const [openRow, setOpenRow] = useState(null);
+  const rowProps = (key) => ({
+    open: openRow === key,
+    onToggle: () => setOpenRow((current) => (current === key ? null : key)),
+  });
 
   const navigate = useNavigate();
   const [missingCarat, setMissingCarat] = useState(null);
@@ -431,40 +449,102 @@ function ProductView({ product, slug }) {
           )}
 
           <div className="pd-details">
-            <DetailRow title="PRODUCT DETAILS" icon={ScrollText}>
-              <dl className="pd-specs">
-                {specs.map(([label, value]) => (
-                  <div key={label}>
-                    <dt>{label.charAt(0).toUpperCase() + label.slice(1)}</dt>
-                    <dd>{value}</dd>
-                  </div>
-                ))}
-              </dl>
-              {product.description && !Object.keys(details).length && (
-                <p>{product.description}</p>
+            <DetailRow title="PRODUCT DETAILS" icon={ScrollText} {...rowProps("details")}>
+              {variant.productCode && (
+                <div className="pd-info-block">
+                  <h3>Product Code</h3>
+                  <p>{variant.productCode}</p>
+                </div>
               )}
-            </DetailRow>
-            <DetailRow title="METRO GUARANTEE" icon={BadgeCheck}>
-              <p>
-                Questions about authenticity or craftsmanship? Contact our team
-                for details about this piece.
+              {infoLines.length > 0 && (
+                <div className="pd-info-block">
+                  <h3>Product Info</h3>
+                  {infoLines.map(([key, value]) => (
+                    <p key={key}>
+                      <strong>{upperFirst(key)}:</strong> {upperFirst(String(value))}
+                    </p>
+                  ))}
+                </div>
+              )}
+              {footerLines.length > 0 && (
+                <div className="pd-info-block pd-info-tight">
+                  {footerLines.map(([key, value]) => (
+                    <p key={key}>
+                      <strong>{upperFirst(key)}:</strong> {value}
+                    </p>
+                  ))}
+                </div>
+              )}
+              {!detailEntries.length && product.description && <p>{product.description}</p>}
+              <p className="pd-lead-note">
+                *All orders are bespoke, lead time is typically 7–14 days prior
+                to collection/shipping or up to 21 days during peak times
               </p>
             </DetailRow>
-            <DetailRow title="DROP A HINT" icon={Gift}>
-              <p>Share this piece with someone special.</p>
-              <button
-                className="pd-inline-action"
-                type="button"
-                onClick={share}
-              >
-                Share product
-              </button>
-            </DetailRow>
-            <DetailRow title="SHIPPING AND RETURNS" icon={Box}>
+            <DetailRow title="METRO GUARANTEE" icon={BadgeCheck} {...rowProps("guarantee")}>
+              <ul className="pd-list">
+                <li>Lifetime warranty of manufacturing defects</li>
+                <li>Premium finishing quality guarantee</li>
+                <li>GIA/IGI diamond certification</li>
+                <li>100% honest and transparent advice</li>
+                <li>Complimentary ring sizing</li>
+                <li>Complimentary annual polish &amp; clean</li>
+              </ul>
               <p>
-                Contact our team for delivery and return details for your
-                location.
+                Diamond certificates are included with all rings that have
+                diamond(s) 0.30ct or larger. Typically, natural diamonds come
+                with GIA certification whilst lab-grown diamonds come with IGI
+                certification.
               </p>
+            </DetailRow>
+            <DetailRow title="DROP A HINT" icon={Gift} {...rowProps("hint")}>
+              <p>
+                Make it easy for your friends &amp; loved ones by sharing this
+                product with them!
+              </p>
+              <div className="pd-hint-actions">
+                <a
+                  className="pd-inline-action"
+                  href={whatsappLink("", `Check out ${variantName}: ${window.location.href}`)}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <MessageCircle size={18} strokeWidth={1.5} />
+                  Share on WhatsApp
+                </a>
+                <button
+                  className="pd-inline-action"
+                  type="button"
+                  onClick={share}
+                >
+                  <Share2 size={18} strokeWidth={1.5} />
+                  Share
+                </button>
+              </div>
+            </DetailRow>
+            <DetailRow title="SHIPPING AND RETURNS" icon={Box} {...rowProps("shipping")}>
+              <ul className="pd-list">
+                <li>
+                  <strong>Free Express Shipping</strong>: Complimentary
+                  worldwide shipping on all orders over $1,500.
+                </li>
+                <li>
+                  <strong>Fully Insured</strong>: Every piece is securely
+                  packaged, tracked, and fully insured with DHL Express.
+                </li>
+                <li>
+                  <strong>Fast Delivery</strong>: Orders are delivered within
+                  2-7 days once shipped depending on the country.
+                </li>
+                <li>
+                  <strong>Easy Returns</strong>: You may return your order
+                  within 30 days for a full refund or exchange. See our{" "}
+                  <Link className="pd-inline-action" to="/faqs">
+                    full returns policy
+                  </Link>
+                  .
+                </li>
+              </ul>
             </DetailRow>
           </div>
         </section>

@@ -48,7 +48,7 @@ const COLUMNS = [
   },
 ]
 
-const svg = { viewBox: '0 0 24 24', width: 18, height: 18, fill: 'none', stroke: 'currentColor', strokeWidth: 1.7, strokeLinecap: 'round', strokeLinejoin: 'round', 'aria-hidden': true }
+const svg = { viewBox: '0 0 24 24', width: 24, height: 24, fill: 'none', stroke: 'currentColor', strokeWidth: 1.7, strokeLinecap: 'round', strokeLinejoin: 'round', 'aria-hidden': true }
 
 const SOCIALS = [
   { name: 'Pinterest', icon: <svg {...svg}><circle cx="12" cy="12" r="9" /><path d="M11 8.5c2.5-1 4.5.5 4 3-.4 2-2 3-3.5 2.5M11.5 11 10 18" /></svg> },
