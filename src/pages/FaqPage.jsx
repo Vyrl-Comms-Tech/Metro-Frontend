@@ -1,4 +1,5 @@
 import FaqList from "../components/FaqList";
+import FaqSkeleton from "../components/FaqSkeleton";
 import { useSite } from "../context/siteContext";
 import { groupByCategory } from "../utils/faq";
 import "../styles/Faq.css";
@@ -25,11 +26,11 @@ export default function FaqPage() {
       </section>
 
       <div className="faqpage-body">
-        {(loading || error || groups.length === 0) && (
+        {loading && <FaqSkeleton />}
+
+        {!loading && (error || groups.length === 0) && (
           <p className="faqpage-status">
-            {loading
-              ? "Loading…"
-              : (error?.message ?? "No questions have been added yet.")}
+            {error?.message ?? "No questions have been added yet."}
           </p>
         )}
 

@@ -1,7 +1,64 @@
 .search-page {
-  max-width: 1240px;
-  margin: 0 auto;
-  padding: 40px 24px 60px;
+  padding-top: 40px;
 }
-.search-page h1 { margin: 0 0 6px; font-size: 26px; font-weight: 400; }
-.search-page .search-count { margin: 0 0 28px; color: #666; font-size: 14px; }
+
+/* the box at the top of the results, as wide as the results below it */
+.search-page .search-page-wrap {
+  position: relative;
+  max-width: 920px;
+  margin: 0 auto 36px;
+}
+
+.search-page .search-page-box .search-clear {
+  width: 32px;
+  color: var(--brand-green);
+}
+
+.search-page .search-page-box {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  border: 1px solid var(--brand-black);
+}
+
+.search-page .search-page-box input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0 16px;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 15px;
+  outline: none;
+}
+
+.search-page .search-page-box button {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 100%;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.search-page .search-card-foot {
+  display: flex;
+  justify-content: flex-end;
+  align-items: baseline;
+  margin: 8px 0 0;
+  font-size: 13px;
+}
+
+.search-page .search-card-foot a { color: inherit; text-decoration: none; }
+.search-page .search-card-foot a:hover { text-decoration: underline; }
+
+/* "Type something to search." under the empty box */
+.search-page > .col-empty {
+  margin: 48px 0 80px;
+  padding: 0 24px;
+  text-align: center;
+  color: #666;
+}

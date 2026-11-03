@@ -16,8 +16,6 @@ const RANGES = [
 const CURRENCIES = [
   { code: "AED", name: "UAE Dirham" },
   { code: "USD", name: "US Dollar" },
-  { code: "SAR", name: "Saudi Riyal" },
-  { code: "QAR", name: "Qatari Riyal" },
 ];
 
 const W = 800;

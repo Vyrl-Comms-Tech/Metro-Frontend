@@ -87,10 +87,11 @@
   background: none;
   color: var(--brand-black);
   cursor: pointer;
+  --fill: var(--brand-green);
+  transition: color 0.35s ease;
 }
 
 .footer .ft-news form button:hover {
-  background: var(--brand-green);
   color: var(--brand-white);
 }
 

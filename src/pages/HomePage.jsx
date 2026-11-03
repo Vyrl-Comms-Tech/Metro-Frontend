@@ -13,8 +13,8 @@ export default function HomePage() {
       <GoldChart />
       <RecentGemstones />
       <Categories />
-      <Reels />
       <GalleryGrid />
+      <Reels />
       <Faq />
     </>
   )

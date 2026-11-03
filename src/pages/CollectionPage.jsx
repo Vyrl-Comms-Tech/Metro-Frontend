@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Link, Navigate, useParams, useSearchParams } from "react-router-dom";
 import { CHECK_GROUPS, CHECK_KEYS, RANGE_GROUPS, RANGE_KEYS, SORTS } from "../data/collectionFilters";
 import { rangesFor } from "../data/collections";
 import {
@@ -77,12 +77,51 @@ function SubCategoryPage({ slug, sub, category }) {
     () => (wedding ? { onlyCategory: "Plain,Diamond", perProduct: true } : slug === "rings" ? { notCategory: "Plain,Diamond" } : {}),
     [slug, wedding],
   );
-  // each category keeps its own filters, sort and loaded pages for the session
+  // the filters and the sort live in the URL (?metal=18k White Gold&widthMin=2&sort=az), so a filtered page can be shared and survives a reload
+  const [urlParams, setUrlParams] = useSearchParams();
+  const pathCategory = category && !wedding ? category : null; // the page's own category is the default choice, until the visitor changes it
+  const filters = useMemo(() => {
+    const f = emptyFilters(ranges);
+    for (const key of CHECK_KEYS) {
+      const name = FACET_KEY[key] ?? key;
+      if (key !== "subCategory" && urlParams.has(name)) f[key] = urlParams.get(name).split(",").filter(Boolean);
+    }
+    if (pathCategory && !urlParams.has("category")) f.category = [pathCategory];
+    for (const key of RANGE_KEYS) {
+      const lo = Number(urlParams.get(`${key}Min`) ?? ranges[key].min);
+      const hi = Number(urlParams.get(`${key}Max`) ?? ranges[key].max);
+      f[key] = [Number.isNaN(lo) ? ranges[key].min : lo, Number.isNaN(hi) ? ranges[key].max : hi];
+    }
+    return f;
+  }, [urlParams, ranges, pathCategory]);
+  const sort = urlParams.get("sort") ?? "";
+  const setFilters = (next) => {
+    const value = typeof next === "function" ? next(filters) : next;
+    setUrlParams((prev) => {
+      const out = new URLSearchParams(prev);
+      for (const key of CHECK_KEYS) {
+        if (key === "subCategory") continue;
+        const name = FACET_KEY[key] ?? key;
+        if (value[key].length) out.set(name, value[key].join(","));
+        else if (key === "category" && pathCategory) out.set(name, ""); // "none chosen" must not fall back to the page's category
+        else out.delete(name);
+      }
+      for (const key of RANGE_KEYS) {
+        const [lo, hi] = value[key];
+        if (lo !== ranges[key].min) out.set(`${key}Min`, lo); else out.delete(`${key}Min`);
+        if (hi !== ranges[key].max) out.set(`${key}Max`, hi); else out.delete(`${key}Max`);
+      }
+      return out;
+    }, { replace: true });
+  };
+  const setSort = (next) =>
+    setUrlParams((prev) => {
+      const out = new URLSearchParams(prev);
+      if (next) out.set("sort", next); else out.delete("sort");
+      return out;
+    }, { replace: true });
+  // the loaded pages are still kept per category for the session
   const store = `sub:${slug}${category ? `:${category}` : ""}`;
-  const [savedFilters, setFilters] = useSessionState(`${store}:filters`, () => ({ ...emptyFilters(ranges), category: category && !wedding ? [category] : [] }));
-  // filters saved before a new filter existed lack its key
-  const filters = useMemo(() => ({ ...emptyFilters(ranges), ...savedFilters }), [ranges, savedFilters]);
-  const [sort, setSort] = useSessionState(`${store}:sort`, "");
   const [savedPages, setSavedPages] = useSessionState(`${store}:pages`, 1);
   const restorePages = useRef(savedPages); // the pages to load again on the first visit
   const [items, setItems] = useState([]);

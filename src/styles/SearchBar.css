@@ -68,3 +68,8 @@
 }
 
 .site-header .search-popular a { text-decoration: underline; }
+
+.site-header .search-box .search-clear {
+  width: 32px;
+  color: var(--brand-green);
+}

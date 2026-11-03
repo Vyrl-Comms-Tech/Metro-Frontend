@@ -91,11 +91,7 @@
   letter-spacing: 0.04em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: background 0.2s;
-}
-
-.contact .ct-form button:hover {
-  background: var(--brand-whatsapp);
+  --fill: var(--brand-whatsapp);
 }
 
 .contact .ct-form .ct-sent {

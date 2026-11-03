@@ -130,13 +130,11 @@
   color: var(--brand-green);
   background: var(--brand-white);
   text-decoration: none;
-  transition:
-    background 0.2s,
-    color 0.2s;
+  --fill: var(--brand-green);
+  transition: color 0.35s ease;
 }
 
 .faq-all:hover {
-  background: var(--brand-green);
   color: var(--brand-white);
 }
 

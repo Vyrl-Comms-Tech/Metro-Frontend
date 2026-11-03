@@ -128,11 +128,8 @@
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s, opacity 0.2s;
-}
-
-.login-submit:hover:not(:disabled) {
-  background: var(--brand-banner-2);
+  --fill: var(--brand-banner-2);
+  transition: opacity 0.2s;
 }
 
 .login-submit:disabled {

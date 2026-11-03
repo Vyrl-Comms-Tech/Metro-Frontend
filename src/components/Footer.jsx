@@ -37,11 +37,13 @@ const COLUMNS = [
   {
     title: 'Explore',
     links: [
-      { label: 'About Metro Jewellers', to: '#' },
-      { label: 'Celebrity Clients', to: '#' },
+      { label: 'Home', to: '/' },
+      { label: 'Gemstones', to: '/gemstone' },
+      { label: 'Loose Diamonds', to: '/loose-diamond' },
+      { label: 'Diamonds', to: '/diamonds' },
+      { label: 'Custom Jewellery', to: '/custom-jewellery' },
+      { label: 'Wishlist', to: '/wishlist' },
       { label: 'FAQs', to: '/faqs' },
-      { label: 'Blog', to: '#' },
-      { label: 'Our Partners', to: '#' },
     ],
   },
 ]

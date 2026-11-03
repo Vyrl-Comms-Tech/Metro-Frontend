@@ -540,12 +540,12 @@
   letter-spacing: 0.14em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  --fill: var(--brand-green);
+  transition: color 0.35s ease;
 }
 
 .collection .col-more button:hover,
 .collection .col-more button:focus-visible {
-  background: var(--brand-green);
   color: var(--brand-white);
   outline: none;
 }

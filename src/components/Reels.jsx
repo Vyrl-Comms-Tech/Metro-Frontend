@@ -25,7 +25,9 @@ export default function Reels() {
   const reels = (data?.items ?? []).map((r) => ({
     ...r,
     tint: r.tint?.length >= 2 ? r.tint : DEFAULT_TINT,
-    video: r.video,
+    // Instagram link wins, then the poster image, then the uploaded video
+    canEmbed: Boolean(embedUrl(r.href)),
+    video: !embedUrl(r.href) && !r.poster ? r.video : '',
     poster: r.poster,
   }))
 
@@ -73,7 +75,7 @@ function ReelCarousel({ reels }) {
         {reels.map((r, i) => {
           const off = offsetOf(i, active, N)
           const isActive = off === 0
-          const canEmbed = !r.video && Boolean(embedUrl(r.href))
+          const canEmbed = r.canEmbed
           const showEmbed = isActive && canEmbed
           return (
             <article

@@ -38,7 +38,7 @@
 
 .site-header .hd-top .hd-right {
   justify-content: flex-end;
-  gap: 22px;
+  gap: 22px;  
 }
 
 .site-header .hd-top .logo {
@@ -208,20 +208,24 @@
   border-radius: 3px;
   font-size: 13px;
   font-weight: 500;
+  transition: color 0.35s ease, border-color 0.35s ease;
 }
 
 .site-header .mega .btn-dark {
+  --fill: var(--brand-black);
   background: var(--brand-green);
   color: var(--brand-white) !important;
 }
 
 .site-header .mega .btn-outline {
+  --fill: var(--brand-green);
   border: 1px solid var(--brand-line);
   background: var(--brand-white);
 }
 
 .site-header .mega .btn-outline:hover {
   border-color: var(--brand-green);
+  color: var(--brand-white);
 }
 
 /* column menus */

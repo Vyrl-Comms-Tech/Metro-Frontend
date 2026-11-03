@@ -153,11 +153,7 @@
   letter-spacing: 0.04em;
   text-transform: uppercase;
   text-decoration: none;
-  transition: background 0.2s;
-}
-
-.product .pd-whatsapp:hover {
-  background: var(--brand-whatsapp);
+  --fill: var(--brand-whatsapp);
 }
 
 /* details list */
@@ -476,10 +472,9 @@
   text-decoration: none;
   cursor: pointer;
 }
-.product .pd-discount { background: #000; color: #fff; }
-.product .pd-add { background: #fff; color: #000; }
-.product .pd-discount:hover { background: #333; }
-.product .pd-add:hover { background: #f7f7f7; }
+.product .pd-discount { --fill: #333; background: #000; color: #fff; }
+.product .pd-add { --fill: #000; background: #fff; color: #000; transition: color 0.35s ease; }
+.product .pd-add:hover { color: #fff; }
 .product .pd-added { margin: 0; font-size: 13px; color: var(--brand-green); }
 .product .pd-added a { color: inherit; text-decoration: underline; }
 
