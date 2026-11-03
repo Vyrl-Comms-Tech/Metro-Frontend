@@ -4,6 +4,8 @@ import StoneCard from './StoneCard'
 import '../styles/RecentGemstones.css'
 import axiosClient from '../utils/axiosClient'
 import { useAsync } from '../utils/useAsync'
+import { useSite } from '../context/siteContext'
+import { productPath } from '../utils/productPath'
 
 const previewGemstones = [
   { id: 'preview-sapphire', name: 'Sapphire', type: 'Natural', shape: 'Oval', carat: 2.15, color: 'Blue' },
@@ -14,7 +16,12 @@ const previewGemstones = [
 ]
 
 export default function RecentGemstones() {
-  const { data } = useAsync(() => axiosClient.get('/products/getAll', { params: { mainCategory: 'gemstones', limit: 5 } }), [])
+  const { publicCategories } = useSite()
+  const mainCategory = publicCategories.find((category) => /^gemstones?$/.test(category.slug))?.slug
+  const { data } = useAsync(
+    () => (mainCategory ? axiosClient.get('/products/getAll', { params: { mainCategory, limit: 5 } }) : Promise.resolve(null)),
+    [mainCategory],
+  )
   const isPreview = !data?.items?.length
   const gemstones = isPreview ? previewGemstones : data.items
 
@@ -31,14 +38,14 @@ export default function RecentGemstones() {
           <StoneCard
             key={gemstone.id}
             stone={gemstone}
-            to={isPreview ? '/collections/gemstones' : `/product/${gemstone.id}`}
+            to={isPreview ? '/gemstone' : productPath(gemstone, gemstone.variants?.[0])}
             linkLabel={isPreview ? 'Explore Gemstones' : 'View Details'}
           />
         ))}
       </div>
 
       <div className="rg-footer">
-        <Link className="rg-view-all" to="/collections/gemstones">
+        <Link className="rg-view-all" to="/gemstone">
           View All <ArrowRight size={16} aria-hidden="true" />
         </Link>
       </div>

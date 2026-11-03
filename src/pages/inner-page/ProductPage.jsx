@@ -138,6 +138,7 @@ function ProductView({ product, slug }) {
   );
   const [added, setAdded] = useState(false);
   const isRing = product.subCategory === "Rings";
+  const isStone = ["gemstone", "gemstones", "loose-diamond", "diamonds"].includes(product.mainCategory);
   const [ring, setRing] = useState({ country: "", size: "", engraving: "" });
   const variant = variants[selectedIndex] ?? variants[0];
   const variantName = variant.name ?? product.name;
@@ -155,6 +156,8 @@ function ProductView({ product, slug }) {
     variant.images?.length ? variant.images : (product.images ?? [])
   ).map((src) => ({ src, alt: variantName }));
   const details = variant.details ?? {};
+  // each variation has its own description; older products only have one for the whole product
+  const description = variant.description ?? product.description;
   // per-variation details: the stone/size lines first, then packaging, weights and origin
   const footerKeys = ["packaging", "weights", "made in"];
   const detailEntries = Object.entries(details).filter(
@@ -340,7 +343,8 @@ function ProductView({ product, slug }) {
             </button>
           </div>
 
-          {types.length > 1 && (
+          {/* a stone has one type (Natural or Lab Grown): it is still shown, for the others only when there is a choice */}
+          {(types.length > 1 || (types.length === 1 && isStone)) && (
             <div
               className="pd-type-options"
               role="group"
@@ -388,7 +392,7 @@ function ProductView({ product, slug }) {
             </div>
           )}
 
-          {metals.length > 0 && (
+          {metals.length > 0 && !isStone && (
             <div className="pd-options">
               <h2>
                 Select Metal{" "}
@@ -456,7 +460,22 @@ function ProductView({ product, slug }) {
                   <p>{variant.productCode}</p>
                 </div>
               )}
-              {infoLines.length > 0 && (
+              {description ? (
+                <div className="pd-info-block pd-info-tight">
+                  {description.split("\n").map((line, n) => {
+                    const colon = line.indexOf(":");
+                    return line.trim() ? (
+                      <p key={n}>
+                        {colon > 0 ? <strong>{line.slice(0, colon + 1)}</strong> : null}
+                        {colon > 0 ? line.slice(colon + 1) : line}
+                      </p>
+                    ) : (
+                      <br key={n} />
+                    );
+                  })}
+                </div>
+              ) : null}
+              {!description && infoLines.length > 0 && (
                 <div className="pd-info-block">
                   <h3>Product Info</h3>
                   {infoLines.map(([key, value]) => (
@@ -466,7 +485,7 @@ function ProductView({ product, slug }) {
                   ))}
                 </div>
               )}
-              {footerLines.length > 0 && (
+              {!description && footerLines.length > 0 && (
                 <div className="pd-info-block pd-info-tight">
                   {footerLines.map(([key, value]) => (
                     <p key={key}>
@@ -475,7 +494,6 @@ function ProductView({ product, slug }) {
                   ))}
                 </div>
               )}
-              {!detailEntries.length && product.description && <p>{product.description}</p>}
               <p className="pd-lead-note">
                 *All orders are bespoke, lead time is typically 7–14 days prior
                 to collection/shipping or up to 21 days during peak times

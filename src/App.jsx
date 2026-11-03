@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { BrowserRouter, Outlet, Route, Routes, useLocation } from 'react-router-dom'
+import { BrowserRouter, Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import HomePage from './pages/HomePage'
@@ -56,6 +56,9 @@ function App() {
         <Routes>
           <Route element={<SiteLayout />}>
             <Route path="/" element={<HomePage />} />
+            {/* the stones have pages of their own, older links to their collection go there */}
+            <Route path="/collections/gemstones" element={<Navigate to="/gemstone" replace />} />
+            <Route path="/collections/gemstone" element={<Navigate to="/gemstone" replace />} />
             <Route path="/collections/:slug" element={<CollectionPage />} />
             <Route path="/collections/:slug/:option" element={<CollectionRoute />} />
             <Route path="/product/:id" element={<ProductPage />} />

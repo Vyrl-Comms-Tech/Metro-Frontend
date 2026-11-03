@@ -601,3 +601,7 @@
     display: none;
   }
 }
+
+.product .pd-description {
+  white-space: pre-line;
+}

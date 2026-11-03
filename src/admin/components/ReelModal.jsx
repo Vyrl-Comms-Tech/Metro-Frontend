@@ -11,6 +11,7 @@ export default function ReelModal({ reel, nextOrder, onClose, onSaved }) {
     href: reel.href ?? "",
     video: reel.video ?? "",
     poster: reel.poster ?? "",
+    active: reel.active ?? true,
   });
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
 
@@ -20,6 +21,7 @@ export default function ReelModal({ reel, nextOrder, onClose, onSaved }) {
       href: form.href.trim(),
       video: form.video.trim(),
       poster: form.poster,
+      active: form.active,
     };
     if (reel.id) await axiosClient.put(`/reels/${reel.id}`, data);
     else await axiosClient.post('/reels', { ...data, order: nextOrder });
@@ -28,8 +30,8 @@ export default function ReelModal({ reel, nextOrder, onClose, onSaved }) {
 
   return (
     <Modal title={reel.id ? "Edit reel" : "Add reel"} onClose={onClose} onSave={save}>
-      <Field label="Instagram reel link" hint="Paste the reel link to show the Instagram player. Instagram controls playback, so link-only reels may require a tap to play.">
-        <input type="url" value={form.href} onChange={set("href")} required />
+      <Field label="Instagram reel link" optional hint="Paste the reel link to show the Instagram player. Instagram controls playback, so link-only reels may require a tap to play. Leave empty for a reel that only has a video.">
+        <input type="url" value={form.href} onChange={set("href")} required={!form.video} />
       </Field>
       <Field label="Name (optional)">
         <input value={form.name} onChange={set("name")} />
@@ -46,6 +48,12 @@ export default function ReelModal({ reel, nextOrder, onClose, onSaved }) {
         value={form.poster}
         onChange={(poster) => setForm((f) => ({ ...f, poster }))}
       />
+      <div className="ad-category-settings">
+        <label className="ad-category-setting">
+          <span><strong>Active</strong><small>Show this reel on the website.</small></span>
+          <input type="checkbox" checked={form.active} onChange={(e) => setForm((f) => ({ ...f, active: e.target.checked }))} />
+        </label>
+      </div>
     </Modal>
   );
 }

@@ -26,11 +26,27 @@ export default function ReelsAdmin() {
     }
   };
 
+  const toggleActive = async (reel) => {
+    setActionError("");
+    try {
+      await axiosClient.put(`/reels/${reel.id}`, { active: reel.active === false });
+      setReload((n) => n + 1);
+    } catch (err) {
+      setActionError(err.message);
+    }
+  };
+
   const columns = [
     { key: 'order', label: 'Order', render: (reel) => reel.order ?? 0 },
     { key: 'name', label: 'Reel', cellClassName: 'ad-cell-main', render: (reel) => <div className="ad-record"><span className="ad-thumb">{reel.poster && <img src={reel.poster} alt="" />}</span><span className="ad-primary-text">{reel.name || 'Instagram reel'}</span></div> },
-    { key: 'href', label: 'Link', render: (reel) => <a className="ad-table-link" href={reel.href} target="_blank" rel="noreferrer">Open reel ↗</a> },
-    { key: 'video', label: 'Video', render: (reel) => reel.video ? <span className="ad-status">Uploaded</span> : 'Link only' },
+    { key: 'href', label: 'Link', render: (reel) => reel.href ? <a className="ad-table-link" href={reel.href} target="_blank" rel="noreferrer">Open reel ↗</a> : '—' },
+    { key: 'video', label: 'Video', render: (reel) => reel.video ? <span className="ad-status">Video</span> : 'Link only' },
+    { key: 'active', label: 'Status', render: (reel) => (
+      <span className="ad-switch-row">
+        <button type="button" role="switch" aria-checked={reel.active !== false} aria-label={`${reel.name || 'Reel'} is ${reel.active === false ? 'inactive' : 'active'}`} className="ad-switch" onClick={() => toggleActive(reel)} />
+        <span className="ad-switch-label">{reel.active === false ? 'Inactive' : 'Active'}</span>
+      </span>
+    ) },
     { key: 'actions', label: '', cellClassName: 'ad-actions-cell', render: (reel) => <TableActions name={reel.name || 'reel'} onEdit={() => setEditing(reel)} onRemove={() => remove(reel)} /> },
   ];
 

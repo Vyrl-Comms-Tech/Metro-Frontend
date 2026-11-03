@@ -12,6 +12,7 @@ export default function StoneCard({ stone, to, linkLabel = 'View Details' }) {
   const shape = stone.shape ? `${stone.shape} Cut` : ''
   const details = [stone.type, shape].filter(Boolean).join(' · ')
   const saved = has(stone.id)
+  const colour = stone.color || stone.variants?.[0]?.details?.colour || stone.gemstone
 
   return (
     <article className="rg-card">
@@ -31,11 +32,11 @@ export default function StoneCard({ stone, to, linkLabel = 'View Details' }) {
       <div className="rg-body">
         <h3>{title}</h3>
         {details && <p className="rg-meta">{details}</p>}
-        <div className="rg-tags">
+        {/* <div className="rg-tags">
           {stone.carat != null && <span>{Number(stone.carat).toFixed(2)} Carat</span>}
           {stone.shape && <span>{stone.shape}</span>}
-          {(stone.color || stone.gemstone) && <span>{stone.color || stone.gemstone}</span>}
-        </div>
+          {colour && <span>{colour}</span>}
+        </div> */}
         <Link className="rg-details" to={to}>
           {linkLabel} <ArrowRight size={15} aria-hidden="true" />
         </Link>

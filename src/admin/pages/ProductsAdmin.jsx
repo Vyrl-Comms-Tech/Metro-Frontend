@@ -4,6 +4,7 @@ import { GEMSTONES, METALS, PENDANT_TYPES, SHAPES, TYPES } from "../../data/coll
 import ProductArt from "../../components/collection/ProductArt";
 import PageHeader from "../components/PageHeader";
 import ProductModal from "../components/ProductModal";
+import ProductViewModal from "../components/ProductViewModal";
 import DataTable from "../components/DataTable";
 import TableActions from "../components/TableActions";
 import axiosClient from "../../utils/axiosClient";
@@ -24,8 +25,11 @@ export default function ProductsAdmin() {
   const [filters, setFilters] = useState(NO_FILTERS);
   const [page, setPage] = useState(1);
   const [editing, setEditing] = useState(null); // null = closed, {} = new, product = edit
+  const [viewing, setViewing] = useState(null); // the product whose full details are open
   const [reload, setReload] = useState(0);
   const [actionError, setActionError] = useState("");
+  const [selected, setSelected] = useState([]); // ids ticked for bulk delete
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     const t = setTimeout(() => {
@@ -82,7 +86,39 @@ export default function ProductsAdmin() {
     }
   };
 
+  // the ticks belong to the rows on screen: a new page, search or filter starts again
+  useEffect(() => {
+    setSelected([]);
+  }, [query, filters, page]);
+
+  const allTicked = items.length > 0 && items.every((p) => selected.includes(p.id));
+  const toggleOne = (id) => setSelected((ids) => (ids.includes(id) ? ids.filter((x) => x !== id) : [...ids, id]));
+  const toggleAll = () => setSelected(allTicked ? [] : items.map((p) => p.id));
+
+  const removeSelected = async () => {
+    if (!window.confirm(`Remove ${selected.length} selected ${selected.length === 1 ? "product" : "products"}? This cannot be undone.`)) return;
+    setActionError("");
+    setDeleting(true);
+    try {
+      await axiosClient.post("/products/bulk-delete", { ids: selected });
+      // step back a page if every product on it was removed
+      if (selected.length >= items.length && page > 1) setPage(page - 1);
+      else setReload((n) => n + 1);
+      setSelected([]);
+    } catch (err) {
+      setActionError(err.message);
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   const columns = [
+    {
+      key: 'select',
+      label: <input type="checkbox" checked={allTicked} onChange={toggleAll} aria-label="Select all products on this page" disabled={!items.length} />,
+      cellClassName: 'ad-select-cell',
+      render: (p) => <input type="checkbox" checked={selected.includes(p.id)} onChange={() => toggleOne(p.id)} aria-label={`Select ${p.name}`} />,
+    },
     {
       key: 'name', label: 'Product', cellClassName: 'ad-cell-main',
       render: (p) => <div className="ad-record"><span className="ad-thumb">{p.images?.[0] ? <img src={p.images[0]} alt="" /> : <ProductArt metal={p.metal} />}</span><span>{p.variants?.[0]?.name ?? p.name}</span></div>,
@@ -92,7 +128,7 @@ export default function ProductsAdmin() {
     { key: 'category', label: 'Category' },
     { key: 'price', label: 'From (AED)', render: (p) => (p.price != null ? p.price.toLocaleString() : '') },
     { key: 'variants', label: 'Variants', render: (p) => p.variants?.length ?? 0 },
-    { key: 'actions', label: '', cellClassName: 'ad-actions-cell', render: (p) => <TableActions name={p.name} onEdit={() => setEditing(p)} onRemove={() => remove(p)} /> },
+    { key: 'actions', label: '', cellClassName: 'ad-actions-cell', render: (p) => <TableActions name={p.name} onView={() => setViewing(p)} onEdit={() => setEditing(p)} onRemove={() => remove(p)} /> },
   ];
 
   return (
@@ -204,6 +240,18 @@ export default function ProductsAdmin() {
           </p>
         )}
 
+        {selected.length > 0 && (
+          <div className="ad-bulk" role="status">
+            <span>{selected.length} selected</span>
+            <button type="button" className="ad-btn ghost" onClick={() => setSelected([])} disabled={deleting}>
+              Clear
+            </button>
+            <button type="button" className="ad-btn ad-btn-danger" onClick={removeSelected} disabled={deleting}>
+              {deleting ? "Deleting…" : "Delete selected"}
+            </button>
+          </div>
+        )}
+
         <DataTable
           caption="Products"
           columns={columns}
@@ -224,6 +272,17 @@ export default function ProductsAdmin() {
           </button>
         </div>
       </section>
+
+      {viewing && (
+        <ProductViewModal
+          product={viewing}
+          onClose={() => setViewing(null)}
+          onEdit={(p) => {
+            setViewing(null);
+            setEditing(p);
+          }}
+        />
+      )}
 
       {editing && (
         <ProductModal

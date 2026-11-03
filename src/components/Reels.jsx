@@ -21,11 +21,10 @@ const offsetOf = (i, active, n) => {
 }
 
 export default function Reels() {
-  const { data } = useAsync(() => axiosClient.get('/reels', { params: { limit: 100 } }), [])
+  const { data } = useAsync(() => axiosClient.get('/reels', { params: { limit: 100, active: true } }), [])
   const reels = (data?.items ?? []).map((r) => ({
     ...r,
     tint: r.tint?.length >= 2 ? r.tint : DEFAULT_TINT,
-    // Instagram link wins, then the poster image, then the uploaded video
     canEmbed: Boolean(embedUrl(r.href)),
     video: !embedUrl(r.href) && !r.poster ? r.video : '',
     poster: r.poster,
@@ -66,7 +65,7 @@ function ReelCarousel({ reels }) {
       <header className="reels-head">
         <span className="reels-eyebrow">@metrojewellers</span>
         <h2>Loved by Our Clients</h2>
-        <p>Real stories, real sparkle — straight from Instagram.</p>
+        <p>Real stories, real sparkle straight from Instagram.</p>
       </header>
 
       <div className="reels-stage" tabIndex={0} onKeyDown={onKey} onPointerDown={onDown} onPointerUp={onUp}>
@@ -121,8 +120,11 @@ function ReelCarousel({ reels }) {
               {!showEmbed && (r.name || r.video || !canEmbed) && (
                 <div className="reel-info">
                   {r.name && <h3>{r.name}</h3>}
-                  <ul>{(r.tags ?? []).map((t) => <li key={t}>{t}</li>)}</ul>
-                  <a href={r.href} target="_blank" rel="noreferrer" tabIndex={isActive ? 0 : -1}>Watch Reel</a>
+                  {(r.href || r.video) && (
+                    <a href={r.href || r.video} target="_blank" rel="noreferrer" tabIndex={isActive ? 0 : -1}>
+                      {r.href ? 'Watch Reel' : 'View'}
+                    </a>
+                  )}
                 </div>
               )}
             </article>
@@ -137,9 +139,15 @@ function ReelCarousel({ reels }) {
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M11 6l-6 6 6 6" /></svg>
         </button>
         <div className="reels-dots">
-          {reels.map((r, i) => (
-            <button key={r.id} className={i === active ? 'on' : ''} onClick={() => select(i)} aria-label={`Go to reel ${i + 1}`} aria-current={i === active} />
-          ))}
+          {reels.map((r, i) => ({ r, i }))
+            .filter(({ i }) => {
+              if (N <= 5) return true
+              const d = Math.abs(i - active)
+              return Math.min(d, N - d) <= 2
+            })
+            .map(({ r, i }) => (
+              <button key={r.id} className={i === active ? 'on' : ''} onClick={() => select(i)} aria-label={`Go to reel ${i + 1}`} aria-current={i === active} />
+            ))}
         </div>
         <button onClick={() => go(1)} aria-label="Next reel">
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
