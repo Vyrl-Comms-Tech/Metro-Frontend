@@ -41,20 +41,24 @@
   pointer-events: none;
 }
 
-.hero .hero-copy .hero-btn:hover::before,
-.site-header .mega .btn-dark:hover::before,
-.site-header .mega .btn-outline:hover::before,
-.collection .col-more button:is(:hover, :focus-visible)::before,
-.contact .ct-form button:hover::before,
-.footer .ft-news form button:hover::before,
-.faq-all:hover::before,
-.login-submit:hover:not(:disabled)::before,
-.product .pd-whatsapp:hover::before,
-.product .pd-discount:hover::before,
-.product .pd-add:hover::before,
-.recent-gemstones .rg-view-all:hover::before,
-.wishlist .wl-browse:hover::before {
-  transform: scaleY(1);
+/* touch screens have no hover, so the fill is only for real pointers */
+@media (hover: hover) {
+
+  .hero .hero-copy .hero-btn:hover::before,
+  .site-header .mega .btn-dark:hover::before,
+  .site-header .mega .btn-outline:hover::before,
+  .collection .col-more button:is(:hover, :focus-visible)::before,
+  .contact .ct-form button:hover::before,
+  .footer .ft-news form button:hover::before,
+  .faq-all:hover::before,
+  .login-submit:hover:not(:disabled)::before,
+  .product .pd-whatsapp:hover::before,
+  .product .pd-discount:hover::before,
+  .product .pd-add:hover::before,
+  .recent-gemstones .rg-view-all:hover::before,
+  .wishlist .wl-browse:hover::before {
+    transform: scaleY(1);
+  }
 }
 
 /* leaving the button, the fill drains back down */
@@ -74,5 +78,21 @@
   .recent-gemstones .rg-view-all::before,
   .wishlist .wl-browse::before {
     transition: none;
+  }
+}
+/* the call-to-action links that open another page: a bigger tap target on phones.
+   `body` raises the specificity so these win over each component's own padding */
+@media (max-width: 700px) {
+
+  body .hero .hero-copy .hero-btn,
+  body .faq-all,
+  body .wishlist .wl-browse,
+  body .recent-gemstones .rg-view-all {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 10px 20px;
+    font-size: 13px;
   }
 }

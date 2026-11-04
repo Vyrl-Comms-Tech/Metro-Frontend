@@ -193,8 +193,10 @@
     color 0.2s;
 }
 
-.gold .gold-ranges button:hover {
-  color: var(--brand-black);
+@media (hover: hover) {
+  .gold .gold-ranges button:hover {  
+    color: var(--brand-black);  
+  }
 }
 
 .gold .gold-ranges button.on {

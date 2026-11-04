@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 const Arrow = ({ dir }) => (
   <svg
@@ -18,6 +18,7 @@ const Arrow = ({ dir }) => (
 
 export default function ProductGallery({ images, fallback }) {
   const [index, setIndex] = useState(0);
+  const swipe = useRef(null);
   const go = (step) =>
     setIndex((i) => (i + step + images.length) % images.length);
 
@@ -46,7 +47,21 @@ export default function ProductGallery({ images, fallback }) {
         ))}
       </ul>
 
-      <div className="pd-stage">
+      <div
+        className="pd-stage"
+        onPointerDown={(e) => {
+          if (!e.target.closest(".pd-nav")) swipe.current = { x: e.clientX, y: e.clientY };
+        }}
+        onPointerUp={(e) => {
+          const s = swipe.current;
+          swipe.current = null;
+          if (!s || images.length < 2) return;
+          const dx = e.clientX - s.x;
+          // a clear sideways swipe, not a vertical scroll
+          if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(e.clientY - s.y)) go(dx < 0 ? 1 : -1);
+        }}
+        onPointerCancel={() => (swipe.current = null)}
+      >
         {/* every image sits in the same spot; the chosen one fades in over the others */}
         {images.map((img, i) => (
           <img

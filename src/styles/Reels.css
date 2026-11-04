@@ -151,8 +151,10 @@
   cursor: pointer;
 }
 
-.reels .reel .reel-mute:hover {
-  background: var(--brand-scrim-strong);
+@media (hover: hover) {
+  .reels .reel .reel-mute:hover {
+    background: var(--brand-scrim-strong);
+  }
 }
 
 /* glass info panel */
@@ -261,10 +263,12 @@
     border-color 0.2s;
 }
 
-.reels .reels-controls > button:hover {
-  background: var(--brand-green);
-  border-color: var(--brand-green);
-  color: var(--brand-white);
+@media (hover: hover) {
+  .reels .reels-controls > button:hover {
+    background: var(--brand-green);
+    border-color: var(--brand-green);
+    color: var(--brand-white);
+  }
 }
 
 .reels .reels-controls button:focus-visible {

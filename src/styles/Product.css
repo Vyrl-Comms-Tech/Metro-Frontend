@@ -61,6 +61,8 @@
   aspect-ratio: 1 / 1;
   background: #f8f8f8;
   border: 1px solid #dedede;
+  /* sideways swipes change the image; vertical drags still scroll the page */
+  touch-action: pan-y;
 }
 
 .product .pd-stage img {
@@ -122,9 +124,19 @@
   right: 12px;
 }
 
-.product .pd-nav:hover {
-  background: var(--brand-green);
-  color: var(--brand-white);
+@media (hover: hover) {
+  .product .pd-nav:hover {  
+    background: var(--brand-green);  
+    color: var(--brand-white);
+  }
+}
+
+/* touch screens have no hover, so the arrows are filled all the time */
+@media (hover: none) {
+  .product .pd-nav {
+    background: var(--brand-green);
+    color: var(--brand-white);
+  }
 }
 
 /* info column */
@@ -265,9 +277,11 @@
   transition: border-color 0.15s, color 0.15s;
 }
 
-.product .pd-carat-options button:hover {
-  border-color: #888;
-  color: #444;
+@media (hover: hover) {
+  .product .pd-carat-options button:hover {  
+    border-color: #888;  
+    color: #444;  
+  }
 }
 
 .product .pd-carat-options button.on {
@@ -411,8 +425,10 @@
   color: #fff;
 }
 
-.product .pd-discount:hover {
-  color: #000;
+@media (hover: hover) {
+  .product .pd-discount:hover {  
+    color: #000;  
+  }
 }
 
 .product .pd-add {
@@ -421,8 +437,10 @@
   color: #000;
 }
 
-.product .pd-add:hover {
-  color: #fff;
+@media (hover: hover) {
+  .product .pd-add:hover {  
+    color: #fff;  
+  }
 }
 
 .product .pd-added {

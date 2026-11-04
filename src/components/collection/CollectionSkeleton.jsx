@@ -21,7 +21,7 @@ export default function CollectionSkeleton() {
             <Skeleton width={90} height={16} />
           </p>
           <div className="col-sort col-sort-sk">
-            <Skeleton height={44} style={{ display: "block" }} />
+            <Skeleton width={80} height={14} />
           </div>
         </div>
         <div className="col-grid">

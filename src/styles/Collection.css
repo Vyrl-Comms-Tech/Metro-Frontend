@@ -32,6 +32,7 @@
   font-size: 40px;
   font-weight: 300;
   letter-spacing: 0.01em;
+  color: var(--brand-white);
 }
 
 .collection .col-banner .col-banner-img {
@@ -481,7 +482,8 @@
 
   .collection .col-banner .col-banner-img {
     width: 70%;
-    opacity: 0.6;
+    opacity: 0.85;
+    object-position: 70% center;
   }
 
   .collection .col-layout {
@@ -513,14 +515,13 @@
   color: var(--brand-muted);
 }
 
+/* second image fades in over the first on hover */
 .collection .col-grid .prod .prod-img img {
+  grid-area: 1 / 1;
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-.collection .col-banner h1 {
-  color: var(--brand-white);
+  transition: opacity 0.5s ease, transform 0.6s ease;
 }
 
 /* load more */
@@ -546,7 +547,12 @@
   transition: color 0.35s ease;
 }
 
-.collection .col-more button:hover,
+@media (hover: hover) {
+  .collection .col-more button:hover {
+    color: var(--brand-white);
+  }
+}
+
 .collection .col-more button:focus-visible {
   color: var(--brand-white);
   outline: none;
@@ -555,12 +561,6 @@
 .collection .col-more button:disabled {
   opacity: 0.6;
   cursor: wait;
-}
-
-/* second image fades in over the first on hover */
-.collection .col-grid .prod .prod-img img {
-  grid-area: 1 / 1;
-  transition: opacity 0.5s ease, transform 0.6s ease;
 }
 
 .collection .col-grid .prod .prod-img img.prod-hover {
@@ -572,9 +572,7 @@
     opacity: 1;
     transform: scale(1.06);
   }
-}
 
-@media (hover: hover) {
   .collection .col-grid .prod:hover .prod-img:has(.prod-hover) img:not(.prod-hover) {
     opacity: 0;
   }
@@ -710,10 +708,10 @@
   }
 
   .collection .col-drawer .col-drawer-foot button {
-    height: 48px;
+    height: 40px;
     border-radius: 4px;
     font: inherit;
-    font-size: 14px;
+    font-size: 13px;
     cursor: pointer;
   }
 
@@ -757,17 +755,28 @@
   }
 }
 
-/* the loading view */
+/* the loading view: the sort box is drawn like the real select: same border, size and corners */
 .collection .col-sk .col-toolbar .col-sort-sk {
+  display: flex;
+  align-items: center;
   min-width: 186px;
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid var(--brand-line-soft);
+  border-radius: 4px;
+  background: var(--brand-white);
 }
 
 @media (max-width: 1000px) {
+  /* Filters + Sort sit as one joined control, both centred like the real buttons */
   .collection .col-sk .col-toolbar .col-sort-sk {
+    justify-content: center;
     min-width: 0;
+    height: 48px;
+    padding: 0 16px;
+    border-radius: 0 4px 4px 0;
   }
 
-  /* two across: an even number of cards */
   .collection .col-sk .col-grid .prod:nth-child(9) {
     display: none;
   }
@@ -775,14 +784,19 @@
 
 
 @media (max-width: 500px) {
-   .collection .col-drawer .col-toolbar .col-filter-open {
+   .collection .col-drawer .col-toolbar .col-filter-open,
+   .collection .col-sk .col-toolbar .col-sort-sk {
     height: 40px;
    }
 
    .collection .col-grid .prod .prod-wish {
     top: 5px;
     right: 5px;
+    width: 30px;
+    height: 30px;
+
    }
+
 
 
    .collection .col-drawer .col-toolbar .col-sort select{

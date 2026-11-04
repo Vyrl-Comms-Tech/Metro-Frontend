@@ -23,11 +23,15 @@
 }
 
 @keyframes search-fade {
-  from { opacity: 0; }
+  from {
+    opacity: 0;
+  }
 }
 
 @keyframes search-drop {
-  from { transform: translateY(-100%); }
+  from {
+    transform: translateY(-100%);
+  }
 }
 
 .site-header .search-top {
@@ -101,7 +105,9 @@
   font-size: 14px;
 }
 
-.site-header .search-popular a { text-decoration: underline; }
+.site-header .search-popular a {
+  text-decoration: underline;
+}
 
 .site-header .search-box .search-clear {
   width: 32px;
@@ -191,15 +197,36 @@
     flex-direction: column;
   }
 
-  /* the close button goes in the top-right corner, the box takes the full width below it */
+
+  .site-header .search-box input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    padding: 0 12px;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    font-size: 15px;
+    outline: none;
+  }
+
+  .site-header .search-box {
+    height: 40px;
+  }
+
+  .site-header .search-popular {
+    justify-content: left;
+  }
+
+
+  /* the box and the close button share one row */
   .site-header .search-panel {
-    padding-top: 56px;
+    top: -4px;
+    padding: 16px 12px 20px;
   }
 
   .site-header .search-top .search-close {
-    position: absolute;
-    top: 6px;
-    right: 8px;
+    width: 36px;
   }
 
   .site-header .search-panel .search-top,

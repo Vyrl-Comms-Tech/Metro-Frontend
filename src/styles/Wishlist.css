@@ -3,6 +3,8 @@
 }
 
 .wishlist .wl-body {
+  box-sizing: border-box;
+  width: 100%;
   max-width: 1100px;
   margin: 0 auto;
   padding: 48px 24px 96px;
@@ -66,7 +68,7 @@
 /* saved items */
 .wishlist .wl-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 28px 20px;
   margin: 0 0 40px;
   padding: 0;
@@ -75,6 +77,7 @@
 
 .wishlist .wl-card {
   position: relative;
+  min-width: 0;
 }
 
 .wishlist .wl-card .wl-img {
@@ -125,6 +128,7 @@
   font-size: 14px;
   font-weight: 400;
   line-height: 1.45;
+  overflow-wrap: anywhere;
 }
 
 .wishlist .wl-card h3 a {
@@ -138,13 +142,13 @@
 
 @media (max-width: 900px) {
   .wishlist .wl-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 700px) {
   .wishlist .wl-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 20px 12px;
   }
 }
@@ -152,6 +156,14 @@
 @media (max-width: 560px) {
   .wishlist .wl-body {
     padding: 28px 16px 64px;
+  }
+
+  .wishlist .wl-card .wl-remove {
+    top: 5px;
+    right: 5px;
+    width: 30px;
+    height: 30px;
+
   }
 
   .wishlist .wl-head h1 {

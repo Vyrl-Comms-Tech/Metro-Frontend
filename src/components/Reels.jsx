@@ -90,6 +90,11 @@ function ReelCarousel({ reels }) {
                 <video className="reel-video" src={r.video} poster={r.poster || undefined} autoPlay loop muted={muted} playsInline />
               )}
 
+              {/* the side cards show a still first frame of their video as the preview */}
+              {Math.abs(off) === 1 && r.video && !r.poster && (
+                <video className="reel-video" src={`${r.video}#t=0.1`} preload="metadata" muted playsInline tabIndex={-1} aria-hidden="true" />
+              )}
+
               {isActive && r.video && (
                 <button className="reel-mute" aria-label={muted ? 'Unmute' : 'Mute'} onClick={(e) => { e.stopPropagation(); setMuted((m) => !m) }}>
                   <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" aria-hidden="true">

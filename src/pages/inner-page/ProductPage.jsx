@@ -18,6 +18,7 @@ import { previewProductById } from "../../data/previewProducts";
 import { productEnquiry, whatsappLink } from "../../utils/whatsapp";
 import { useSite } from "../../context/siteContext";
 import { useWishlist } from "../../context/wishlistContext";
+import RelatedProducts from "../../components/RelatedProducts";
 import ProductGallery from "./ProductGallery";
 import RingOptions from "./RingOptions";
 import axiosClient from "../../utils/axiosClient";
@@ -567,6 +568,13 @@ function ProductView({ product, slug }) {
           </div>
         </section>
       </div>
+      {!product.preview && product.mainCategory && product.subCategory && (
+        <RelatedProducts
+          mainCategory={product.mainCategory}
+          subCategory={product.subCategory}
+          currentSlug={variant.slug ?? slug}
+        />
+      )}
     </main>
   );
 }

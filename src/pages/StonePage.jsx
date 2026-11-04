@@ -53,7 +53,7 @@ const ticksOf = ({ min, max }) => {
 // the Gemstone, Loose Diamond and Diamonds pages: a banner, filters on the left and a grid of stone cards (same look as the collections).
 // Stones added in the dashboard show here; the samples stay until the first one is added.
 export default function StonePage({ page }) {
-  const { title, intro, stones: samples } = STONE_PAGES[page]
+  const { title, stones: samples } = STONE_PAGES[page]
   const { publicCategories, loaded } = useSite()
   const mainCategory = publicCategories.find((category) => MAIN_CATEGORY[page].test(category.slug))?.slug
   const { data, loading } = useAsync(
@@ -113,7 +113,7 @@ export default function StonePage({ page }) {
   if (!loaded || loading) {
     return (
       <main className="collection">
-        <Banner title={title} />
+        <Banner title={title} slug={page} />
         <CollectionSkeleton />
       </main>
     )
@@ -121,7 +121,7 @@ export default function StonePage({ page }) {
 
   return (
     <main className="collection">
-      <Banner title={title} />
+      <Banner title={title} slug={page} />
 
       <div className="col-layout col-drawer">
         <DrawerBackdrop open={showFilters} onClose={closeFilters} />

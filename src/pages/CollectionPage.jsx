@@ -190,7 +190,7 @@ function SubCategoryPage({ slug, sub, category }) {
   if (state.loading || !facets || (state.error && items.length === 0)) {
     return (
       <main className="collection">
-        <Banner title={collection.title} />
+        <Banner title={collection.title} slug={collection.slug} />
         {state.error ? <p className="col-status">{state.error.message}</p> : <CollectionSkeleton />}
       </main>
     );
@@ -238,7 +238,7 @@ function GenericCollectionPage({ slug }) {
   if (loading || (error && previewItems.length === 0)) {
     return (
       <main className="collection">
-        <Banner title={collection.title} image={collection.banner} />
+        <Banner title={collection.title} image={collection.banner} slug={collection.slug} />
         {loading ? <CollectionSkeleton /> : <p className="col-status">{error.message}</p>}
       </main>
     );
@@ -320,7 +320,7 @@ function CollectionView({ collection, items, facets, groups, paging, filterState
 
   return (
     <main className="collection">
-      <Banner title={collection.title} image={collection.banner} />
+      <Banner title={collection.title} image={collection.banner} slug={collection.slug} />
 
       <div className="col-layout col-drawer">
         <DrawerBackdrop open={showFilters} onClose={closeFilters} />

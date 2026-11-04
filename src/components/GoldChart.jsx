@@ -176,6 +176,8 @@ export default function GoldChart() {
   };
 
   const h = hasChart && hover !== null ? points[hover] : null;
+  // the tooltip doesn't need hover: it rests on the current (latest) point until a point is touched/hovered
+  const tip = h ?? (hasChart ? points.at(-1) : null);
   const shownPrice = h ? h.price : current;
   const shownDate = h ? h.date : data?.current?.updatedAt ? new Date(data.current.updatedAt) : null;
   const hourly = range.label === "1W";
@@ -284,6 +286,7 @@ export default function GoldChart() {
               width={width}
               height={H}
               onPointerMove={onMove}
+              onPointerDown={onMove}
               onPointerLeave={() => setHover(null)}
               role="img"
               aria-label={`Gold price chart for the last ${range.label}, from ${currency} ${fmtPrice(low)} to ${fmtPrice(high)}`}
@@ -318,32 +321,32 @@ export default function GoldChart() {
               <path d={area} fill="url(#gold-fill)" />
               <path d={line} className="gold-line" />
 
-              {!h && (
+              {!tip && (
                 <g>
                   <circle cx={points.at(-1).x} cy={points.at(-1).y} r="9" className="gold-pulse" />
                   <circle cx={points.at(-1).x} cy={points.at(-1).y} r="4.5" className="gold-dot" />
                 </g>
               )}
-              {h && (
+              {tip && (
                 <g>
-                  <line x1={h.x} x2={h.x} y1={pad.top} y2={pad.top + ih} className="gold-cross" />
-                  <circle cx={h.x} cy={h.y} r="5" className="gold-dot" />
+                  <line x1={tip.x} x2={tip.x} y1={pad.top} y2={pad.top + ih} className="gold-cross" />
+                  <circle cx={tip.x} cy={tip.y} r="5" className="gold-dot" />
                 </g>
               )}
             </svg>
 
-            {h && (
+            {tip && (
               <div
                 className="gold-tip"
-                style={{ left: Math.min(Math.max(h.x, 76), width - 76), top: Math.max(h.y - 64, 0) }}
+                style={{ left: Math.min(Math.max(tip.x, 76), width - 76), top: Math.max(tip.y - 64, 0) }}
                 aria-hidden="true"
               >
                 <b>
-                  {currency} {fmtPrice(h.price)}
+                  {currency} {fmtPrice(tip.price)}
                 </b>
                 <span>
-                  {fmtDate(h.date, LONG_DATE)}
-                  {hourly && `, ${fmtTime(h.date)}`}
+                  {fmtDate(tip.date, LONG_DATE)}
+                  {hourly && `, ${fmtTime(tip.date)}`}
                 </span>
               </div>
             )}

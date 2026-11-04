@@ -69,8 +69,10 @@
   transition: color 0.2s;
 }
 
-.faq-list .faq-item button:hover {
-  color: var(--brand-green);
+@media (hover: hover) {
+  .faq-list .faq-item button:hover {  
+    color: var(--brand-green);  
+  }
 }
 
 .faq-list .faq-item button:focus-visible {
@@ -135,8 +137,10 @@
   transition: color 0.35s ease;
 }
 
-.faq-all:hover {
-  color: var(--brand-white);
+@media (hover: hover) {
+  .faq-all:hover {  
+    color: var(--brand-white);  
+  }
 }
 
 @media (max-width: 900px) {

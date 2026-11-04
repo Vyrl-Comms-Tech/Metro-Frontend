@@ -85,8 +85,10 @@
   transition: color 0.35s ease;
 }
 
-.hero .hero-copy .hero-btn:hover {
-  color: var(--brand-white);
+@media (hover: hover) {
+  .hero .hero-copy .hero-btn:hover {  
+    color: var(--brand-white);  
+  }
 }
 
 .hero:focus-visible,
@@ -132,7 +134,7 @@
   }
 
   .hero .hero-copy h1 {
-    max-width: 360px;
+    max-width: 355px;
     margin-bottom: 24px;
   }
 

@@ -223,9 +223,11 @@
   background: var(--brand-white);
 }
 
-.site-header .mega .btn-outline:hover {
-  border-color: var(--brand-green);
-  color: var(--brand-white);
+@media (hover: hover) {
+  .site-header .mega .btn-outline:hover {  
+    border-color: var(--brand-green);  
+    color: var(--brand-white);  
+  }
 }
 
 /* column menus */
@@ -319,6 +321,11 @@
 
   .site-header .hd-top .icon-btn.hd-menu-btn {
     display: grid;
+  }
+
+  .site-header .hd-top .icon-btn svg {
+    width: 26px;
+    height: 26px;
   }
 
   .site-header .hd-nav,
