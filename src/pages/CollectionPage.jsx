@@ -19,6 +19,8 @@ import ProductArt from "../components/collection/ProductArt";
 import CollectionSkeleton from "../components/collection/CollectionSkeleton";
 import ProductSkeleton from "../components/collection/ProductSkeleton";
 import RangeGroup from "../components/collection/RangeGroup";
+import { DrawerBackdrop, DrawerFoot, DrawerHead, FilterButton } from "../components/collection/FilterDrawer";
+import { onDrawerScreen, useDrawerLock } from "../utils/useDrawerLock";
 import { useSite } from "../context/siteContext";
 import { useWishlist } from "../context/wishlistContext";
 import { previewProductsFor } from "../data/previewProducts";
@@ -26,7 +28,8 @@ import "../styles/Collection.css";
 import axiosClient from "../utils/axiosClient";
 import { useAsync } from "../utils/useAsync";
 
-const PER_PAGE = 15;
+// 16 per page where the grid is two across (phones and tablets), so the last row is never half empty; 15 for the three-across grid
+const PER_PAGE = window.matchMedia("(max-width: 1000px)").matches ? 16 : 15;
 
 
 const SUBCATEGORY_PAGES = {
@@ -111,7 +114,6 @@ function SubCategoryPage({ slug, sub, category }) {
       if (next) out.set("sort", next); else out.delete("sort");
       return out;
     }, { replace: true });
-  // the loaded pages are still kept per category for the session
   const store = `sub:${slug}${category ? `:${category}` : ""}`;
   const [savedPages, setSavedPages] = useSessionState(`${store}:pages`, 1);
   const restorePages = useRef(savedPages); // the pages to load again on the first visit
@@ -265,6 +267,9 @@ function CollectionView({ collection, items, facets, groups, paging, filterState
   const ownSort = useSessionState(`collection:${collection.slug}:sort`, "");
   const [sort, setSort] = sortState ?? ownSort;
   const [showFilters, setShowFilters] = useState(false);
+  const closeFilters = useCallback(() => setShowFilters(false), []);
+  useDrawerLock(showFilters, closeFilters);
+  const [groupsOpen] = useState(() => !onDrawerScreen()); // in the filter panel every group starts closed
   const [shown, setShown] = useSessionState(`collection:${collection.slug}:shown`, PER_PAGE);
   const { has, toggle: toggleWish } = useWishlist();
 
@@ -317,8 +322,10 @@ function CollectionView({ collection, items, facets, groups, paging, filterState
     <main className="collection">
       <Banner title={collection.title} image={collection.banner} />
 
-      <div className="col-layout">
+      <div className="col-layout col-drawer">
+        <DrawerBackdrop open={showFilters} onClose={closeFilters} />
         <aside className={`col-side ${showFilters ? "show" : ""}`}>
+          <DrawerHead active={active} onClose={closeFilters} />
           <button
             className="col-filter-toggle"
             onClick={() => setShowFilters((s) => !s)}
@@ -359,13 +366,14 @@ function CollectionView({ collection, items, facets, groups, paging, filterState
                 selected={filters[g.key]}
                 onToggle={(v) => toggle(g.key, v)}
                 scroll={g.scroll}
-                defaultOpen={g.defaultOpen}
+                defaultOpen={groupsOpen && g.defaultOpen}
               />
             ))}
 
             {RANGE_GROUPS.map((g) => (
               <RangeGroup
                 key={g.key}
+                defaultOpen={groupsOpen}
                 title={g.title}
                 bounds={ranges[g.key]}
                 ticks={Array.from({ length: Math.floor(ranges[g.key].max - ranges[g.key].min) + 1 }, (_, i) => ranges[g.key].min + i)}
@@ -374,10 +382,12 @@ function CollectionView({ collection, items, facets, groups, paging, filterState
               />
             ))}
           </div>
+          <DrawerFoot count={totalVariations} label="products" active={active} onReset={() => setFilters(emptyFilters(ranges))} onClose={closeFilters} />
         </aside>
 
         <section className="col-main">
           <div className="col-toolbar">
+            <FilterButton active={active} onOpen={() => setShowFilters(true)} />
             <p>
               <b>{totalVariations}</b> products
             </p>

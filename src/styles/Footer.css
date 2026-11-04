@@ -5,15 +5,15 @@
 }
 
 .footer .ft-inner {
-  max-width: 1240px;
+  max-width: 1600px; /* same as the home page sections */
   margin: 0 auto;
-  padding: 52px 24px 40px;
+  padding: 52px var(--site-gutter) 40px;
 }
 
 .footer .ft-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr) 1.15fr;
-  gap: 40px;
+  gap: 10px;
 }
 
 /* link columns */
@@ -198,7 +198,7 @@
 
 @media (max-width: 560px) {
   .footer .ft-inner {
-    padding: 40px 16px 88px;
+    padding: 40px var(--site-gutter) 88px;
   }
 
   .footer .ft-grid {

@@ -92,7 +92,7 @@
   letter-spacing: 0.04em;
   text-transform: uppercase;
   cursor: pointer;
-  --fill: var(--brand-whatsapp);
+  /* --fill: var(--brand-white); */
 }
 
 .contact .ct-form .ct-sent {
@@ -113,8 +113,18 @@
 }
 
 @media (max-width: 560px) {
+
+   .contact .ct-photo {
+    height: 230px;
+  }
+
+
   .contact .ct-layout {
     padding: 24px 16px 64px;
+  }
+
+  .contact .ct-layout {
+    height: auto;
   }
 
   .contact .ct-form h1 {

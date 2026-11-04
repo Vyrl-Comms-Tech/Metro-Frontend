@@ -71,6 +71,24 @@
   object-position: center;
 }
 
+/* the images change with a soft cross-fade */
+.product .pd-stage .pd-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+
+.product .pd-stage .pd-slide.is-active {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product .pd-stage .pd-slide {
+    transition: none;
+  }
+}
+
 .product .pd-stage-empty {
   display: grid;
   place-items: center;
@@ -137,9 +155,15 @@
   cursor: pointer;
 }
 
-.product .pd-icon:hover,
 .product .pd-icon.on {
   color: var(--brand-green);
+}
+
+/* hover colours only for a mouse: on a touch screen a tap would leave the button looking hovered */
+@media (hover: hover) {
+  .product .pd-icon:hover {
+    color: var(--brand-green);
+  }
 }
 
 .product .pd-preview-note {
@@ -589,6 +613,26 @@
     overflow-x: auto;
   }
 
+  /* smaller image arrows on phones */
+  .product .pd-nav {
+    width: 28px;
+    height: 28px;
+    margin-top: -14px;
+  }
+
+  .product .pd-nav svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .product .pd-nav.prev {
+    left: 8px;
+  }
+
+  .product .pd-nav.next {
+    right: 8px;
+  }
+
   .product .pd-metal-options button {
     font-size: 11px;
   }
@@ -604,4 +648,13 @@
 
 .product .pd-description {
   white-space: pre-line;
+}
+
+/* wide screens: the page sections grow from 1240px to 1340px */
+@media (min-width: 1470px) {
+  .product .pd-layout {
+    max-width: 1340px;
+    padding-left: var(--site-gutter);
+    padding-right: var(--site-gutter);
+  }
 }

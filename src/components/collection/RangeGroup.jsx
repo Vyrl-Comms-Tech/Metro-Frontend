@@ -1,7 +1,7 @@
 import Collapsible from './Collapsible'
 import { compact } from '../../utils/collection'
 
-export default function RangeGroup({ title, bounds, value, onChange, ticks }) {
+export default function RangeGroup({ title, bounds, value, onChange, ticks, defaultOpen }) {
   const { min, max, step } = bounds
   const [lo, hi] = value
   const pct = (v) => ((v - min) / (max - min)) * 100
@@ -16,7 +16,7 @@ export default function RangeGroup({ title, bounds, value, onChange, ticks }) {
   }
 
   return (
-    <Collapsible title={title}>
+    <Collapsible title={title} defaultOpen={defaultOpen}>
       <div className="rng-inputs">
         <input
           type="number"

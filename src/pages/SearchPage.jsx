@@ -19,7 +19,7 @@ const PER_PAGE = 15
 const GROUPS = CHECK_GROUPS.filter((g) => g.key !== 'subCategory').map((g) => ({ ...g, param: g.key === 'type' ? 'diamondType' : g.key }))
 
 // only these sorts are offered; the first one (no `sort` in the URL) is the server's own order
-const SORT_OPTIONS = SORTS.filter((s) => ['az', 'za'].includes(s.value))
+const SORT_OPTIONS = SORTS.filter((s) => ['best', 'az', 'za'].includes(s.value))
 
 // the search box, with the suggestions dropping down under it while the visitor types
 function SearchBox({ initial, onSearch }) {

@@ -4,6 +4,7 @@ import { columnLink } from './menuData'
 import { useNav } from './useNav'
 import MobileMenu from './MobileMenu'
 import SearchBar from './SearchBar'
+import HeaderSearch from './HeaderSearch'
 import { useWishlist } from '../context/wishlistContext'
 import '../styles/Header.css'
 
@@ -101,9 +102,10 @@ export default function Header() {
   const closeMenu = useCallback(() => setMenuOpen(false), [])
   const closeSearch = useCallback(() => setSearchOpen(false), [])
 
+  // the menu panel and the search box share the space under the header, so only one shows at a time
   const open = (i) => {
     clearTimeout(timer.current)
-    setActive(i)
+    setActive(searchOpen ? null : i)
   }
   // small delay so the pointer can cross the gap between tab and panel
   const close = () => {
@@ -126,7 +128,11 @@ export default function Header() {
         </div>
 
         <div className="hd-right">
-          <button className="icon-btn" aria-label="Search" aria-expanded={searchOpen} onClick={() => setSearchOpen((o) => !o)}>
+          <HeaderSearch onFocus={() => setActive(null)} />
+          <button className="icon-btn hd-search-btn" aria-label="Search" aria-expanded={searchOpen} onClick={() => {
+            setActive(null)
+            setSearchOpen((o) => !o)
+          }}>
             <Icon><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></Icon>
           </button>
           <button className="icon-btn" aria-label="Messages">
@@ -159,7 +165,7 @@ export default function Header() {
 
       {searchOpen && <SearchBar onClose={closeSearch} />}
 
-      {current?.menu && (
+      {current?.menu && !searchOpen && (
         <div className="mega" onMouseEnter={() => clearTimeout(timer.current)}>
           <MegaMenu item={current} />
         </div>

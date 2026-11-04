@@ -46,8 +46,12 @@
 /* grid: 3 per row */
 .categories .cat-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 24px;
+}
+
+.categories .cat-grid> :nth-child(4) {
+  grid-column: 1;
 }
 
 .categories .cat-card {
@@ -126,7 +130,7 @@
   justify-content: space-between;
   gap: 16px;
   min-height: 130px;
-  padding: 22px 26px 24px;
+  padding: 15px;
 }
 
 .categories .cat-card .cat-body h3 {
@@ -165,9 +169,10 @@
   transform: translateX(3px);
 }
 
+
 @media (max-width: 900px) {
   .categories .cat-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 20px;
   }
 }
@@ -181,7 +186,7 @@
     grid-template-columns: 1fr;
   }
 
-  .categories .cat-body {
+  .categories .cat-card .cat-body {
     min-height: 110px;
     padding: 18px 20px 20px;
   }

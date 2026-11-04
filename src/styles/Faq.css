@@ -2,7 +2,7 @@
 .faq {
   width: 100%;
   padding: var(--section-y) var(--section-x);
-  background: var(--brand-green-tint);
+  /* background: var(--brand-green-tint); */
   color: var(--brand-black);
 }
 
@@ -114,6 +114,7 @@
   padding: 0 56px 28px 8px;
   font-size: 15px;
   line-height: 1.7;
+  font-weight: 500;
   color: var(--brand-text-soft);
 }
 
@@ -121,14 +122,14 @@
 .faq-all {
   display: inline-block;
   padding: 14px 36px;
-  border: 1px solid var(--brand-green);
+  border: 1px solid var(--brand-black);
   border-radius: 3px;
   font-size: 13px;
   font-weight: 400;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--brand-green);
-  background: var(--brand-white);
+  color: var(--brand-black);
+  background: transparent;
   text-decoration: none;
   --fill: var(--brand-green);
   transition: color 0.35s ease;

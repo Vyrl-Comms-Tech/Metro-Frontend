@@ -7,13 +7,11 @@ const pad = (n) => String(n + 1).padStart(2, '0')
 
 const DEFAULT_TINT = ['#e9d6c6', '#a98b74']
 
-// https://www.instagram.com/reel/XXXX/?igsh=… -> https://www.instagram.com/reel/XXXX/embed
 const embedUrl = (href) => {
   const m = /instagram\.com\/(reel|reels|p|tv)\/([\w-]+)/i.exec(href ?? '')
   return m ? `https://www.instagram.com/${m[1] === 'reels' ? 'reel' : m[1]}/${m[2]}/embed` : ''
 }
 
-// shortest signed distance from the active card, wrapping around the loop
 const offsetOf = (i, active, n) => {
   let d = (i - active + n) % n
   if (d > n / 2) d -= n
@@ -30,7 +28,6 @@ export default function Reels() {
     poster: r.poster,
   }))
 
-  // no reels added in the admin yet
   if (reels.length === 0) return null
   return <ReelCarousel reels={reels} />
 }
@@ -40,8 +37,7 @@ function ReelCarousel({ reels }) {
   const [active, setActive] = useState(0)
   const [muted, setMuted] = useState(true)
   const startX = useRef(null)
-
-  // Newly selected videos start muted so browsers can autoplay them.
+  
   const select = (index) => {
     setMuted(true)
     setActive(index)

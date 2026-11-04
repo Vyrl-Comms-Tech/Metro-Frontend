@@ -1,7 +1,7 @@
 .reels {
-  --step: 440px;
-  --card-w: 360px;
-  --card-h: 596px;
+  --step: 480px;
+  --card-w: 400px;
+  --card-h: 610px;
   padding: var(--section-y) var(--section-x);
   background: var(--brand-white);
   color: var(--brand-black);
@@ -296,11 +296,19 @@
   background: var(--brand-green);
 }
 
+@media (max-width: 1200px) {
+  .reels {
+    --step: 440px;
+    --card-w: 380px;
+    --card-h: 580px;
+  }
+}
+
 @media (max-width: 900px) {
   .reels {
-    --step: 250px;
-    --card-w: 280px;
-    --card-h: 480px;
+    --step: 280px;
+    --card-w: 310px;
+    --card-h: 490px;
   }
 
   .reels .reels-stage .reels-num {
@@ -310,8 +318,8 @@
 
 @media (max-width: 560px) {
   .reels {
-    --step: 62vw;
-    --card-w: 66vw;
+    --step: 68vw;
+    --card-w: 72vw;
     --card-h: 112vw;
   }
 

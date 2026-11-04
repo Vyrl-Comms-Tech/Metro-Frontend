@@ -1,5 +1,3 @@
-/* hover on a button fills it from the bottom to the top: a layer in the button's `--fill` colour grows up behind its text.
-   Each button sets its own --fill (and, where the text changes colour, its :hover color). */
 .hero .hero-copy .hero-btn,
 .site-header .mega .btn-dark,
 .site-header .mega .btn-outline,
@@ -11,12 +9,12 @@
 .product .pd-whatsapp,
 .product .pd-discount,
 .product .pd-add,
-.recent-gemstones .rg-details,
 .recent-gemstones .rg-view-all,
 .wishlist .wl-browse {
   position: relative;
   overflow: hidden;
-  isolation: isolate; /* keeps the layer behind the text but above the button's own background */
+  isolation: isolate;
+  /* keeps the layer behind the text but above the button's own background */
 }
 
 .hero .hero-copy .hero-btn::before,
@@ -30,7 +28,6 @@
 .product .pd-whatsapp::before,
 .product .pd-discount::before,
 .product .pd-add::before,
-.recent-gemstones .rg-details::before,
 .recent-gemstones .rg-view-all::before,
 .wishlist .wl-browse::before {
   content: "";
@@ -55,7 +52,6 @@
 .product .pd-whatsapp:hover::before,
 .product .pd-discount:hover::before,
 .product .pd-add:hover::before,
-.recent-gemstones .rg-details:hover::before,
 .recent-gemstones .rg-view-all:hover::before,
 .wishlist .wl-browse:hover::before {
   transform: scaleY(1);
@@ -63,6 +59,7 @@
 
 /* leaving the button, the fill drains back down */
 @media (prefers-reduced-motion: reduce) {
+
   .hero .hero-copy .hero-btn::before,
   .site-header .mega .btn-dark::before,
   .site-header .mega .btn-outline::before,
@@ -74,7 +71,6 @@
   .product .pd-whatsapp::before,
   .product .pd-discount::before,
   .product .pd-add::before,
-  .recent-gemstones .rg-details::before,
   .recent-gemstones .rg-view-all::before,
   .wishlist .wl-browse::before {
     transition: none;

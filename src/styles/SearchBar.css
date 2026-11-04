@@ -14,6 +14,10 @@
   padding: 36px 24px 28px;
   background: var(--brand-white);
   border-top: 3px solid var(--brand-green);
+  /* on a short window the panel scrolls instead of running off the screen */
+  max-height: 100vh;
+  max-height: 100dvh;
+  overflow-y: auto;
   text-align: center;
   animation: search-drop 0.22s ease-out;
 }
@@ -24,6 +28,36 @@
 
 @keyframes search-drop {
   from { transform: translateY(-100%); }
+}
+
+.site-header .search-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 968px;
+  margin: 0 auto;
+}
+
+.site-header .search-top .search-box {
+  flex: 1;
+  min-width: 0;
+}
+
+.site-header .search-top .search-close {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--brand-black);
+  cursor: pointer;
+}
+
+.site-header .search-top .search-close:hover {
+  color: var(--brand-green);
 }
 
 .site-header .search-box {
@@ -72,4 +106,120 @@
 .site-header .search-box .search-clear {
   width: 32px;
   color: var(--brand-green);
+}
+
+/* the search field in the header (wide screens); small screens use the search icon and the panel above */
+.site-header .hd-search {
+  position: relative;
+}
+
+.site-header .hd-search .hd-search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: clamp(200px, 20vw, 300px);
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--brand-line);
+  background: var(--brand-white);
+  transition: border-color 0.2s;
+}
+
+.site-header .hd-search .hd-search-box:hover,
+.site-header .hd-search .hd-search-box:focus-within {
+  border-color: var(--brand-black);
+}
+
+.site-header .hd-search .hd-search-box input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+  outline: none;
+}
+
+.site-header .hd-search .hd-search-clear {
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--brand-green);
+  cursor: pointer;
+}
+
+.site-header .hd-search .hd-search-drop {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 60;
+  width: min(920px, calc(100vw - 2 * var(--site-gutter)));
+  padding: 24px 24px 8px;
+  background: var(--brand-white);
+  border: 1px solid var(--brand-line-soft);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+.site-header .hd-search .hd-search-drop .search-results {
+  margin-top: 0;
+  max-height: max(220px, calc(100vh - 160px));
+}
+
+/* wide screens have the field, so the icon is for small screens only */
+@media (min-width: 901px) {
+  .site-header .hd-top .icon-btn.hd-search-btn {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .site-header .hd-search {
+    display: none;
+  }
+}
+
+/* mobile: the search opens as a full-height screen, the results scroll inside it and the popular searches stay at the bottom */
+@media (max-width: 900px) {
+  .site-header .search-panel {
+    box-sizing: border-box;
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* the close button goes in the top-right corner, the box takes the full width below it */
+  .site-header .search-panel {
+    padding-top: 56px;
+  }
+
+  .site-header .search-top .search-close {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+  }
+
+  .site-header .search-panel .search-top,
+  .site-header .search-panel .search-popular {
+    flex: none;
+    width: 100%;
+  }
+
+  .site-header .search-panel .search-results {
+    order: 2;
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    max-height: none;
+    align-content: start;
+  }
+
+  /* the popular searches sit right under the box, above the results */
+  .site-header .search-panel .search-popular {
+    order: 1;
+    margin-bottom: 8px;
+  }
 }

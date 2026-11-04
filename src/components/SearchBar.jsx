@@ -36,6 +36,7 @@ export default function SearchBar({ onClose }) {
     <>
       <div className="search-backdrop" onClick={onClose} />
       <div className="search-panel">
+        <div className="search-top">
         <form className="search-box" role="search" onSubmit={submit}>
           <input value={text} onChange={(e) => setText(e.target.value)} placeholder="Search products" aria-label="Search products" autoFocus />
           {text && (
@@ -48,6 +49,8 @@ export default function SearchBar({ onClose }) {
             </svg>
           </button>
         </form>
+        <button type="button" className="search-close" aria-label="Close search" onClick={onClose}><X size={24} /></button>
+        </div>
 
         <SearchSuggestions text={text} onSearch={open} onNavigate={onClose} />
 

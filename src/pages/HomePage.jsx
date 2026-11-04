@@ -5,10 +5,11 @@ import GoldChart from '../components/GoldChart'
 import Reels from '../components/Reels'
 import Faq from '../components/Faq'
 import GalleryGrid from '../components/GalleryGrid'
+import '../styles/HomePage.css'
 
 export default function HomePage() {
   return (
-    <>
+    <main className="home-page">
       <Hero />
       <GoldChart />
       <RecentGemstones />
@@ -16,6 +17,6 @@ export default function HomePage() {
       <GalleryGrid limit={12} />
       <Reels />
       <Faq />
-    </>
+    </main>
   )
 }

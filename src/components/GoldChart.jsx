@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -18,22 +18,27 @@ const CURRENCIES = [
   { code: "USD", name: "US Dollar" },
 ];
 
-const W = 800;
-const H = 320;
-const PAD = { top: 16, right: 16, bottom: 28, left: 56 };
+const PAD = { top: 20, right: 12, bottom: 30, left: 56 };
+const PAD_SM = { top: 16, right: 8, bottom: 26, left: 42 }; // phones: a tighter frame
 
 const fmtPrice = (n) =>
   n.toLocaleString("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
-const fmtDate = (d, long) =>
-  d.toLocaleDateString(
-    "en-US",
-    long
-      ? { day: "numeric", month: "short", year: "numeric" }
-      : { day: "numeric", month: "short" },
-  );
+const fmtDate = (d, opts = { day: "numeric", month: "short" }) => d.toLocaleDateString("en-US", opts);
+const fmtTime = (d) => d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+const LONG_DATE = { day: "numeric", month: "short", year: "numeric" };
+
+// round axis values (1, 2, 2.5, 5 x 10^n) that cover [lo, hi]
+function niceTicks(lo, hi, count = 5) {
+  const raw = (hi - lo || 1) / (count - 1);
+  const mag = 10 ** Math.floor(Math.log10(raw));
+  const step = [1, 2, 2.5, 5, 10].map((m) => m * mag).find((m) => m >= raw);
+  const ticks = [];
+  for (let v = Math.floor(lo / step) * step; v < hi + step - 1e-9; v += step) ticks.push(v);
+  return ticks;
+}
 
 function GoldBarsIcon({ size = 34 }) {
   return (
@@ -73,38 +78,62 @@ export default function GoldChart() {
   const [range, setRange] = useState(RANGES[1]);
   const [currency, setCurrency] = useState("AED");
   const [hover, setHover] = useState(null);
+  const [box, setBox] = useState(null);
+  const [width, setWidth] = useState(800);
+  // on a phone the currency list shows just the codes (AED, USD)
+  const [phone, setPhone] = useState(() => window.matchMedia("(max-width: 560px)").matches);
+  useEffect(() => {
+    const query = window.matchMedia("(max-width: 560px)");
+    const onChange = (e) => setPhone(e.matches);
+    query.addEventListener("change", onChange);
+    return () => query.removeEventListener("change", onChange);
+  }, []);
 
   const { data, error } = useAsync(
     () => axiosClient.get('/gold', { params: { range: range.label } }),
     [range.label],
   );
 
-  const rate = data?.rates?.[currency] ?? 1;
-  const series = useMemo(
-    () =>
-      (data?.history ?? []).map((p) => ({
-        date: new Date(p.date),
-        price: p.usd * rate,
-      })),
-    [data, rate],
-  );
+  // the chart is drawn at the size it is shown, so the text stays sharp on every screen
+  useEffect(() => {
+    if (!box) return;
+    const observer = new ResizeObserver(([entry]) => setWidth(Math.round(entry.contentRect.width)));
+    observer.observe(box);
+    return () => observer.disconnect();
+  }, [box]);
 
-  const { points, min, max } = useMemo(() => {
+  const compact = width < 560;
+  const pad = compact ? PAD_SM : PAD;
+  const H = compact ? 240 : 340;
+  const iw = Math.max(width - pad.left - pad.right, 1);
+  const ih = H - pad.top - pad.bottom;
+
+  const rate = data?.rates?.[currency] ?? 1;
+  const series = useMemo(() => {
+    const list = (data?.history ?? []).map((p) => ({ date: new Date(p.date), price: p.usd * rate }));
+    // finish the line on the live price
+    if (list.length && data?.current?.usd != null && data.current.updatedAt) {
+      const live = new Date(data.current.updatedAt);
+      if (live > list.at(-1).date) list.push({ date: live, price: data.current.usd * rate });
+    }
+    return list;
+  }, [data, rate]);
+
+  const { points, ticks, min, max } = useMemo(() => {
     const prices = series.map((p) => p.price);
-    const lo = Math.min(...prices);
-    const hi = Math.max(...prices);
-    const pad = (hi - lo || 1) * 0.1;
-    const min = lo - pad;
-    const max = hi + pad;
-    const iw = W - PAD.left - PAD.right;
-    const ih = H - PAD.top - PAD.bottom;
-    const points = series.map((p, i) => ({
+    const ticks = niceTicks(Math.min(...prices), Math.max(...prices), compact ? 4 : 5);
+    const min = ticks[0];
+    const max = ticks.at(-1);
+    const t0 = series[0]?.date.getTime();
+    const span = series.at(-1)?.date.getTime() - t0 || 1;
+    // x follows the date, so gaps (weekends) show as gaps and the date labels are evenly spaced
+    const points = series.map((p) => ({
       ...p,
-      x: PAD.left + (i / (series.length - 1)) * iw,
-      y: PAD.top + (1 - (p.price - min) / (max - min)) * ih,
+      x: pad.left + ((p.date.getTime() - t0) / span) * iw,
+      y: pad.top + (1 - (p.price - min) / (max - min || 1)) * ih,
     }));
-    return { points, min, max };
-  }, [series]);
+    return { points, ticks, min, max };
+  }, [series, iw, ih, compact, pad]);
 
   // the backend builds history over time, so a fresh install has a single point
   const hasChart = points.length > 1;
@@ -112,7 +141,7 @@ export default function GoldChart() {
     .map((p, i) => `${i ? "L" : "M"}${p.x.toFixed(1)},${p.y.toFixed(1)}`)
     .join(" ");
   const area = hasChart
-    ? `${line} L${points.at(-1).x},${H - PAD.bottom} L${points[0].x},${H - PAD.bottom} Z`
+    ? `${line} L${points.at(-1).x.toFixed(1)},${pad.top + ih} L${points[0].x.toFixed(1)},${pad.top + ih} Z`
     : "";
 
   const currentUsd = data?.current?.usd ?? series.at(-1)?.price / rate;
@@ -122,31 +151,34 @@ export default function GoldChart() {
   const pct = first ? (change / first) * 100 : 0;
   const up = change >= 0;
 
-  const yTicks = Array.from(
-    { length: 5 },
-    (_, i) => min + ((max - min) * i) / 4,
-  );
-  const yPos = (v) =>
-    PAD.top + (1 - (v - min) / (max - min)) * (H - PAD.top - PAD.bottom);
-  const xTickIdx = Array.from({ length: 5 }, (_, i) =>
-    Math.round((i / 4) * (points.length - 1)),
-  );
+  const prices = series.map((p) => p.price);
+  const low = prices.length ? Math.min(...prices) : null;
+  const high = prices.length ? Math.max(...prices) : null;
+
+  const yPos = (v) => pad.top + (1 - (v - min) / (max - min || 1)) * ih;
+  const xCount = compact ? 4 : 5;
+  const xTicks = hasChart
+    ? Array.from({ length: xCount }, (_, i) => {
+        const t0 = points[0].date.getTime();
+        const t1 = points.at(-1).date.getTime();
+        return { x: pad.left + (i / (xCount - 1)) * iw, date: new Date(t0 + ((t1 - t0) * i) / (xCount - 1)) };
+      })
+    : [];
+  const xFormat = range.label === "1Y" ? { month: "short", year: "numeric" } : undefined;
 
   const onMove = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * W;
-    const ratio = (x - PAD.left) / (W - PAD.left - PAD.right);
-    setHover(
-      Math.max(
-        0,
-        Math.min(points.length - 1, Math.round(ratio * (points.length - 1))),
-      ),
-    );
+    const x = e.clientX - e.currentTarget.getBoundingClientRect().left;
+    let best = 0;
+    for (let i = 1; i < points.length; i++) {
+      if (Math.abs(points[i].x - x) < Math.abs(points[best].x - x)) best = i;
+    }
+    setHover(best);
   };
 
   const h = hasChart && hover !== null ? points[hover] : null;
   const shownPrice = h ? h.price : current;
   const shownDate = h ? h.date : data?.current?.updatedAt ? new Date(data.current.updatedAt) : null;
+  const hourly = range.label === "1W";
 
   if (error) {
     return (
@@ -160,150 +192,184 @@ export default function GoldChart() {
   if (!data) {
     return (
       <section className="gold" aria-busy="true" aria-label="Loading gold price">
-        <div className="gold-head">
-          <div className="gold-title">
-            <Skeleton circle width={34} height={34} />
-            <div>
-              <Skeleton width={120} height={22} />
-              <Skeleton width={240} height={14} />
+        <div className="gold-card">
+          <div className="gold-head">
+            <div className="gold-title">
+              <Skeleton circle width={48} height={48} />
+              <div>
+                <Skeleton width={120} height={22} />
+                <Skeleton width={240} height={14} />
+              </div>
             </div>
+            <Skeleton width={180} height={40} />
           </div>
-          <Skeleton width={150} height={38} />
+          <Skeleton width={260} height={38} style={{ marginTop: 20 }} />
+          <Skeleton width={180} height={14} />
+          <Skeleton width={200} height={34} style={{ margin: "16px 0" }} />
+          <Skeleton height={300} />
         </div>
-        <Skeleton width={220} height={34} style={{ marginTop: 16 }} />
-        <Skeleton width={180} height={14} />
-        <Skeleton width={200} height={34} style={{ margin: "16px 0" }} />
-        <Skeleton height={H} />
       </section>
     );
   }
 
   return (
     <section className="gold">
-      <div className="gold-head">
-        <div className="gold-title">
-          <span className="gold-icon" aria-hidden="true">
-            <GoldBarsIcon />
-          </span>
-          <div>
-            <h2>Gold Price</h2>
-            <p className="gold-sub">Live international gold price per troy ounce</p>
+      <div className="gold-card">
+        <div className="gold-head">
+          <div className="gold-title">
+            <span className="gold-icon" aria-hidden="true">
+              <GoldBarsIcon />
+            </span>
+            <div>
+              <h2>Gold Price</h2>
+              <p className="gold-sub">Live international gold price per troy ounce</p>
+            </div>
           </div>
+          <label className="gold-currency">
+            <span className="sr-only">Currency</span>
+            <select value={currency} onChange={(e) => setCurrency(e.target.value)}>
+              {CURRENCIES.map((c) => (
+                <option key={c.code} value={c.code}>
+                  {phone ? c.code : `${c.code} – ${c.name}`}
+                </option>
+              ))}
+            </select>
+            <ChevronDown size={16} aria-hidden="true" />
+          </label>
         </div>
-        <label className="gold-currency">
-          <span className="sr-only">Currency</span>
-          <select value={currency} onChange={(e) => setCurrency(e.target.value)}>
-            {CURRENCIES.map((c) => (
-              <option key={c.code} value={c.code}>
-                {c.code} – {c.name}
-              </option>
-            ))}
-          </select>
-          <ChevronDown size={16} aria-hidden="true" />
-        </label>
-      </div>
 
-      <div className="gold-stats">
-        <strong>
-          {currency} {shownPrice != null ? fmtPrice(shownPrice) : "—"}
-        </strong>
-        {hasChart && (
-          <span className={`gold-change ${up ? "up" : "down"}`}>
-            {up ? "▲" : "▼"} {fmtPrice(Math.abs(change))} (
-            {Math.abs(pct).toFixed(2)}%) <em>{range.label}</em>
-          </span>
-        )}
-        {shownDate && <span className="gold-date">{fmtDate(shownDate, true)}</span>}
-      </div>
-      <p className="gold-unit">1 Troy Ounce (31.1035 g) • 24K Gold</p>
-
-      <div className="gold-ranges" role="tablist">
-        {RANGES.map((r) => (
-          <button
-            key={r.label}
-            role="tab"
-            aria-selected={r === range}
-            className={r === range ? "on" : ""}
-            onClick={() => {
-              setRange(r);
-              setHover(null);
-            }}
-          >
-            {r.label}
-          </button>
-        ))}
-      </div>
-
-      {!hasChart ? (
-        <p className="gold-note">
-          The price chart builds up as prices are recorded. Check back soon.
-        </p>
-      ) : (
-        <svg
-          className="gold-svg"
-          viewBox={`0 0 ${W} ${H}`}
-          onMouseMove={onMove}
-          onMouseLeave={() => setHover(null)}
-          role="img"
-          aria-label={`Gold price chart, ${range.label}`}
-        >
-          <defs>
-            <linearGradient id="gold-fill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stopColor="#c9a24b" stopOpacity="0.35" />
-              <stop offset="1" stopColor="#c9a24b" stopOpacity="0" />
-            </linearGradient>
-          </defs>
-
-          {yTicks.map((v) => (
-            <g key={v}>
-              <line
-                x1={PAD.left}
-                x2={W - PAD.right}
-                y1={yPos(v)}
-                y2={yPos(v)}
-                className="gold-grid"
-              />
-              <text
-                x={PAD.left - 8}
-                y={yPos(v) + 4}
-                textAnchor="end"
-                className="gold-axis"
-              >
-                {Math.round(v).toLocaleString()}
-              </text>
-            </g>
-          ))}
-          {xTickIdx.map((i, k) => (
-            <text
-              key={i}
-              x={points[i].x}
-              y={H - 8}
-              className="gold-axis"
-              textAnchor={
-                k === 0 ? "start" : k === xTickIdx.length - 1 ? "end" : "middle"
-              }
-            >
-              {fmtDate(points[i].date)}
-            </text>
-          ))}
-
-          <path d={area} fill="url(#gold-fill)" />
-          <path d={line} className="gold-line" />
-
-          {h && (
-            <g>
-              <line
-                x1={h.x}
-                x2={h.x}
-                y1={PAD.top}
-                y2={H - PAD.bottom}
-                className="gold-cross"
-              />
-              <circle cx={h.x} cy={h.y} r="5" className="gold-dot" />
-            </g>
+        <div className="gold-stats">
+          <strong>
+            <span className="gold-cur">{currency}</span> {shownPrice != null ? fmtPrice(shownPrice) : "—"}
+          </strong>
+          {hasChart && (
+            <span className={`gold-change ${up ? "up" : "down"}`}>
+              {up ? "▲" : "▼"} {fmtPrice(Math.abs(change))} ({Math.abs(pct).toFixed(2)}%) <em>{range.label}</em>
+            </span>
           )}
-        </svg>
-      )}
+          {shownDate && (
+            <span className="gold-date">
+              {fmtDate(shownDate, LONG_DATE)}
+              {(h ? hourly : true) && `, ${fmtTime(shownDate)}`}
+            </span>
+          )}
+        </div>
+        <p className="gold-unit">1 Troy Ounce (31.1035 g) • 24K Gold</p>
+
+        <div className="gold-ranges" role="tablist" aria-label="Time range">
+          {RANGES.map((r) => (
+            <button
+              key={r.label}
+              role="tab"
+              aria-selected={r === range}
+              className={r === range ? "on" : ""}
+              onClick={() => {
+                setRange(r);
+                setHover(null);
+              }}
+            >
+              {r.label}
+            </button>
+          ))}
+        </div>
+
+        {!hasChart ? (
+          <p className="gold-note">
+            The price chart builds up as prices are recorded. Check back soon.
+          </p>
+        ) : (
+          <div className="gold-plot" ref={setBox}>
+            <svg
+              className="gold-svg"
+              width={width}
+              height={H}
+              onPointerMove={onMove}
+              onPointerLeave={() => setHover(null)}
+              role="img"
+              aria-label={`Gold price chart for the last ${range.label}, from ${currency} ${fmtPrice(low)} to ${fmtPrice(high)}`}
+            >
+              <defs>
+                <linearGradient id="gold-fill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stopColor="#c9a24b" stopOpacity="0.32" />
+                  <stop offset="1" stopColor="#c9a24b" stopOpacity="0" />
+                </linearGradient>
+              </defs>
+
+              {ticks.map((v) => (
+                <g key={v}>
+                  <line x1={pad.left} x2={width - pad.right} y1={yPos(v)} y2={yPos(v)} className="gold-grid" />
+                  <text x={pad.left - 10} y={yPos(v) + 4} textAnchor="end" className="gold-axis">
+                    {Math.round(v).toLocaleString()}
+                  </text>
+                </g>
+              ))}
+              {xTicks.map((t, k) => (
+                <text
+                  key={k}
+                  x={t.x}
+                  y={H - 8}
+                  className="gold-axis"
+                  textAnchor={k === 0 ? "start" : k === xTicks.length - 1 ? "end" : "middle"}
+                >
+                  {fmtDate(t.date, xFormat)}
+                </text>
+              ))}
+
+              <path d={area} fill="url(#gold-fill)" />
+              <path d={line} className="gold-line" />
+
+              {!h && (
+                <g>
+                  <circle cx={points.at(-1).x} cy={points.at(-1).y} r="9" className="gold-pulse" />
+                  <circle cx={points.at(-1).x} cy={points.at(-1).y} r="4.5" className="gold-dot" />
+                </g>
+              )}
+              {h && (
+                <g>
+                  <line x1={h.x} x2={h.x} y1={pad.top} y2={pad.top + ih} className="gold-cross" />
+                  <circle cx={h.x} cy={h.y} r="5" className="gold-dot" />
+                </g>
+              )}
+            </svg>
+
+            {h && (
+              <div
+                className="gold-tip"
+                style={{ left: Math.min(Math.max(h.x, 76), width - 76), top: Math.max(h.y - 64, 0) }}
+                aria-hidden="true"
+              >
+                <b>
+                  {currency} {fmtPrice(h.price)}
+                </b>
+                <span>
+                  {fmtDate(h.date, LONG_DATE)}
+                  {hourly && `, ${fmtTime(h.date)}`}
+                </span>
+              </div>
+            )}
+          </div>
+        )}
+
+        {hasChart && (
+          <dl className="gold-range-stats">
+            <div>
+              <dt>{range.label} low</dt>
+              <dd>{fmtPrice(low)}</dd>
+            </div>
+            <div>
+              <dt>{range.label} high</dt>
+              <dd>{fmtPrice(high)}</dd>
+            </div>
+            <div>
+              <dt>{range.label} change</dt>
+              <dd className={up ? "up" : "down"}>
+                {up ? "+" : "−"}
+                {Math.abs(pct).toFixed(2)}%
+              </dd>
+            </div>
+          </dl>
+        )}
+      </div>
     </section>
   );
 }

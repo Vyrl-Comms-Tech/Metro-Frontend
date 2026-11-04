@@ -8,7 +8,8 @@
   display: flex;
   align-items: center;
   height: 300px;
-  padding: 0 8%;
+  /* the title starts on the same edge as the header and the page content */
+  padding: 0 max(var(--site-gutter), calc((100% - 1600px) / 2 + var(--site-gutter)));
   overflow: hidden;
   background:
     radial-gradient(
@@ -59,10 +60,11 @@
   display: grid;
   grid-template-columns: 310px 1fr;
   gap: 48px;
-  /* max-width: 1240px; */
-  width: 85%;
+  /* same width and side padding as the home page sections */
+  width: 100%;
+  max-width: 1600px;
   margin: 0 auto;
-  padding: 28px 24px 80px;
+  padding: 28px var(--site-gutter) 80px;
   align-items: start;
 }
 
@@ -97,10 +99,9 @@
 
 /* filter groups */
 .collection .col-group {
-  padding: 4px 0 24px;
+  padding: 4px 0 0px;
   border-bottom: 1px solid var(--brand-line-soft);
-  margin-bottom: 20px;
-  
+  margin-bottom: 10px;
 }
 
 .collection .col-group:last-child {
@@ -114,7 +115,7 @@
   width: 100%;
   background: none;
   border: 0;
-  padding: 8px 0 16px;
+  padding: 6px 0 10px;
   cursor: pointer;
   font-size: 17px;
   font-weight: 500;
@@ -496,7 +497,8 @@
   }
 }
 
-@media (hover: none) {
+/* touch screens and the phone / tablet layout: the heart is always visible, not only on hover */
+@media (hover: none), (max-width: 1000px) {
   .collection .col-grid .prod .prod-wish {
     opacity: 1;
   }
@@ -504,9 +506,9 @@
 
 /* loading / error message under the banner */
 .collection .col-status {
-  max-width: 1240px;
+  max-width: 1600px;
   margin: 0 auto;
-  padding: 64px 24px;
+  padding: 64px var(--site-gutter);
   text-align: center;
   color: var(--brand-muted);
 }
@@ -584,4 +586,207 @@
   aspect-ratio: 1 / 1;
   height: auto;
   line-height: 1;
+}
+
+/* the filter panel: only used on phones and tablets (see FilterDrawer.jsx) */
+.collection .col-drawer-head,
+.collection .col-drawer-foot,
+.collection .col-filter-open,
+.collection .col-backdrop {
+  display: none;
+}
+
+@media (max-width: 1000px) {
+  /* toolbar: Filters and Sort side by side, the product count under them */
+  .collection .col-drawer .col-main .col-toolbar {
+    flex-wrap: wrap;
+    gap: 0;
+    margin-bottom: 16px;
+    min-height: 0;
+  }
+
+  .collection .col-drawer .col-toolbar .col-filter-open {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex: 1 1 0;
+    min-width: 0;
+    height: 48px;
+    border: 1px solid var(--brand-line-soft);
+    border-radius: 4px 0 0 4px;
+    background: var(--brand-white);
+    font: inherit;
+    font-size: 14px;
+    color: var(--brand-text);
+    cursor: pointer;
+  }
+
+  .collection .col-drawer .col-toolbar .col-sort {
+    flex: 1 1 0;
+    min-width: 0;
+    margin-left: -1px;
+  }
+
+  .collection .col-drawer .col-toolbar .col-sort select {
+    width: 100%;
+    min-width: 0;
+    height: 48px;
+    padding: 0 40px 0 16px;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .collection .col-drawer .col-toolbar p {
+    order: 3;
+    flex-basis: 100%;
+    margin-top: 14px;
+  }
+
+  /* the sidebar becomes a panel sliding in from the left */
+  .collection .col-drawer .col-side {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 120;
+    display: flex;
+    flex-direction: column;
+    width: min(86vw, 360px);
+    background: var(--brand-white);
+    box-shadow: 8px 0 30px var(--brand-shadow);
+    transform: translateX(-100%);
+    visibility: hidden;
+    transition:
+      transform 0.3s ease,
+      visibility 0s linear 0.3s;
+  }
+
+  .collection .col-drawer .col-side.show {
+    transform: none;
+    visibility: visible;
+    transition: transform 0.3s ease;
+  }
+
+  .collection .col-drawer .col-side .col-filter-toggle {
+    display: none;
+  }
+
+  .collection .col-drawer .col-drawer-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: none;
+    padding: 12px 12px 12px 20px;
+    border-bottom: 1px solid var(--brand-line-soft);
+    font-size: 17px;
+    font-weight: 500;
+  }
+
+  .collection .col-drawer .col-drawer-head button {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border: 0;
+    background: none;
+    color: var(--brand-black);
+    cursor: pointer;
+  }
+
+  .collection .col-drawer .col-side .col-filters {
+    display: block;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 16px 20px;
+  }
+
+  .collection .col-drawer .col-drawer-foot {
+    display: flex;
+    gap: 10px;
+    flex: none;
+    padding: 12px 20px;
+    border-top: 1px solid var(--brand-line-soft);
+  }
+
+  .collection .col-drawer .col-drawer-foot button {
+    height: 48px;
+    border-radius: 4px;
+    font: inherit;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .collection .col-drawer .col-drawer-foot .col-drawer-show {
+    flex: 2;
+    border: 1px solid var(--brand-green);
+    background: var(--brand-green);
+    color: var(--brand-white);
+  }
+
+  .collection .col-drawer .col-drawer-foot .col-drawer-reset {
+    flex: 1;
+    border: 1px solid var(--brand-green);
+    background: var(--brand-white);
+    color: var(--brand-green);
+  }
+
+  .collection .col-drawer .col-drawer-foot .col-drawer-reset:disabled {
+    border-color: var(--brand-line);
+    color: var(--brand-subtle);
+    cursor: default;
+  }
+
+  /* the panel has Reset all at the bottom, so the small link in the list is not needed */
+  .collection .col-drawer .col-side .col-clear {
+    display: none;
+  }
+
+  .collection .col-drawer .col-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 110;
+    background: var(--brand-scrim);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .collection .col-drawer .col-side {
+    transition: none;
+  }
+}
+
+/* the loading view */
+.collection .col-sk .col-toolbar .col-sort-sk {
+  min-width: 186px;
+}
+
+@media (max-width: 1000px) {
+  .collection .col-sk .col-toolbar .col-sort-sk {
+    min-width: 0;
+  }
+
+  /* two across: an even number of cards */
+  .collection .col-sk .col-grid .prod:nth-child(9) {
+    display: none;
+  }
+}
+
+
+@media (max-width: 500px) {
+   .collection .col-drawer .col-toolbar .col-filter-open {
+    height: 40px;
+   }
+
+   .collection .col-grid .prod .prod-wish {
+    top: 5px;
+    right: 5px;
+   }
+
+
+   .collection .col-drawer .col-toolbar .col-sort select{
+    height: 40px;
+
+   }
 }

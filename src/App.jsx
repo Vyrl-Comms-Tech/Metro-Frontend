@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { BrowserRouter, Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom'
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -12,6 +12,8 @@ import StonePage from './pages/StonePage'
 import CustomJewelleryPage from './pages/CustomJewelleryPage'
 import ContactPage from './pages/ContactPage'
 import WishlistPage from './pages/WishlistPage'
+import TermsPage from './pages/TermsPage'
+import PrivacyPage from './pages/PrivacyPage'
 import AdminLayout from './admin/AdminLayout'
 import LoginPage from './admin/LoginPage'
 import ProtectedRoute from './admin/ProtectedRoute'
@@ -19,7 +21,7 @@ import AuthProvider from './context/AuthProvider'
 import Overview from './admin/pages/Overview'
 import ProductsAdmin from './admin/pages/ProductsAdmin'
 import CategoriesAdmin from './admin/pages/CategoriesAdmin'
-import ContentAdmin from './admin/pages/ContentAdmin'
+// import ContentAdmin from './admin/pages/ContentAdmin' // Website Content tab switched off
 import FaqsAdmin from './admin/pages/FaqsAdmin'
 import ReelsAdmin from './admin/pages/ReelsAdmin'
 import CustomJewelleryAdmin from './admin/pages/CustomJewelleryAdmin'
@@ -27,11 +29,33 @@ import WishlistProvider from './context/WishlistProvider'
 import SiteProvider from './context/SiteProvider'
 import './App.css'
 
+// new page -> top; a #section link then glides to its section once the page has rendered
 function ScrollToTop() {
-  const { pathname } = useLocation()
+  const { pathname, hash, key } = useLocation()
+  const lastPath = useRef(null)
+
   useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [pathname])
+    const newPage = lastPath.current !== pathname
+    lastPath.current = pathname
+    if (newPage) window.scrollTo(0, 0)
+    if (!hash) return
+
+    // the section may not exist yet (FAQs load from the API), so wait for it
+    let tries = 0
+    let glide
+    const poll = setInterval(() => {
+      const el = document.getElementById(decodeURIComponent(hash.slice(1)))
+      if (!el && ++tries < 40) return
+      clearInterval(poll)
+      if (el) glide = setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), newPage ? 300 : 0)
+    }, 100)
+
+    return () => {
+      clearInterval(poll)
+      clearTimeout(glide)
+    }
+  }, [pathname, hash, key])
+
   return null
 }
 
@@ -70,6 +94,8 @@ function App() {
             <Route path="/contact-us" element={<ContactPage />} />
             <Route path="/wishlist" element={<WishlistPage />} />
             <Route path="/faqs" element={<FaqPage />} />
+            <Route path="/terms-conditions" element={<TermsPage />} />
+            <Route path="/privacy-policy" element={<PrivacyPage />} />
             <Route path="*" element={<HomePage />} />
           </Route>
 
@@ -80,7 +106,7 @@ function App() {
               <Route index element={<Overview />} />
               <Route path="products" element={<ProductsAdmin />} />
               <Route path="categories" element={<CategoriesAdmin />} />
-              <Route path="content" element={<ContentAdmin />} />
+              {/* <Route path="content" element={<ContentAdmin />} /> */}
               <Route path="faqs" element={<FaqsAdmin />} />
               <Route path="custom-jewellery" element={<CustomJewelleryAdmin />} />
               <Route path="reels" element={<ReelsAdmin />} />

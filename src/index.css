@@ -3,6 +3,7 @@
   --section-y: 72px;
   --section-x: 24px;
   --section-head-gap: 44px;
+  --site-gutter: clamp(16px, 4vw, 56px);
 
   /* brand colours: white primary, deep forest green secondary */
   --brand-white: #fff;
@@ -19,8 +20,8 @@
 
   /* neutrals */
   --brand-text: #333;
-  --brand-text-soft: #5a5a5a;
-  --brand-muted: #6b6b6b;
+  --brand-text-soft: #383838;
+  --brand-muted: #474747;
   --brand-subtle: #8a8a8a;
   --brand-line: #d9d9d9;
   --brand-line-soft: #e3e3e3;

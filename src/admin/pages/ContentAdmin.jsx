@@ -13,7 +13,6 @@ const BLOCKS = [
     fields: [
       { name: "heading", label: "Heading" },
       { name: "buttonText", label: "Button text" },
-      { name: "image", label: "Banner image", type: "image", hint: "Leave empty to use the default photo." },
     ],
   },
   {

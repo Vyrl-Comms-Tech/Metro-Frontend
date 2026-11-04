@@ -1,0 +1,130 @@
+.terms {
+  --terms-wrap: min(1240px, 100% - 48px);
+  color: var(--brand-black);
+}
+
+.terms .crumbs ol {
+  width: var(--terms-wrap);
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* banner */
+.terms .terms-banner {
+  padding: 72px 0 64px;
+  text-align: left;
+  background: linear-gradient(
+    100deg,
+    var(--brand-banner-1),
+    var(--brand-banner-2) 60%,
+    var(--brand-banner-3)
+  );
+}
+
+.terms .terms-banner h1,
+.terms .terms-banner p {
+  width: var(--terms-wrap);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.terms .terms-banner h1 {
+  margin-bottom: 14px;
+  font-size: 40px;
+  font-weight: 300;
+  letter-spacing: 0.01em;
+  color: var(--brand-white);
+}
+
+.terms .terms-banner p {
+  font-size: 15px;
+  color: var(--brand-white);
+}
+
+/* body */
+.terms .terms-body {
+  width: var(--terms-wrap);
+  margin: 0 auto;
+  padding: 40px 0 96px;
+}
+
+/* long lines are hard to read, keep the text to a column */
+.terms .terms-body > * {
+  max-width: 860px;
+}
+
+.terms .terms-intro {
+  margin: 0 0 40px;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.terms .terms-section,
+.terms .terms-contact {
+  margin-bottom: 36px;
+}
+
+.terms .terms-body h2 {
+  margin: 0 0 14px;
+  font-size: 22px;
+  font-weight: 400;
+}
+
+.terms .terms-body p,
+.terms .terms-body li {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--brand-muted);
+}
+
+.terms .terms-body h3 {
+  margin: 18px 0 10px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.terms .terms-body p {
+  margin: 0 0 12px;
+}
+
+.terms .terms-body ul {
+  margin: 0;
+  padding-left: 22px;
+}
+
+.terms .terms-body li {
+  margin-bottom: 8px;
+}
+
+.terms .terms-body a {
+  color: var(--brand-green);
+}
+
+.terms .terms-contact {
+  padding: 32px 24px;
+  background: var(--brand-green-tint);
+  border-radius: 8px;
+}
+
+@media (max-width: 560px) {
+  .terms {
+    --terms-wrap: calc(100% - 32px);
+  }
+
+  .terms .terms-banner {
+    padding: 48px 0 40px;
+  }
+
+  .terms .terms-banner h1 {
+    font-size: 28px;
+  }
+
+  .terms .terms-body {
+    padding: 28px 0 64px;
+  }
+
+  .terms .terms-body h2 {
+    font-size: 19px;
+  }
+}

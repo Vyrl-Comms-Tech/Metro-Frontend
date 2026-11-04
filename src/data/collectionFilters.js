@@ -4,8 +4,6 @@ export const SORTS = [
   { value: "best", label: "Best selling" },
   { value: "az", label: "Alphabetically, A-Z" },
   { value: "za", label: "Alphabetically, Z-A" },
-  { value: "priceAsc", label: "Price, low to high" },
-  { value: "priceDesc", label: "Price, high to low" },
 ];
 
 export const METAL_COLOR = {

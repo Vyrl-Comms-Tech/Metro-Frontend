@@ -11,6 +11,15 @@
   font-weight: 300;
 }
 
+/* card */
+.gold .gold-card {
+  padding: 32px;
+  border: 1px solid var(--brand-line-soft);
+  border-radius: 14px;
+  background: var(--brand-white);
+  box-shadow: 0 4px 10px var(--brand-shadow);
+}
+
 /* header row */
 .gold .gold-head {
   display: flex;
@@ -22,7 +31,7 @@
 
 .gold .gold-head .gold-sub {
   margin: 4px 0 0;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--brand-muted);
 }
 
@@ -35,8 +44,9 @@
 .gold .gold-icon {
   display: grid;
   place-items: center;
-  width: 48px;
-  height: 48px;
+  flex: none;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   background: var(--brand-green-tint);
   color: var(--brand-green);
@@ -60,6 +70,11 @@
   font: inherit;
   font-size: 13px;
   cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.gold .gold-currency select:hover {
+  border-color: var(--brand-green);
 }
 
 .gold .gold-currency select:focus-visible {
@@ -73,14 +88,69 @@
   pointer-events: none;
 }
 
+/* price + change */
+.gold .gold-stats {
+  display: flex;
+  align-items: center;
+  gap: 12px 16px;
+  flex-wrap: wrap;
+  margin: 28px 0 6px;
+}
+
+.gold .gold-stats strong {
+  font-size: 40px;
+  font-weight: 500;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.gold .gold-stats .gold-cur {
+  font-size: 0.55em;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--brand-muted);
+}
+
+.gold .gold-stats .gold-change {
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.gold .gold-stats .gold-change em {
+  font-style: normal;
+  font-weight: 400;
+  opacity: 0.75;
+  margin-left: 4px;
+}
+
+.gold .gold-stats .gold-change.up {
+  color: var(--brand-success);
+  background: rgba(26, 127, 75, 0.1);
+}
+
+.gold .gold-stats .gold-change.down {
+  color: var(--brand-danger);
+  background: rgba(201, 59, 59, 0.1);
+}
+
+.gold .gold-stats .gold-date {
+  margin-left: auto;
+  font-size: 13px;
+  color: var(--brand-muted);
+  font-variant-numeric: tabular-nums;
+}
+
 .gold .gold-unit {
-  margin: 0 0 18px;
+  margin: 0 0 22px;
   font-size: 13px;
   color: var(--brand-muted);
 }
 
 .gold .gold-note {
-  margin: 8px 0 32px;
+  margin: 8px 0 8px;
   padding: 40px 16px;
   text-align: center;
   font-size: 14px;
@@ -98,24 +168,29 @@
   white-space: nowrap;
 }
 
+/* range switch */
 .gold .gold-ranges {
   display: inline-flex;
   gap: 4px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   border: 1px solid var(--brand-line);
-  border-radius: 6px;
+  border-radius: 8px;
   padding: 3px;
 }
 
 .gold .gold-ranges button {
   background: none;
   border: 0;
-  border-radius: 4px;
-  padding: 6px 14px;
+  border-radius: 6px;
+  padding: 7px 16px;
+  font: inherit;
   font-size: 12px;
   font-weight: 500;
   color: var(--brand-muted);
   cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s;
 }
 
 .gold .gold-ranges button:hover {
@@ -127,68 +202,40 @@
   color: var(--brand-white);
 }
 
-/* price + change */
-.gold .gold-stats {
-  display: flex;
-  align-items: baseline;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin: 24px 0 8px;
-}
-
-.gold .gold-stats strong {
-  font-size: 32px;
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-}
-
-.gold .gold-stats .gold-change {
-  font-size: 13px;
-  font-variant-numeric: tabular-nums;
-}
-
-.gold .gold-stats .gold-change em {
-  font-style: normal;
-  color: var(--brand-muted);
-  margin-left: 4px;
-}
-
-.gold .gold-stats .gold-change.up {
-  color: var(--brand-success);
-}
-
-.gold .gold-stats .gold-change.down {
-  color: var(--brand-danger);
-}
-
-.gold .gold-stats .gold-date {
-  margin-left: auto;
-  font-size: 12px;
-  color: var(--brand-muted);
+.gold .gold-ranges button:focus-visible {
+  outline: 2px solid var(--brand-green);
+  outline-offset: 2px;
 }
 
 /* chart */
-.gold .gold-svg {
+.gold .gold-plot {
+  position: relative;
   width: 100%;
-  height: auto;
+}
+
+.gold .gold-svg {
   display: block;
+  max-width: 100%;
   cursor: crosshair;
+  touch-action: pan-y;
 }
 
 .gold .gold-svg .gold-grid {
   stroke: var(--brand-line-soft);
   stroke-width: 1;
+  stroke-dasharray: 2 4;
 }
 
 .gold .gold-svg .gold-axis {
-  font-size: 11px;
+  font-size: 12px;
   fill: var(--brand-subtle);
+  font-variant-numeric: tabular-nums;
 }
 
 .gold .gold-svg .gold-line {
   fill: none;
   stroke: var(--brand-gold);
-  stroke-width: 2;
+  stroke-width: 2.25;
   stroke-linejoin: round;
   stroke-linecap: round;
 }
@@ -202,11 +249,213 @@
 .gold .gold-svg .gold-dot {
   fill: var(--brand-white);
   stroke: var(--brand-gold);
-  stroke-width: 2;
+  stroke-width: 2.25;
+}
+
+.gold .gold-svg .gold-pulse {
+  fill: var(--brand-gold);
+  opacity: 0.25;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: gold-pulse 2s ease-out infinite;
+}
+
+@keyframes gold-pulse {
+  from {
+    transform: scale(0.6);
+    opacity: 0.45;
+  }
+  to {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gold .gold-svg .gold-pulse {
+    animation: none;
+  }
+}
+
+/* hover card */
+.gold .gold-tip {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 140px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--brand-green);
+  color: var(--brand-white);
+  font-size: 12px;
+  text-align: center;
+  transform: translateX(-50%);
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 6px 18px var(--brand-shadow);
+}
+
+.gold .gold-tip b {
+  font-size: 14px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.gold .gold-tip span {
+  opacity: 0.8;
+}
+
+/* low / high / change */
+.gold .gold-range-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 20px 0 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--brand-line-soft);
+}
+
+.gold .gold-range-stats dt {
+  margin: 0 0 4px;
+  font-size: 12px;
+  color: var(--brand-muted);
+}
+
+.gold .gold-range-stats dd {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.gold .gold-range-stats dd.up {
+  color: var(--brand-success);
+}
+
+.gold .gold-range-stats dd.down {
+  color: var(--brand-danger);
 }
 
 @media (max-width: 560px) {
+  /* mobile: no card, the content sits straight on the page */
+  .gold .gold-card {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  /* heading on the left, the currency on the right */
+  .gold .gold-head {
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .gold .gold-title {
+    flex: 1;
+    min-width: 0;
+    gap: 10px;
+  }
+
+  .gold .gold-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .gold .gold-icon svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .gold h2 {
+    font-size: 22px;
+  }
+
+  .gold .gold-head .gold-sub {
+    font-size: 11px;
+  }
+
+  .gold .gold-currency {
+    flex: none;
+    width: auto;
+  }
+
+  .gold .gold-currency select {
+    width: auto;
+    min-width: 0;
+    padding: 9px 30px 9px 12px;
+    font-size: 12px;
+  }
+
+  .gold .gold-currency svg {
+    right: 10px;
+  }
+
+  /* smaller price and change */
+  .gold .gold-stats {
+    margin-top: 20px;
+    gap: 8px 12px;
+  }
+
+  .gold .gold-stats strong {
+    font-size: 24px;
+  }
+
+  .gold .gold-stats .gold-change {
+    padding: 4px 10px;
+    font-size: 11px;
+  }
+
   .gold .gold-stats .gold-date {
     margin-left: 0;
+    width: 100%;
+    font-size: 12px;
+  }
+
+  .gold .gold-unit {
+    margin-bottom: 16px;
+    font-size: 12px;
+  }
+
+  .gold .gold-ranges button {
+    padding: 6px 12px;
+  }
+
+  /* smaller chart details */
+  .gold .gold-svg .gold-axis {
+    font-size: 10px;
+  }
+
+  .gold .gold-svg .gold-line {
+    stroke-width: 1.75;
+  }
+
+  .gold .gold-svg .gold-dot {
+    r: 3.5px;
+    stroke-width: 1.75;
+  }
+
+  .gold .gold-svg .gold-pulse {
+    r: 7px;
+  }
+
+  .gold .gold-tip {
+    min-width: 120px;
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .gold .gold-tip b {
+    font-size: 12px;
+  }
+
+  .gold .gold-range-stats dt {
+    font-size: 11px;
+  }
+
+  .gold .gold-range-stats dd {
+    font-size: 13px;
   }
 }

@@ -1,84 +1,186 @@
 .hero {
   position: relative;
-  display: flex;
-  align-items: center;
   min-height: 560px;
   height: calc(100svh - 190px);
   max-height: 812px;
   overflow: hidden;
-  background: var(--brand-sand);
+  background: #e5c9b5;
+  touch-action: pan-y;
+  cursor: grab;
+  user-select: none;
 }
 
-/* blend the photo's left edge into the flat background */
-.hero::after {
-  content: "";
+.hero.is-dragging {
+  cursor: grabbing;
+}
+
+.hero-slide {
   position: absolute;
-  inset: 0 auto 0 34%;
-  width: 14%;
-  background: linear-gradient(to right, var(--brand-sand), transparent);
+  inset: 0;
+  display: flex;
+  align-items: center;
+  background: #e5c9b5;
+  transform: translateX(calc(var(--slide-position) + var(--drag-x)));
   pointer-events: none;
+  transition: transform 0.5s ease;
 }
 
-.hero .hero-photo {
+.hero-slide.is-active {
+  pointer-events: auto;
+  z-index: 1;
+}
+
+.hero.is-dragging .hero-slide {
+  transition: none;
+}
+
+.hero-slide .hero-photo {
   position: absolute;
   top: 0;
   right: 0;
+  width: 100%;
   height: 100%;
-  width: 66%;
   object-fit: cover;
-  object-position: left center;
+  object-position: center;
+}
+
+.hero-slide::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(229, 201, 181, 0.28), transparent 56%);
+  pointer-events: none;
 }
 
 .hero .hero-copy {
   position: relative;
   z-index: 1;
-  padding-left: 10%;
+  width: 100%;
+  max-width: 1600px;
+  margin-inline: auto;
+  padding-inline: var(--section-x);
   color: var(--brand-black);
 }
 
 .hero .hero-copy h1 {
+  width: 100%;
+  max-width: 475px;
   margin: 0 0 32px;
   font-size: clamp(30px, 2.6vw, 42px);
-  width: 80%;
   font-weight: 300;
   line-height: 1.2;
-  letter-spacing: 0;
 }
 
 .hero .hero-copy .hero-btn {
   display: inline-block;
   padding: 14px 32px;
+  border-radius: 3px;
   background: var(--brand-white);
   color: var(--brand-black);
-  border-radius: 3px;
   font-size: 14px;
   letter-spacing: 0.03em;
-  text-transform: uppercase;
   text-decoration: none;
+  text-transform: uppercase;
   --fill: var(--brand-green);
   transition: color 0.35s ease;
 }
 
 .hero .hero-copy .hero-btn:hover {
   color: var(--brand-white);
-  cursor: pointer;
+}
+
+.hero:focus-visible,
+.hero .hero-btn:focus-visible {
+  outline: 2px solid var(--brand-green);
+  outline-offset: 3px;
+}
+
+@media (max-width: 1540px) {
+  .hero {
+    height: calc(100svh - 130px);
+  }
+
+  .site-header .hd-top {
+    padding-top: 20px;
+    padding-bottom: 0px;
+  }
 }
 
 @media (max-width: 800px) {
   .hero {
-    min-height: 480px;
+    min-height: 440px;
+    height: 65svh;
   }
 
-  .hero::after {
-    display: none;
+  .hero-slide::after {
+    background: linear-gradient(90deg, rgba(229, 201, 181, 0.88), rgba(229, 201, 181, 0.2));
   }
 
-  .hero .hero-photo {
-    width: 100%;
-    opacity: 0.55;
+  .hero-slide .hero-photo {
+    object-position: 72% center;
   }
 
-  .hero .hero-copy {
-    padding: 0 24px;
+  .hero .hero-copy h1 {
+    max-width: 440px;
+  }
+}
+
+@media (max-width: 560px) {
+  .hero {
+    min-height: 420px;
+    max-height: 600px;
+  }
+
+  .hero .hero-copy h1 {
+    max-width: 360px;
+    margin-bottom: 24px;
+  }
+
+}
+
+/* the slide dots: phones and tablets only */
+.hero .hero-dots {
+  display: none;
+}
+
+@media (max-width: 800px) {
+  .hero .hero-dots {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 20px;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .hero .hero-dots button {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: 0;
+    border-radius: 4px;
+    background: rgba(0, 53, 29, 0.3);
+    cursor: pointer;
+    transition:
+      width 0.25s,
+      background 0.25s;
+  }
+
+  .hero .hero-dots button.on {
+    width: 24px;
+    background: var(--brand-green);
+  }
+
+  .hero .hero-dots button:focus-visible {
+    outline: 2px solid var(--brand-green);
+    outline-offset: 3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-slide {
+    transition: none;
   }
 }

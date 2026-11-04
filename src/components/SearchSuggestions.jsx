@@ -15,8 +15,6 @@ function Highlight({ label, text, as: Tag = 'strong' }) {
   return parts.map((part, i) => (i % 2 ? <Tag key={i}>{part}</Tag> : part))
 }
 
-const price = (n) => (n == null ? '' : `AED ${Number(n).toLocaleString('en-US')}`)
-
 // the same layout as the results, shown while they load
 function SuggestionsSkeleton() {
   return (
@@ -86,7 +84,6 @@ export default function SearchSuggestions({ text, onSearch, onNavigate }) {
                   {p.image ? <img src={p.image} alt="" /> : <span className="search-thumb" />}
                   <span>
                     <span className="search-name"><Highlight label={p.name} text={typed} /></span>
-                    <span className="search-price">{price(p.price)}</span>
                   </span>
                 </Link>
               </li>

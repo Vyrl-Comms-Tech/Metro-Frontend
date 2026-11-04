@@ -1,6 +1,7 @@
-// Shown until the real content loads from the API, or if the API cannot be reached.
+// The website content (hero banner, contact details, hours, footer). It is hard-coded here;
+// the "Website Content" tab in the admin is switched off, so edit this file to change it.
 export const DEFAULT_CONTENT = {
-  homeBanner: { heading: 'Design your perfect engagement ring', buttonText: 'Get Started', image: '' },
+  homeBanner: { heading: 'Find your perfect wedding ring', buttonText: 'Shop Rings' },
   contact: {
     whatsapp: '971523606874',
     email: 'info@metrojewellers.com',

@@ -4,7 +4,9 @@
   grid-template-columns: 1fr 280px;
   gap: 0 32px;
   max-width: 920px;
-  max-height: 60vh;
+  /* what is left of the window under the search box and above the popular searches */
+  max-height: max(220px, calc(100vh - 220px));
+  max-height: max(220px, calc(100dvh - 220px));
   margin: 16px auto 0;
   overflow-y: auto;
   text-align: left;
@@ -35,7 +37,6 @@
 .search-products img,
 .search-thumb { width: 72px; height: 72px; flex: none; object-fit: cover; background: #f5f5f5; }
 .search-name { display: block; }
-.search-price { display: block; margin-top: 4px; color: #b07a3c; }
 .search-none { grid-column: 1 / -1; margin: 0; text-align: center; }
 
 @media (max-width: 720px) {

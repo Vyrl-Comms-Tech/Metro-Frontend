@@ -112,9 +112,12 @@
   cursor: pointer;
 }
 
-.wishlist .wl-card .wl-remove:hover {
-  background: var(--brand-sale);
-  color: var(--brand-white);
+/* hover colours only for a mouse: on a touch screen a tap would leave the button looking hovered */
+@media (hover: hover) {
+  .wishlist .wl-card .wl-remove:hover {
+    background: var(--brand-sale);
+    color: var(--brand-white);
+  }
 }
 
 .wishlist .wl-card h3 {

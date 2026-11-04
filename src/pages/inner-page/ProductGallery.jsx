@@ -47,7 +47,17 @@ export default function ProductGallery({ images, fallback }) {
       </ul>
 
       <div className="pd-stage">
-        <img src={images[index].src} alt={images[index].alt} />
+        {/* every image sits in the same spot; the chosen one fades in over the others */}
+        {images.map((img, i) => (
+          <img
+            key={img.src}
+            className={`pd-slide ${i === index ? "is-active" : ""}`}
+            src={img.src}
+            alt={i === index ? img.alt : ""}
+            aria-hidden={i !== index}
+            draggable="false"
+          />
+        ))}
         <button
           className="pd-nav prev"
           onClick={() => go(-1)}

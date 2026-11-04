@@ -6,13 +6,30 @@
 
 .crumbs ol {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; /* one line; a long name scrolls sideways */
   align-items: center;
   gap: 8px;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: thin;
+  scrollbar-color: var(--brand-white-soft) transparent;
   margin: 0 auto;
 max-width: 1190px;
   padding: 17px 0px;
   list-style: none;
+}
+
+.crumbs li {
+  flex: none;
+}
+
+.crumbs ol::-webkit-scrollbar {
+  height: 3px;
+}
+
+.crumbs ol::-webkit-scrollbar-thumb {
+  background: var(--brand-white-soft);
+  border-radius: 3px;
 }
 
 .crumbs li + li::before {
@@ -34,7 +51,7 @@ max-width: 1190px;
   opacity: 0.75;
 }
 
-@media (max-width: 560px) {
+@media (max-width: 900px) {
   .crumbs ol {
     padding: 14px 16px;
   }

@@ -1,0 +1,13 @@
+.home-page {
+  --section-x: var(--site-gutter);
+}
+
+.home-page > :is(.recent-gemstones, .categories, .gallery-grid) {
+  width: 100%;
+  max-width: 1600px;
+}
+
+.home-page .faq > .faq-list {
+  width: 100%;
+  max-width: 1100px;
+}

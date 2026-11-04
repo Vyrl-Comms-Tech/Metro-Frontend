@@ -20,18 +20,18 @@ const COLUMNS = [
     links: [
       { label: 'info@metrojewellers.com', href: 'mailto:info@metrojewellers.com', icon: Mail },
       { label: '+971 52 360 6874', href: 'tel:+971523606874', icon: Phone },
-      { label: 'Terms & Conditions', to: '#' },
-      { label: 'Privacy Policy', to: '#' },
+      { label: 'Terms & Conditions', to: '/terms-conditions' },
+      { label: 'Privacy Policy', to: '/privacy-policy' },
     ],
   },
   {
     title: 'Our Guarantee',
     links: [
-      { label: 'Worldwide Shipping', to: '#' },
-      { label: '30 days returns', to: '#' },
-      { label: 'Lifetime Warranty', to: '#' },
+      { label: 'Worldwide Shipping', to: '/faqs#collection-shipping-information' },
+      { label: '30 days returns', to: '/faqs#returns-refunds-cancellations-and-warranties' },
+      { label: 'Lifetime Warranty', to: '/faqs#returns-refunds-cancellations-and-warranties' },
       { label: 'Contact Us', to: '/contact-us' },
-      { label: 'Refunds & Returns Policy', to: '#' },
+      { label: 'Refunds & Returns Policy', to: '/faqs#returns-refunds-cancellations-and-warranties' },
     ],
   },
   {
@@ -48,13 +48,16 @@ const COLUMNS = [
   },
 ]
 
-const svg = { viewBox: '0 0 24 24', width: 24, height: 24, fill: 'none', stroke: 'currentColor', strokeWidth: 1.7, strokeLinecap: 'round', strokeLinejoin: 'round', 'aria-hidden': true }
+const psvg = { viewBox: '0 0 24 24', width: 24, height: 24, fill: 'none', stroke: 'currentColor', strokeWidth: 1.7, strokeLinecap: 'round', strokeLinejoin: 'round', 'aria-hidden': true }
+const fsvg = { viewBox: '0 0 24 24', width: 30, height: 30, fill: 'none', stroke: 'currentColor', strokeWidth: 1.7, strokeLinecap: 'round', strokeLinejoin: 'round', 'aria-hidden': true }
+const isvg = { viewBox: '0 0 24 24', width: 24, height: 24, fill: 'none', stroke: 'currentColor', strokeWidth: 1.7, strokeLinecap: 'round', strokeLinejoin: 'round', 'aria-hidden': true }
+const xsvg = { viewBox: '0 0 24 24', width: 24, height: 24, fill: 'none', stroke: 'currentColor', strokeWidth: 1.7, strokeLinecap: 'round', strokeLinejoin: 'round', 'aria-hidden': true }
 
 const SOCIALS = [
-  { name: 'Pinterest', icon: <svg {...svg}><circle cx="12" cy="12" r="9" /><path d="M11 8.5c2.5-1 4.5.5 4 3-.4 2-2 3-3.5 2.5M11.5 11 10 18" /></svg> },
-  { name: 'Facebook', icon: <svg {...svg}><path d="M14 8h2V4h-2.5C11 4 10 5.5 10 7.5V10H8v3.5h2V20h3.5v-6.5H16l.5-3.5h-3V8.2c0-.1 0-.2.5-.2Z" /></svg> },
-  { name: 'Instagram', icon: <svg {...svg}><rect x="4" y="4" width="16" height="16" rx="4.5" /><circle cx="12" cy="12" r="3.6" /><circle cx="16.8" cy="7.2" r="0.6" fill="currentColor" /></svg> },
-  { name: 'X', icon: <svg {...svg}><path d="m5 5 14 14M19 5 5 19" /></svg> },
+  { name: 'Pinterest', icon: <svg {...psvg}><circle cx="12" cy="12" r="9" /><path d="M11 8.5c2.5-1 4.5.5 4 3-.4 2-2 3-3.5 2.5M11.5 11 10 18" /></svg> },
+  { name: 'Facebook', icon: <svg {...fsvg}><path d="M14 8h2V4h-2.5C11 4 10 5.5 10 7.5V10H8v3.5h2V20h3.5v-6.5H16l.5-3.5h-3V8.2c0-.1 0-.2.5-.2Z" /></svg> },
+  { name: 'Instagram', icon: <svg {...isvg}><rect x="4" y="4" width="16" height="16" rx="4.5" /><circle cx="12" cy="12" r="3.6" /><circle cx="16.8" cy="7.2" r="0.6" fill="currentColor" /></svg> },
+  { name: 'X', icon: <svg {...xsvg}><path d="m5 5 14 14M19 5 5 19" /></svg> },
 ]
 
 function FooterLink({ link }) {

@@ -1,9 +1,11 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import Banner from '../components/collection/Banner'
 import CheckGroup from '../components/collection/CheckGroup'
 import Chevron from '../components/collection/Chevron'
 import CollectionSkeleton from '../components/collection/CollectionSkeleton'
 import RangeGroup from '../components/collection/RangeGroup'
+import { DrawerBackdrop, DrawerFoot, DrawerHead, FilterButton } from '../components/collection/FilterDrawer'
+import { onDrawerScreen, useDrawerLock } from '../utils/useDrawerLock'
 import StoneCard from '../components/StoneCard'
 import { STONE_PAGES } from '../data/stonePages'
 import { useSite } from '../context/siteContext'
@@ -18,8 +20,7 @@ const MAIN_CATEGORY = { gemstone: /^gemstones?$/, 'loose-diamond': /^loose-diamo
 
 const NO_FILTERS = { gemstone: [], type: [], shape: [] }
 const SORTS = [
-  { value: 'price-asc', label: 'Price: low to high' },
-  { value: 'price-desc', label: 'Price: high to low' },
+  { value: 'best', label: 'Best selling' },
   { value: 'carat-asc', label: 'Carat: small to large' },
   { value: 'carat-desc', label: 'Carat: large to small' },
 ]
@@ -67,14 +68,14 @@ export default function StonePage({ page }) {
 
   const [filters, setFilters] = useState(NO_FILTERS)
   const [caratRange, setCaratRange] = useState(null) // null = the whole range
-  const [priceRange, setPriceRange] = useState(null)
   const [sort, setSort] = useState('')
   const [showFilters, setShowFilters] = useState(false)
+  const closeFilters = useCallback(() => setShowFilters(false), [])
+  useDrawerLock(showFilters, closeFilters)
+  const [groupsOpen] = useState(() => !onDrawerScreen()) // in the filter panel every group starts closed
 
   const caratBounds = useMemo(() => boundsOf(stones.map((s) => s.carat), 1), [stones])
-  const priceBounds = useMemo(() => boundsOf(stones.map((s) => s.price), 500), [stones])
   const carat = caratRange ?? (caratBounds && [caratBounds.min, caratBounds.max])
-  const price = priceRange ?? (priceBounds && [priceBounds.min, priceBounds.max])
 
   const toggle = (key, value) =>
     setFilters((f) => ({ ...f, [key]: f[key].includes(value) ? f[key].filter((v) => v !== value) : [...f[key], value] }))
@@ -94,20 +95,18 @@ export default function StonePage({ page }) {
     const list = stones.filter(
       (stone) =>
         GROUPS.every(({ key }) => !filters[key].length || filters[key].includes(FACETS[key](stone))) &&
-        inRange(stone.carat, caratRange) &&
-        inRange(stone.price, priceRange),
+        inRange(stone.carat, caratRange),
     )
     const [key, direction] = sort.split('-')
-    if (!key) return list
+    if (!key || key === 'best') return list
     const sign = direction === 'desc' ? -1 : 1
     return [...list].sort((a, b) => sign * ((a[key] ?? 0) - (b[key] ?? 0)))
-  }, [stones, filters, caratRange, priceRange, sort])
+  }, [stones, filters, caratRange, sort])
 
-  const active = Object.values(filters).flat().length + (caratRange ? 1 : 0) + (priceRange ? 1 : 0)
+  const active = Object.values(filters).flat().length + (caratRange ? 1 : 0)
   const clear = () => {
     setFilters(NO_FILTERS)
     setCaratRange(null)
-    setPriceRange(null)
   }
 
   // the real stones are on their way: placeholders, not the samples
@@ -124,8 +123,10 @@ export default function StonePage({ page }) {
     <main className="collection">
       <Banner title={title} />
 
-      <div className="col-layout">
+      <div className="col-layout col-drawer">
+        <DrawerBackdrop open={showFilters} onClose={closeFilters} />
         <aside className={`col-side ${showFilters ? 'show' : ''}`}>
+          <DrawerHead active={active} onClose={closeFilters} />
           <button className="col-filter-toggle" onClick={() => setShowFilters((s) => !s)}>
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden="true">
               <path d="M4 7h10M18 7h2M4 17h2M10 17h10" />
@@ -151,21 +152,20 @@ export default function StonePage({ page }) {
                 selected={filters[group.key]}
                 onToggle={(value) => toggle(group.key, value)}
                 scroll={group.scroll}
-                defaultOpen
+                defaultOpen={groupsOpen}
               />
             ))}
 
             {caratBounds && (
-              <RangeGroup title="Carat weight" bounds={caratBounds} ticks={ticksOf(caratBounds)} value={carat} onChange={setCaratRange} />
-            )}
-            {priceBounds && (
-              <RangeGroup title="Price (AED)" bounds={priceBounds} ticks={ticksOf(priceBounds)} value={price} onChange={setPriceRange} />
+              <RangeGroup title="Carat weight" defaultOpen={groupsOpen} bounds={caratBounds} ticks={ticksOf(caratBounds)} value={carat} onChange={setCaratRange} />
             )}
           </div>
+          <DrawerFoot count={shown.length} label={shown.length === 1 ? 'stone' : 'stones'} active={active} onReset={clear} onClose={closeFilters} />
         </aside>
 
         <section className="col-main">
           <div className="col-toolbar">
+            <FilterButton active={active} onOpen={() => setShowFilters(true)} />
             <p>
               <b>{shown.length}</b> {shown.length === 1 ? 'stone' : 'stones'}
             </p>
@@ -182,7 +182,7 @@ export default function StonePage({ page }) {
             </div>
           </div>
 
-          <p className="col-preview-note">{intro}</p>
+          {/* <p className="col-preview-note">{intro}</p> */}
 
           {shown.length === 0 ? (
             <p className="col-empty">No stones match these filters.</p>

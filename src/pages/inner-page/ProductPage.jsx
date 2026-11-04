@@ -172,8 +172,8 @@ function ProductView({ product, slug }) {
       word.toUpperCase(),
     );
 
-  // only one detail row is open at a time
-  const [openRow, setOpenRow] = useState(null);
+  // only one detail row is open at a time; product details start open
+  const [openRow, setOpenRow] = useState("details");
   const rowProps = (key) => ({
     open: openRow === key,
     onToggle: () => setOpenRow((current) => (current === key ? null : key)),

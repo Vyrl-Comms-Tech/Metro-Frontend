@@ -20,11 +20,12 @@ const LINKS = [
     label: "Categories",
     icon: "M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z",
   },
-  {
-    to: "/admin/content",
-    label: "Website Content",
-    icon: "M5 4h14v16H5zM8 9h8M8 13h8M8 17h5",
-  },
+  // Website Content tab switched off: the content is hard-coded in src/data/siteDefaults.js
+  // {
+  //   to: "/admin/content",
+  //   label: "Website Content",
+  //   icon: "M5 4h14v16H5zM8 9h8M8 13h8M8 17h5",
+  // },
   {
     to: "/admin/faqs",
     label: "FAQs",

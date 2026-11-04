@@ -7,7 +7,7 @@ import PageHeader from "../components/PageHeader";
 const SHORTCUTS = [
   { label: "Products", description: "Add products and manage catalogue details", to: "/admin/products" },
   { label: "Categories", description: "Organise collections and their visibility", to: "/admin/categories" },
-  { label: "Website content", description: "Update the home page and contact details", to: "/admin/content" },
+  // { label: "Website content", description: "Update the home page and contact details", to: "/admin/content" }, // tab switched off
   { label: "FAQs", description: "Manage answers to common questions", to: "/admin/faqs" },
   { label: "Instagram reels", description: "Manage videos shown on the home page", to: "/admin/reels" },
 ];
