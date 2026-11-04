@@ -137,7 +137,6 @@ function ProductView({ product, slug }) {
       ),
     ),
   );
-  const [added, setAdded] = useState(false);
   const isRing = product.subCategory === "Rings";
   const isStone = ["gemstone", "gemstones", "loose-diamond", "diamonds"].includes(product.mainCategory);
   const [ring, setRing] = useState({ country: "", size: "", engraving: "" });
@@ -226,7 +225,6 @@ function ProductView({ product, slug }) {
     setSelectedIndex(next);
     // update the address without reloading the product
     window.history.replaceState(null, "", productPath(product, variants[next]));
-    setAdded(false);
   };
 
   const enquiry = whatsappLink(
@@ -235,6 +233,8 @@ function ProductView({ product, slug }) {
       name: variantName,
       type: selectedType,
       metal: selectedMetal,
+      price,
+      ...(isRing && { ringSize: ring.size && `${ring.country} ${ring.size}`, engraving: ring.engraving }),
       url: window.location.href,
     }),
   );
@@ -242,34 +242,6 @@ function ProductView({ product, slug }) {
     content.contact.whatsapp,
     `Hello, could you check the best price for ${variantName} (${selectedType ?? ""}, ${selectedMetal ?? ""}, ${variant.productCode ?? id})? ${window.location.href}`,
   );
-
-  const addToCart = () => {
-    const item = {
-      id,
-      productCode: variant.productCode ?? id,
-      name: variantName,
-      type: selectedType,
-      metal: selectedMetal,
-      carat: selectedCarat,
-      price,
-      image: images[0]?.src,
-      quantity: 1,
-      ...(isRing && { ringSize: ring.size && `${ring.country} ${ring.size}`, engraving: ring.engraving }),
-    };
-    try {
-      const current = JSON.parse(localStorage.getItem("metro-cart") ?? "[]");
-      const cart = Array.isArray(current) ? current : [];
-      const existing = cart.find(
-        (entry) => entry.id === id && entry.productCode === item.productCode,
-      );
-      if (existing) existing.quantity += 1;
-      else cart.push(item);
-      localStorage.setItem("metro-cart", JSON.stringify(cart));
-      setAdded(true);
-    } catch {
-      setAdded(false);
-    }
-  };
 
   const share = async () => {
     try {
@@ -433,17 +405,14 @@ function ProductView({ product, slug }) {
               >
                 CHECK FOR DISCOUNT
               </a>
-              <button className="pd-add" type="button" onClick={addToCart}>
-                ADD TO CART
-              </button>
-              {added && (
-                <p className="pd-added" role="status">
-                  Added to cart.{" "}
-                  <a href={enquiry} target="_blank" rel="noreferrer">
-                    Enquire to order
-                  </a>
-                </p>
-              )}
+              <a
+                className="pd-add"
+                href={enquiry}
+                target="_blank"
+                rel="noreferrer"
+              >
+                CHECKOUT
+              </a>
             </div>
           )}
           {product.preview && (

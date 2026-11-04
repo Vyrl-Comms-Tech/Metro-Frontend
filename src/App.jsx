@@ -25,6 +25,7 @@ import CategoriesAdmin from './admin/pages/CategoriesAdmin'
 import FaqsAdmin from './admin/pages/FaqsAdmin'
 import ReelsAdmin from './admin/pages/ReelsAdmin'
 import CustomJewelleryAdmin from './admin/pages/CustomJewelleryAdmin'
+import EnquiriesAdmin from './admin/pages/EnquiriesAdmin'
 import WishlistProvider from './context/WishlistProvider'
 import SiteProvider from './context/SiteProvider'
 import './App.css'
@@ -110,6 +111,7 @@ function App() {
               <Route path="faqs" element={<FaqsAdmin />} />
               <Route path="custom-jewellery" element={<CustomJewelleryAdmin />} />
               <Route path="reels" element={<ReelsAdmin />} />
+              <Route path="enquiries" element={<EnquiriesAdmin />} />
             </Route>
           </Route>
         </Routes>

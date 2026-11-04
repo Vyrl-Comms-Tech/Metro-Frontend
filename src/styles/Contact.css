@@ -56,7 +56,7 @@
   color: var(--brand-text);
 }
 
-.contact .ct-form label span {
+.contact .ct-form .ct-optional {
   color: var(--brand-subtle);
 }
 
@@ -99,6 +99,10 @@
   margin: 0;
   font-size: 13px;
   color: var(--brand-success);
+}
+
+.contact .ct-form .ct-error {
+  color: var(--brand-danger);
 }
 
 @media (max-width: 900px) {

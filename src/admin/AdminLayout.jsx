@@ -41,6 +41,11 @@ const LINKS = [
     label: "Instagram Reels",
     icon: "M5 4h14v16H5zM10 9l5 3-5 3z",
   },
+  {
+    to: "/admin/enquiries",
+    label: "Enquiries",
+    icon: "M4 6h16v12H4zM4 7l8 6 8-6",
+  },
 ];
 
 const Icon = ({ d }) => (
