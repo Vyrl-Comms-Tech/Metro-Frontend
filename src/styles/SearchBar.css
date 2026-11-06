@@ -160,9 +160,9 @@
 .site-header .hd-search .hd-search-drop {
   position: absolute;
   top: calc(100% + 8px);
-  right: 0;
+  left: 0;
   z-index: 60;
-  width: min(920px, calc(100vw - 2 * var(--site-gutter)));
+  width: min(920px, calc(100vw - 2 * var(--hd-pad, var(--site-gutter))));
   padding: 24px 24px 8px;
   background: var(--brand-white);
   border: 1px solid var(--brand-line-soft);

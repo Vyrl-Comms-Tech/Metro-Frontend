@@ -65,7 +65,7 @@
 }
 
 .gallery-grid .gg-tile::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   background: var(--brand-green);
@@ -90,6 +90,13 @@
 @media (max-width: 900px) {
   .gallery-grid .gg-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* laptops only: square tiles keep the two rows short enough for the screen */
+@media (min-width: 901px) and (max-width: 1600px) {
+  .gallery-grid .gg-tile {
+    aspect-ratio: 1;
   }
 }
 

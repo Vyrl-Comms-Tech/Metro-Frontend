@@ -1,8 +1,9 @@
 .reels {
-  --step: 480px;
-  --card-w: 400px;
-  --card-h: 610px;
-  padding: var(--section-y) var(--section-x);
+  /* the card shrinks on short screens so the heading, the cards and the controls all fit in one screen height */
+  --card-h: min(610px, max(420px, calc(100svh - 295px)));
+  --card-w: calc(var(--card-h) * 0.656);
+  --step: calc(var(--card-w) * 1.2);
+  padding: 48px var(--section-x);
   background: var(--brand-white);
   color: var(--brand-black);
   overflow: hidden;
@@ -11,7 +12,7 @@
 /* heading */
 .reels .reels-head {
   text-align: center;
-  margin-bottom: var(--section-head-gap);
+  margin-bottom: 32px;
 }
 
 .reels .reels-head .reels-eyebrow {
@@ -244,7 +245,7 @@
   align-items: center;
   justify-content: center;
   gap: 24px;
-  margin-top: 40px;
+  margin-top: 28px;
 }
 
 .reels .reels-controls > button {
@@ -302,17 +303,18 @@
 
 @media (max-width: 1200px) {
   .reels {
-    --step: 440px;
-    --card-w: 380px;
-    --card-h: 580px;
+    --card-h: min(580px, max(420px, calc(100svh - 295px)));
+    --card-w: calc(var(--card-h) * 0.655);
+    --step: calc(var(--card-w) * 1.16);
   }
 }
 
 @media (max-width: 900px) {
   .reels {
-    --step: 280px;
-    --card-w: 310px;
-    --card-h: 490px;
+    /* the card never grows past what is left of the screen after the heading and controls, so the section fits in one screen */
+    --card-h: min(490px, max(340px, calc(100svh - 340px)));
+    --card-w: calc(var(--card-h) * 0.633);
+    --step: calc(var(--card-w) * 0.9);
   }
 
   .reels .reels-stage .reels-num {
@@ -322,13 +324,36 @@
 
 @media (max-width: 560px) {
   .reels {
-    --step: 68vw;
-    --card-w: 72vw;
-    --card-h: 112vw;
+    --card-h: min(112vw, max(340px, calc(100svh - 300px)));
+    --card-w: calc(var(--card-h) * 0.643);
+    --step: calc(var(--card-w) * 0.944);
+  }
+
+  .reels .reels-head {
+    margin-bottom: 20px;
+  }
+
+  .reels .reels-head .reels-eyebrow {
+    margin-bottom: 8px;
   }
 
   .reels .reels-head h2 {
-    font-size: 26px;
+    margin-bottom: 8px;
+    font-size: 24px;
+  }
+
+  .reels .reels-head p {
+    font-size: 13px;
+  }
+
+  .reels .reels-controls {
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .reels .reels-controls > button {
+    width: 40px;
+    height: 40px;
   }
 }
 

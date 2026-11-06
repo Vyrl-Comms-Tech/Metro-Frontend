@@ -350,3 +350,95 @@
     display: none;
   }
 }
+
+/* desktop: logo centred on its own row, then one bar with the search on the left, the links in the middle and the icons on the right */
+@media (min-width: 901px) {
+  .site-header {
+    --hd-pad: clamp(24px, 4.5vw, 72px);
+  }
+
+  .site-header .hd-top {
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+    height: 131px;
+    max-width: none;
+    padding: 0 !important;
+  }
+
+  .site-header .hd-top .hd-left {
+    justify-content: center;
+  }
+
+  .site-header .hd-top .logo img {
+    height: 76px;
+  }
+
+  /* the search and icons sit on top of the nav bar below the logo row */
+  .site-header .hd-top .hd-right {
+    position: absolute;
+    top: 132px;
+    left: var(--hd-pad);
+    right: var(--hd-pad);
+    height: 70px;
+    gap: 32px;
+    pointer-events: none;
+  }
+
+  .site-header .hd-top .hd-right > * {
+    pointer-events: auto;
+  }
+
+  .site-header .hd-top .hd-right .hd-search {
+    margin-right: auto;
+  }
+
+  .site-header .hd-top .hd-right .hd-search .hd-search-box {
+    box-sizing: border-box;
+    width: clamp(180px, 19vw, 305px);
+    height: 39px;
+    padding: 0 16px;
+    gap: 10px;
+    border-radius: 8px;
+    border-color: var(--brand-line);
+  }
+
+  .site-header .hd-top .hd-right .hd-search .hd-search-box svg {
+    color: var(--brand-black);
+  }
+
+  .site-header .hd-top .hd-right .hd-search .hd-search-box input {
+    font-size: 14px;
+  }
+
+  .site-header .hd-top .hd-right .hd-search .hd-search-box input::placeholder {
+    color: var(--brand-subtle);
+  }
+
+  .site-header .hd-top .icon-btn svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .site-header .hd-nav {
+    box-sizing: border-box;
+    height: 72px;
+    border-top: 1px solid var(--brand-line);
+    border-bottom: 1px solid var(--brand-line-soft);
+  }
+
+  .site-header .hd-nav ul {
+    height: 100%;
+    align-items: center;
+    gap: clamp(20px, 2.7vw, 43px);
+    padding: 0 0 0 clamp(0px, 9vw, 145px);
+    overflow: visible;
+  }
+
+  .site-header .hd-nav a {
+    padding: 0;
+    font-size: clamp(12px, 0.9vw, 14px);
+    font-weight: 400;
+    white-space: nowrap;
+  }
+}

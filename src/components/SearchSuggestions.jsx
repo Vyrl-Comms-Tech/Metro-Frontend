@@ -66,8 +66,14 @@ export default function SearchSuggestions({ text, onSearch, onNavigate }) {
 
   if (!typed) return null
   if (result.for !== typed) return <SuggestionsSkeleton />
-  const results = result.data
-  if (!results) return null
+  // the server may answer with something that is not the expected shape (e.g. an HTML page), so every list falls back to empty
+  const raw = result.data
+  if (!raw || typeof raw !== 'object') return null
+  const results = {
+    products: Array.isArray(raw.products) ? raw.products : [],
+    suggestions: Array.isArray(raw.suggestions) ? raw.suggestions : [],
+    collections: Array.isArray(raw.collections) ? raw.collections : [],
+  }
   const empty = !results.products.length && !results.suggestions.length && !results.collections.length
 
   return (

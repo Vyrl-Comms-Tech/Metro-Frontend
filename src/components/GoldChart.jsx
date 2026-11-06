@@ -18,6 +18,13 @@ const CURRENCIES = [
   { code: "USD", name: "US Dollar" },
 ];
 
+// the feed quotes gold per troy ounce; jewellery is sold by the gram
+const TROY_GRAMS = 31.1035;
+const UNITS = [
+  { key: "gram", label: "Per gram", short: "g", div: TROY_GRAMS, sub: "Live international gold price per gram", note: "1 Gram • 24K Gold (99.9% pure)" },
+  { key: "oz", label: "Per ounce", short: "oz", div: 1, sub: "Live international gold price per troy ounce", note: "1 Troy Ounce (31.1035 g) • 24K Gold" },
+];
+
 const PAD = { top: 20, right: 12, bottom: 30, left: 56 };
 const PAD_SM = { top: 16, right: 8, bottom: 26, left: 42 }; // phones: a tighter frame
 
@@ -38,6 +45,42 @@ function niceTicks(lo, hi, count = 5) {
   const ticks = [];
   for (let v = Math.floor(lo / step) * step; v < hi + step - 1e-9; v += step) ticks.push(v);
   return ticks;
+}
+
+// a smooth line through the points (monotone cubic, so it never overshoots a real high or low)
+function smoothPath(pts) {
+  const n = pts.length;
+  if (n < 3) return pts.map((p, i) => `${i ? "L" : "M"}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ");
+  const dx = [];
+  const m = [];
+  for (let i = 0; i < n - 1; i++) {
+    dx[i] = pts[i + 1].x - pts[i].x || 1e-6;
+    m[i] = (pts[i + 1].y - pts[i].y) / dx[i];
+  }
+  const t = [m[0]];
+  for (let i = 1; i < n - 1; i++) t[i] = m[i - 1] * m[i] <= 0 ? 0 : (m[i - 1] + m[i]) / 2;
+  t[n - 1] = m[n - 2];
+  for (let i = 0; i < n - 1; i++) {
+    if (m[i] === 0) {
+      t[i] = 0;
+      t[i + 1] = 0;
+      continue;
+    }
+    const a = t[i] / m[i];
+    const b = t[i + 1] / m[i];
+    const h = Math.hypot(a, b);
+    if (h > 3) {
+      t[i] = (3 * a * m[i]) / h;
+      t[i + 1] = (3 * b * m[i]) / h;
+    }
+  }
+  let d = `M${pts[0].x.toFixed(1)},${pts[0].y.toFixed(1)}`;
+  for (let i = 0; i < n - 1; i++) {
+    const c1x = pts[i].x + dx[i] / 3;
+    const c2x = pts[i + 1].x - dx[i] / 3;
+    d += ` C${c1x.toFixed(1)},${(pts[i].y + (t[i] * dx[i]) / 3).toFixed(1)} ${c2x.toFixed(1)},${(pts[i + 1].y - (t[i + 1] * dx[i]) / 3).toFixed(1)} ${pts[i + 1].x.toFixed(1)},${pts[i + 1].y.toFixed(1)}`;
+  }
+  return d;
 }
 
 function GoldBarsIcon({ size = 34 }) {
@@ -77,6 +120,7 @@ function GoldBarsIcon({ size = 34 }) {
 export default function GoldChart() {
   const [range, setRange] = useState(RANGES[1]);
   const [currency, setCurrency] = useState("AED");
+  const [unit, setUnit] = useState(UNITS[0]);
   const [hover, setHover] = useState(null);
   const [box, setBox] = useState(null);
   const [width, setWidth] = useState(800);
@@ -110,14 +154,14 @@ export default function GoldChart() {
 
   const rate = data?.rates?.[currency] ?? 1;
   const series = useMemo(() => {
-    const list = (data?.history ?? []).map((p) => ({ date: new Date(p.date), price: p.usd * rate }));
+    const list = (data?.history ?? []).map((p) => ({ date: new Date(p.date), price: (p.usd * rate) / unit.div }));
     // finish the line on the live price
     if (list.length && data?.current?.usd != null && data.current.updatedAt) {
       const live = new Date(data.current.updatedAt);
-      if (live > list.at(-1).date) list.push({ date: live, price: data.current.usd * rate });
+      if (live > list.at(-1).date) list.push({ date: live, price: (data.current.usd * rate) / unit.div });
     }
     return list;
-  }, [data, rate]);
+  }, [data, rate, unit]);
 
   const { points, ticks, min, max } = useMemo(() => {
     const prices = series.map((p) => p.price);
@@ -137,15 +181,13 @@ export default function GoldChart() {
 
   // the backend builds history over time, so a fresh install has a single point
   const hasChart = points.length > 1;
-  const line = points
-    .map((p, i) => `${i ? "L" : "M"}${p.x.toFixed(1)},${p.y.toFixed(1)}`)
-    .join(" ");
+  const line = smoothPath(points);
   const area = hasChart
     ? `${line} L${points.at(-1).x.toFixed(1)},${pad.top + ih} L${points[0].x.toFixed(1)},${pad.top + ih} Z`
     : "";
 
-  const currentUsd = data?.current?.usd ?? series.at(-1)?.price / rate;
-  const current = Number.isFinite(currentUsd) ? currentUsd * rate : null;
+  const currentUsd = data?.current?.usd ?? (series.at(-1)?.price * unit.div) / rate;
+  const current = Number.isFinite(currentUsd) ? (currentUsd * rate) / unit.div : null;
   const first = series[0]?.price ?? current;
   const change = current != null ? current - first : 0;
   const pct = first ? (change / first) * 100 : 0;
@@ -155,6 +197,9 @@ export default function GoldChart() {
   const low = prices.length ? Math.min(...prices) : null;
   const high = prices.length ? Math.max(...prices) : null;
 
+  // per-gram prices have small steps, so the axis keeps a decimal when the step is under 1
+  const tickStep = ticks.length > 1 ? ticks[1] - ticks[0] : 1;
+  const fmtTick = (v) => (tickStep < 1 ? v.toFixed(1) : Math.round(v).toLocaleString());
   const yPos = (v) => pad.top + (1 - (v - min) / (max - min || 1)) * ih;
   const xCount = compact ? 4 : 5;
   const xTicks = hasChart
@@ -181,6 +226,8 @@ export default function GoldChart() {
   const shownPrice = h ? h.price : current;
   const shownDate = h ? h.date : data?.current?.updatedAt ? new Date(data.current.updatedAt) : null;
   const hourly = range.label === "1W";
+  // the draw-in animation restarts when the new data arrives, not when the range button is clicked (the old data stays on screen until then)
+  const drawKey = `${data?.history?.length}-${points[0]?.date.getTime()}-${points.at(-1)?.date.getTime()}-${currency}-${unit.key}`;
 
   if (error) {
     return (
@@ -224,7 +271,7 @@ export default function GoldChart() {
             </span>
             <div>
               <h2>Gold Price</h2>
-              <p className="gold-sub">Live international gold price per troy ounce</p>
+              <p className="gold-sub">{unit.sub}</p>
             </div>
           </div>
           <label className="gold-currency">
@@ -240,9 +287,13 @@ export default function GoldChart() {
           </label>
         </div>
 
+        <div className="gold-body">
+          <aside className="gold-side">
+            <p className="gold-eyebrow">Current price</p>
         <div className="gold-stats">
           <strong>
             <span className="gold-cur">{currency}</span> {shownPrice != null ? fmtPrice(shownPrice) : "—"}
+            <small className="gold-per"> / {unit.short}</small>
           </strong>
           {hasChart && (
             <span className={`gold-change ${up ? "up" : "down"}`}>
@@ -256,8 +307,19 @@ export default function GoldChart() {
             </span>
           )}
         </div>
-        <p className="gold-unit">1 Troy Ounce (31.1035 g) • 24K Gold</p>
+        <p className="gold-unit">{unit.note}</p>
 
+
+        <div className="gold-ranges gold-units" role="tablist" aria-label="Price unit">
+          {UNITS.map((u) => (
+            <button key={u.key} role="tab" aria-selected={u === unit} className={u === unit ? "on" : ""} onClick={() => setUnit(u)}>
+              {u.label}
+            </button>
+          ))}
+        </div>
+
+          </aside>
+          <div className="gold-main">
         <div className="gold-ranges" role="tablist" aria-label="Time range">
           {RANGES.map((r) => (
             <button
@@ -274,7 +336,6 @@ export default function GoldChart() {
             </button>
           ))}
         </div>
-
         {!hasChart ? (
           <p className="gold-note">
             The price chart builds up as prices are recorded. Check back soon.
@@ -293,8 +354,13 @@ export default function GoldChart() {
             >
               <defs>
                 <linearGradient id="gold-fill" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stopColor="#c9a24b" stopOpacity="0.32" />
+                  <stop offset="0" stopColor="#c9a24b" stopOpacity="0.38" />
+                  <stop offset="0.6" stopColor="#c9a24b" stopOpacity="0.08" />
                   <stop offset="1" stopColor="#c9a24b" stopOpacity="0" />
+                </linearGradient>
+                <linearGradient id="gold-stroke" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stopColor="#d9b45a" />
+                  <stop offset="1" stopColor="#a67c1a" />
                 </linearGradient>
               </defs>
 
@@ -302,7 +368,7 @@ export default function GoldChart() {
                 <g key={v}>
                   <line x1={pad.left} x2={width - pad.right} y1={yPos(v)} y2={yPos(v)} className="gold-grid" />
                   <text x={pad.left - 10} y={yPos(v) + 4} textAnchor="end" className="gold-axis">
-                    {Math.round(v).toLocaleString()}
+                    {fmtTick(v)}
                   </text>
                 </g>
               ))}
@@ -318,8 +384,9 @@ export default function GoldChart() {
                 </text>
               ))}
 
-              <path d={area} fill="url(#gold-fill)" />
-              <path d={line} className="gold-line" />
+              <path d={area} fill="url(#gold-fill)" className="gold-area" key={`a-${drawKey}`} />
+              <path d={line} className="gold-line" pathLength="1" key={`l-${drawKey}`} />
+              <line x1={pad.left} x2={width - pad.right} y1={pad.top + ih} y2={pad.top + ih} className="gold-base" />
 
               {!tip && (
                 <g>
@@ -330,6 +397,7 @@ export default function GoldChart() {
               {tip && (
                 <g>
                   <line x1={tip.x} x2={tip.x} y1={pad.top} y2={pad.top + ih} className="gold-cross" />
+                  <circle cx={tip.x} cy={tip.y} r="11" className="gold-halo" />
                   <circle cx={tip.x} cy={tip.y} r="5" className="gold-dot" />
                 </g>
               )}
@@ -338,11 +406,12 @@ export default function GoldChart() {
             {tip && (
               <div
                 className="gold-tip"
-                style={{ left: Math.min(Math.max(tip.x, 76), width - 76), top: Math.max(tip.y - 64, 0) }}
+                style={{ left: Math.min(Math.max(tip.x, 76), width - 76), top: Math.max(tip.y - 70, 0) }}
                 aria-hidden="true"
               >
                 <b>
                   {currency} {fmtPrice(tip.price)}
+                  <small> / {unit.short}</small>
                 </b>
                 <span>
                   {fmtDate(tip.date, LONG_DATE)}
@@ -353,25 +422,8 @@ export default function GoldChart() {
           </div>
         )}
 
-        {hasChart && (
-          <dl className="gold-range-stats">
-            <div>
-              <dt>{range.label} low</dt>
-              <dd>{fmtPrice(low)}</dd>
-            </div>
-            <div>
-              <dt>{range.label} high</dt>
-              <dd>{fmtPrice(high)}</dd>
-            </div>
-            <div>
-              <dt>{range.label} change</dt>
-              <dd className={up ? "up" : "down"}>
-                {up ? "+" : "−"}
-                {Math.abs(pct).toFixed(2)}%
-              </dd>
-            </div>
-          </dl>
-        )}
+          </div>
+        </div>
       </div>
     </section>
   );

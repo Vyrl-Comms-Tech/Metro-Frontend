@@ -170,14 +170,54 @@
 }
 
 
+/* laptops (up to 1600px): a fuller photo and a compact text area under it */
+@media (max-width: 1600px) {
+  .categories .cat-grid {
+    gap: 20px;
+  }
+
+  .categories .cat-card .cat-img {
+    aspect-ratio: 1.85;
+  }
+
+  .categories .cat-card .cat-body {
+    min-height: 0;
+    padding: 12px 16px;
+  }
+
+  .categories .cat-card .cat-body h3 {
+    margin: 0 0 2px;
+    font-size: clamp(17px, 1.5vw, 21px);
+  }
+
+  .categories .cat-card .cat-body p {
+    max-width: 340px;
+    font-size: 12.5px;
+    line-height: 1.4;
+  }
+
+  .categories .cat-card .cat-arrow {
+    width: 38px;
+    height: 38px;
+  }
+}
+
 @media (max-width: 900px) {
   .categories .cat-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 20px;
   }
+
+  .categories .cat-card .cat-img {
+    aspect-ratio: 1.8;
+  }
 }
 
 @media (max-width: 560px) {
+  .categories .cat-card .cat-img {
+    aspect-ratio: 1.74;
+  }
+
   .categories .cat-head h2 {
     font-size: 28px;
   }

@@ -54,6 +54,7 @@
 
 .hero .hero-copy {
   position: relative;
+  max-width: 34%;
   z-index: 1;
   width: 100%;
   max-width: 1600px;

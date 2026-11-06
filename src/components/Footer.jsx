@@ -19,7 +19,7 @@ const COLUMNS = [
     title: 'Customer Care',
     links: [
       { label: 'info@metrojewellers.com', href: 'mailto:info@metrojewellers.com', icon: Mail },
-      { label: '+971 52 360 6874', href: 'tel:+971523606874', icon: Phone },
+      { label: '+971 52 360 6874', href: 'tel:+0559710431', icon: Phone },
       { label: 'Terms & Conditions', to: '/terms-conditions' },
       { label: 'Privacy Policy', to: '/privacy-policy' },
     ],
