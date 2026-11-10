@@ -168,9 +168,9 @@
 }
 
 /* a chevron's weight is at its tip, so it needs a small nudge down to look centred */
-.fab.fab-top svg {
+/* .fab.fab-top svg {
   transform: translateY(1px);
-}
+} */
 
 .fab.fab-wa {
   left: 28px;

@@ -648,6 +648,12 @@
     flex-direction: row;
     order: 2;
     overflow-x: auto;
+    /* still swipes sideways, just without the scrollbar */
+    scrollbar-width: none;
+  }
+
+  .product .pd-thumbs::-webkit-scrollbar {
+    display: none;
   }
 
   /* smaller image arrows on phones */

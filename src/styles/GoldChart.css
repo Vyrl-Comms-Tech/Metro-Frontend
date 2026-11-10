@@ -34,6 +34,13 @@
   height: 56px;
 }
 
+/* the subtitle needs the same styling the open card gives it (it was falling back to a big default paragraph margin) */
+.gold .gold-bar .gold-sub {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--brand-muted);
+}
+
 .gold .gold-bar .gold-bar-price {
   flex: none;
   padding: 0 40px;
@@ -116,7 +123,7 @@
   }
 
   .gold .gold-bar .gold-stats strong {
-    font-size: 28px;
+    font-size: 25px;
   }
 
   .gold .gold-toggle {
@@ -126,8 +133,38 @@
 }
 
 @media (max-width: 560px) {
+  .gold .gold-bar {
+    gap: 14px 12px;
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .gold .gold-bar .gold-title {
+    gap: 10px;
+  }
+
+  .gold .gold-bar .gold-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .gold .gold-bar .gold-icon svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .gold .gold-bar .gold-sub {
+    margin: 0;
+    font-size: 11px;
+  }
+
+  .gold .gold-bar .gold-stats {
+    margin-top: 2px;
+  }
+
   .gold .gold-bar .gold-toggle {
     width: 100%;
+    padding: 12px 16px;
   }
 }
 
@@ -547,6 +584,9 @@
 }
 
 @media (max-width: 560px) {
+  .gold .gold-toggle.gold-toggle-light{
+    display: none;
+  }
   /* mobile: no card, the content sits straight on the page */
   .gold .gold-card {
     padding: 0;
@@ -581,10 +621,11 @@
   .gold h2 {
     font-size: 22px;
   }
-
-  .gold .gold-head .gold-sub {
+/* 
+  .gold .gold-head .gold-sub  {
     font-size: 11px;
-  }
+    margin: 0px 0 0;
+  } */
 
   .gold .gold-currency {
     flex: none;
@@ -746,6 +787,9 @@
 }
 
 @media (max-width: 900px) {
+  .gold .gold-bar .gold-eyebrow-sm{
+    letter-spacing: 0.1em;
+  }
   .gold .gold-body {
     display: flex;
     flex-direction: column;

@@ -101,6 +101,9 @@
 }
 
 @media (max-width: 560px) {
+  .faqpage .faqpage-nav{
+    display: none;
+  }
   .faqpage .faqpage-banner {
     padding: 48px 16px 40px;
   }

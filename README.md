@@ -151,3 +151,6 @@ diamonds
 jewellery
 custom jewellery
 ...............................
+changes in mobile
+1.scroller in inner page images
+2.faq tabs
