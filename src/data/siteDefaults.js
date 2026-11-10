@@ -3,9 +3,9 @@
 export const DEFAULT_CONTENT = {
   homeBanner: { heading: 'Find your perfect wedding ring', buttonText: 'Shop Rings' },
   contact: {
-    whatsapp: '0559710431',
+    whatsapp: '971585680840',
     email: 'info@metrojewellers.com',
-    phone: '+971 52 360 6874',
+    phone: '+971 58 568 0840',
     address: 'Office 3107, Floor 31\nMazaya Tower AA1\nJumeirah Lake Towers\nDubai, UAE',
   },
   hours: { weekdays: '8.30AM - 5.00PM', weekend: 'Closed' },

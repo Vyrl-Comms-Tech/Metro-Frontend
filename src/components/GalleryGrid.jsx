@@ -5,7 +5,7 @@ import '../styles/GalleryGrid.css'
 
 export default function GalleryGrid({ limit = 12}) {
   const { content } = useSite()
-  const href = content.footer?.instagram || '#'
+  // const href = content.footer?.instagram || '#'
   const { data } = useAsync(() => axiosClient.get('/custom-jewellery', { params: { limit, active: true } }), [limit])
 
   const tiles = (data?.items ?? []).map((i) => ({ key: i.id, src: i.image, video: i.video, alt: i.title || 'Custom jewellery' }))
@@ -23,7 +23,8 @@ export default function GalleryGrid({ limit = 12}) {
 
       <div className="gg-grid">
         {tiles.map((t) => (
-          <a className="gg-tile" key={t.key} href={href} target="_blank" rel="noreferrer" aria-label={t.alt}>
+          // <a className="gg-tile" key={t.key} href={href} target="_blank" rel="noreferrer" aria-label={t.alt}>
+          <a className="gg-tile" key={t.key} target="_blank" rel="noreferrer" aria-label={t.alt}>
             {t.video ? (
               <video src={t.video} poster={t.src || undefined} autoPlay loop muted playsInline preload="metadata" />
             ) : (

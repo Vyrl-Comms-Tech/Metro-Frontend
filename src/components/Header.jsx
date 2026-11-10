@@ -123,7 +123,11 @@ export default function Header() {
             <Icon><path d="M4 7h16M4 12h16M4 17h16" /></Icon>
           </button>
           <Link to="/" className="logo" aria-label="Metro Jewellers">
-            <img src="/black-logo.png" alt="Metro Jewellers" />
+            {/* the header is green on phones and tablets, so they get the white logo */}
+            <picture>
+              <source media="(max-width: 900px)" srcSet="/white-logo.png" />
+              <img src="/black-logo.png" alt="Metro Jewellers" />
+            </picture>
           </Link>
         </div>
 

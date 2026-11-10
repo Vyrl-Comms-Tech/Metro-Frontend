@@ -397,8 +397,8 @@
 }
 
 @media (hover: hover) {
-  .gold .gold-ranges button:hover {  
-    color: var(--brand-black);  
+  .gold .gold-ranges button:hover {
+    color: var(--brand-black);
   }
 }
 
@@ -584,7 +584,7 @@
 }
 
 @media (max-width: 560px) {
-  .gold .gold-toggle.gold-toggle-light{
+  .gold .gold-toggle.gold-toggle-light {
     display: none;
   }
   /* mobile: no card, the content sits straight on the page */
@@ -621,7 +621,7 @@
   .gold h2 {
     font-size: 22px;
   }
-/* 
+  /* 
   .gold .gold-head .gold-sub  {
     font-size: 11px;
     margin: 0px 0 0;
@@ -787,7 +787,7 @@
 }
 
 @media (max-width: 900px) {
-  .gold .gold-bar .gold-eyebrow-sm{
+  .gold .gold-bar .gold-eyebrow-sm {
     letter-spacing: 0.1em;
   }
   .gold .gold-body {
