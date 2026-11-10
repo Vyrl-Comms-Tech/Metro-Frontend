@@ -149,6 +149,8 @@
   display: grid;
   place-items: center;
   border: 0;
+  padding: 0; /* a button's default padding pushes the icon off centre */
+  line-height: 0;
   border-radius: 50%;
   cursor: pointer;
   text-decoration: none;
@@ -159,6 +161,15 @@
 
 .fab:hover {
   transform: scale(1.06);
+}
+
+.fab svg {
+  display: block;
+}
+
+/* a chevron's weight is at its tip, so it needs a small nudge down to look centred */
+.fab.fab-top svg {
+  transform: translateY(1px);
 }
 
 .fab.fab-wa {
@@ -176,6 +187,9 @@
   bottom: 16px;
   width: 36px;
   height: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  aspect-ratio: 1 / 1; /* always a true circle */
   background: var(--brand-green);
   color: var(--brand-white);
   opacity: 0;
@@ -203,9 +217,14 @@
     padding: 40px var(--site-gutter) 88px;
   }
 
+  /* bigger phones: the four link columns stay two by two, the newsletter underneath */
   .footer .ft-grid {
-    grid-template-columns: 1fr;
-    gap: 28px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px 16px;
+  }
+
+  .footer .ft-col a {
+    overflow-wrap: anywhere;
   }
 
   .fab.fab-wa {
@@ -216,9 +235,29 @@
   }
 
   .fab.fab-top {
-  right: 10px;
-  bottom: 15px;
-  width: 30px;
-  height: 30px;
+    right: 10px;
+    bottom: 15px;
+    width: 30px;
+    height: 28px;
+    min-width: 30px;
+    min-height: 28px;
+  }
+  .footer .ft-bottom p {
+    font-size: 14px;
+  }
+  .footer .ft-news .ft-social a {
+    width: 40px;
+    height: 40px;
+  }
+  .footer .ft-news .ft-social a svg {
+    width: 23px;
+    height: 23px;
+  }
+}
+
+/* small phones: one column, so nothing is squeezed */
+@media (max-width: 400px) {
+  .footer .ft-grid {
+    grid-template-columns: 1fr;
   }
 }

@@ -26,6 +26,14 @@
   gap: 10px;
 }
 
+/* two-column layout: the gallery stays in view while the details scroll, and lets go when they end */
+@media (min-width: 901px) {
+  .product .pd-layout > .pd-gallery {
+    position: sticky;
+    top: 24px;
+  }
+}
+
 .product .pd-thumbs {
   display: flex;
   flex-direction: column;
@@ -53,7 +61,7 @@
 .product .pd-thumbs img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 .product .pd-stage {
@@ -69,7 +77,7 @@
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
 }
 
@@ -297,6 +305,13 @@
   padding: 0 8px;
 }
 
+/* a metal this design is not made in: still listed, but faded and not clickable */
+.product .pd-type-options button.is-unavailable,
+.product .pd-metal-options button.is-unavailable {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 .product .pd-metal-swatch {
   width: 16px;
   height: 16px;
@@ -405,7 +420,9 @@
   margin-top: 24px;
 }
 
-.product .pd-discount,
+.product .pd-discount{
+  display: none;
+}
 .product .pd-add {
   display: grid;
   place-items: center;
@@ -419,17 +436,17 @@
   transition: color 0.35s ease;
 }
 
-.product .pd-discount {
+/* .product .pd-discount {
   --fill: #fff;
   background: #000;
   color: #fff;
-}
+} */
 
-@media (hover: hover) {
+/* @media (hover: hover) {
   .product .pd-discount:hover {  
     color: #000;  
   }
-}
+} */
 
 .product .pd-add {
   --fill: #000;
@@ -456,7 +473,7 @@
 
 /* accordion: product details, guarantee, hint, shipping */
 .product .pd-details {
-  margin-top: 48px;
+  margin-top: 31px;
   border-top: 1px solid #ccc;
 }
 
@@ -619,6 +636,8 @@
 @media (max-width: 560px) {
   .product .pd-layout {
     padding: 20px 16px 64px;
+  }.product .pd-thumbs button{
+    height: 65px;
   }
 
   .product .pd-gallery {

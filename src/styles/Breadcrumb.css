@@ -14,7 +14,7 @@
   scrollbar-width: thin;
   scrollbar-color: var(--brand-white-soft) transparent;
   margin: 0 auto;
-max-width: 1190px;
+  max-width: 1190px;
   padding: 17px 0px;
   list-style: none;
 }
@@ -53,6 +53,6 @@ max-width: 1190px;
 
 @media (max-width: 900px) {
   .crumbs ol {
-    padding: 14px 16px;
+    display: none;
   }
 }

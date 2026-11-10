@@ -67,7 +67,7 @@
 }
 
 .related .prod h3 {
-  margin: 16px 0 0;
+  margin: 16px 3px 0;
   font-size: 14px;
   font-weight: 400;
   line-height: 1.45;
@@ -156,6 +156,13 @@
   display: none;
 }
 
+/* laptops only: narrower, same as the home page sections (desktop keeps 1600px) */
+@media (max-width: 1600px) {
+  .related {
+    max-width: 1380px;
+  }
+}
+
 @media (max-width: 700px) {
   .related .related-slider {
     --swiper-pagination-color: var(--brand-black);
@@ -179,7 +186,7 @@
   }
 
   .related {
-    padding: 40px 16px 56px;
+    padding: 0px 16px 56px;
   }
 
   .related h2 {

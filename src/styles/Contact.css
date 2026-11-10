@@ -10,17 +10,21 @@
   margin: 0 auto;
   padding: 48px 24px 96px;
   align-items: stretch;
-  height: 75vh;
+  /* min-height, not height: on a short laptop screen the form is taller than 75vh and has to be able to grow */
+  min-height: 75vh;
 }
 
-/* left image */
+/* left image: it fills the row but never decides how tall the row is */
 .contact .ct-photo {
-  height: 100%;
+  position: relative;
+  min-height: 0;
   background: var(--brand-surface);
   overflow: hidden;
 }
 
 .contact .ct-photo img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -109,6 +113,7 @@
   .contact .ct-layout {
     grid-template-columns: 1fr;
     gap: 32px;
+    min-height: 0;
   }
 
   .contact .ct-photo {
@@ -128,7 +133,7 @@
   }
 
   .contact .ct-layout {
-    height: auto;
+    min-height: 0;
   }
 
   .contact .ct-form h1 {

@@ -118,6 +118,7 @@ function GoldBarsIcon({ size = 34 }) {
 }
 
 export default function GoldChart() {
+  const [open, setOpen] = useState(false);
   const [range, setRange] = useState(RANGES[1]);
   const [currency, setCurrency] = useState("AED");
   const [unit, setUnit] = useState(UNITS[0]);
@@ -261,6 +262,43 @@ export default function GoldChart() {
     );
   }
 
+  // collapsed by default: one slim bar with the live price; the button opens the full chart
+  if (!open) {
+    return (
+      <section className="gold">
+        <div className="gold-bar">
+          <div className="gold-title">
+            <span className="gold-icon" aria-hidden="true">
+              <GoldBarsIcon />
+            </span>
+            <div>
+              <h2>Gold Price</h2>
+              <p className="gold-sub">{unit.sub}</p>
+            </div>
+          </div>
+          <div className="gold-bar-price">
+            <span className="gold-eyebrow-sm">Current price</span>
+            <div className="gold-stats">
+              <strong>
+                <span className="gold-cur">{currency}</span> {current != null ? fmtPrice(current) : "—"}
+                <small className="gold-per"> / {unit.short}</small>
+              </strong>
+              {hasChart && (
+                <span className={`gold-change ${up ? "up" : "down"}`}>
+                  {up ? "▲" : "▼"} {up ? "+" : "-"}
+                  {fmtPrice(Math.abs(change))} ({Math.abs(pct).toFixed(2)}%)
+                </span>
+              )}
+            </div>
+          </div>
+          <button type="button" className="gold-toggle" aria-expanded="false" onClick={() => setOpen(true)}>
+            View Full Gold Chart
+          </button>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="gold">
       <div className="gold-card">
@@ -274,6 +312,10 @@ export default function GoldChart() {
               <p className="gold-sub">{unit.sub}</p>
             </div>
           </div>
+          <div className="gold-head-actions">
+          <button type="button" className="gold-toggle gold-toggle-light" aria-expanded="true" onClick={() => setOpen(false)}>
+            Hide chart
+          </button>
           <label className="gold-currency">
             <span className="sr-only">Currency</span>
             <select value={currency} onChange={(e) => setCurrency(e.target.value)}>
@@ -285,6 +327,7 @@ export default function GoldChart() {
             </select>
             <ChevronDown size={16} aria-hidden="true" />
           </label>
+          </div>
         </div>
 
         <div className="gold-body">

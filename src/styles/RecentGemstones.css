@@ -23,7 +23,7 @@
 
 .recent-gemstones .rg-eyebrow::before,
 .recent-gemstones .rg-eyebrow::after {
-  content: '';
+  content: "";
   width: 44px;
   height: 1px;
   background: var(--brand-line);
@@ -57,7 +57,10 @@
   background: var(--brand-white);
   border: 1px solid #e8e5df;
   border-radius: 4px;
-  transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+  transition:
+    border-color 0.25s,
+    box-shadow 0.25s,
+    transform 0.25s;
 }
 
 /* the loading placeholders do not react to the mouse */
@@ -100,8 +103,8 @@
 
 .recent-gemstones .rg-wish {
   position: absolute;
-  top: 14px;
-  right: 14px;
+  top: 9px;
+  right: 9px;
   display: grid;
   place-items: center;
   width: 38px;
@@ -178,8 +181,8 @@
 }
 
 @media (hover: hover) {
-  .recent-gemstones .rg-view-all:hover {  
-    color: var(--brand-green);  
+  .recent-gemstones .rg-view-all:hover {
+    color: var(--brand-green);
   }
 }
 
@@ -190,14 +193,44 @@
   outline-offset: 3px;
 }
 
+@media (max-width: 1600px) {
+  .recent-gemstones .rg-wish {
+    height: 30px;
+    width: 30px;
+  }
 
-@media (max-width: 1540px) {
+  .recent-gemstones .rg-wish svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* laptops only: slightly narrower cards with shorter images (desktop stays as is) */
+@media (min-width: 901px) and (max-width: 1600px) {
+  .recent-gemstones .rg-grid {
+    max-width: 1180px;
+    margin-inline: auto;
+  }
+
+  /* stones listing page: slightly narrower cards, and the toolbar (Sort By) is held to the same width so it lines up with the cards' right edge */
+  .recent-gemstones.rg-embedded .rg-grid,
+  .col-main:has(.rg-embedded) .col-toolbar {
+    max-width: 1060px;
+    margin-inline: 0 auto;
+  }
+
+  .recent-gemstones .rg-image-wrap {
+    aspect-ratio: 1.12 / 1;
+  }
+}
+
+@media (max-width: 1640px) {
   .recent-gemstones .rg-body h3 {
     font-size: 16px;
   }
 
   .recent-gemstones .rg-body {
-    padding: 18px 15px 15px;
+    padding: 13px 13px 13px;
   }
 }
 
@@ -235,8 +268,6 @@
     font-weight: 400;
     line-height: 1.1;
   }
-
-
 }
 
 /* two cards across on most phones, one on the smallest */
@@ -262,7 +293,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-
   .recent-gemstones .rg-card,
   .recent-gemstones .rg-image-wrap img {
     transition: none;
@@ -288,5 +318,8 @@
 @media (max-width: 370px) {
   .recent-gemstones.rg-embedded .rg-grid {
     grid-template-columns: 1fr;
+  }
+  .recent-gemstones .rg-image-wrap{
+    aspect-ratio: 1.12 / 1;
   }
 }

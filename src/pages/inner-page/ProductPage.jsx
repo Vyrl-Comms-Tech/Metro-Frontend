@@ -15,6 +15,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import Breadcrumb from "../../components/Breadcrumb";
 import ProductArt from "../../components/collection/ProductArt";
 import { previewProductById } from "../../data/previewProducts";
+import { METALS, TYPES } from "../../data/collections";
 import { productEnquiry, whatsappLink } from "../../utils/whatsapp";
 import { useSite } from "../../context/siteContext";
 import { useWishlist } from "../../context/wishlistContext";
@@ -148,6 +149,10 @@ function ProductView({ product, slug }) {
     Number(variant.carat ?? product.carat) <= CARAT_OPTIONS[CARAT_OPTIONS.length - 1];
   const types = unique(variants.map((item) => item.type ?? product.type));
   const metals = unique(variants.map((item) => item.metal ?? product.metal));
+  // every metal is listed; the ones this design is not made in are shown faded and cannot be picked
+  const sameMetal = (a, b) => String(a).trim().toLowerCase() === String(b).trim().toLowerCase();
+  const allMetals = [...METALS, ...metals.filter((m) => !METALS.some((x) => sameMetal(x, m)))];
+  const allTypes = [...TYPES, ...types.filter((t) => !TYPES.some((x) => sameMetal(x, t)))];
   const selectedType = variant.type ?? product.type;
   const selectedCarat = variant.carat ?? product.carat;
   const selectedMetal = variant.metal ?? product.metal;
@@ -316,24 +321,31 @@ function ProductView({ product, slug }) {
             </button>
           </div>
 
-          {/* a stone has one type (Natural or Lab Grown): it is still shown, for the others only when there is a choice */}
-          {(types.length > 1 || (types.length === 1 && isStone)) && (
+          {/* both types are always listed; the one this design does not come in is faded and cannot be picked */}
+          {types.length > 0 && (
             <div
               className="pd-type-options"
               role="group"
               aria-label="Diamond type"
             >
-              {types.map((type) => (
-                <button
-                  key={type}
-                  type="button"
-                  className={type === selectedType ? "on" : ""}
-                  aria-pressed={type === selectedType}
-                  onClick={() => choose("type", type)}
-                >
-                  <span>{type}</span>
-                </button>
-              ))}
+              {allTypes.map((type) => {
+                const own = types.find((t) => sameMetal(t, type));
+                const available = own !== undefined;
+                const on = available && sameMetal(own, selectedType);
+                return (
+                  <button
+                    key={type}
+                    type="button"
+                    className={`${on ? "on" : ""} ${available ? "" : "is-unavailable"}`}
+                    aria-pressed={on}
+                    aria-disabled={!available}
+                    title={available ? undefined : "Not available for this design"}
+                    onClick={() => available && choose("type", own)}
+                  >
+                    <span>{type}</span>
+                  </button>
+                );
+              })}
             </div>
           )}
 
@@ -375,20 +387,27 @@ function ProductView({ product, slug }) {
                 />
               </h2>
               <div className="pd-metal-options" role="group" aria-label="Metal">
-                {metals.map((metal) => (
-                  <button
-                    key={metal}
-                    type="button"
-                    className={metal === selectedMetal ? "on" : ""}
-                    aria-pressed={metal === selectedMetal}
-                    onClick={() => choose("metal", metal)}
-                  >
-                    <span
-                      className={`pd-metal-swatch ${/rose/i.test(metal) ? "rose" : /yellow/i.test(metal) ? "yellow" : /platinum/i.test(metal) ? "platinum" : "white"}`}
-                    />
-                    {metal}
-                  </button>
-                ))}
+                {allMetals.map((metal) => {
+                  const own = metals.find((m) => sameMetal(m, metal));
+                  const available = own !== undefined;
+                  const on = available && sameMetal(own, selectedMetal);
+                  return (
+                    <button
+                      key={metal}
+                      type="button"
+                      className={`${on ? "on" : ""} ${available ? "" : "is-unavailable"}`}
+                      aria-pressed={on}
+                      aria-disabled={!available}
+                      title={available ? undefined : "Not available for this design"}
+                      onClick={() => available && choose("metal", own)}
+                    >
+                      <span
+                        className={`pd-metal-swatch ${/rose/i.test(metal) ? "rose" : /yellow/i.test(metal) ? "yellow" : /platinum/i.test(metal) ? "platinum" : "white"}`}
+                      />
+                      {metal}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -397,14 +416,14 @@ function ProductView({ product, slug }) {
 
           {!product.preview && (
             <div className="pd-actions">
-              <a
+              {/* <a
                 className="pd-discount"
                 href={discountLink}
                 target="_blank"
                 rel="noreferrer"
               >
                 CHECK FOR DISCOUNT
-              </a>
+              </a> */}
               <a
                 className="pd-add"
                 href={enquiry}

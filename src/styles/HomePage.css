@@ -7,6 +7,13 @@
   max-width: 1600px;
 }
 
+/* laptops only: narrower (desktop keeps the full 1600px above) */
+@media (max-width: 1600px) {
+  .home-page > :is(.recent-gemstones, .categories, .gallery-grid) {
+    max-width: 1380px;
+  }
+}
+
 .home-page .faq > .faq-list {
   width: 100%;
   max-width: 1100px;
