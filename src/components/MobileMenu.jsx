@@ -64,7 +64,7 @@ export default function MobileMenu({ open, onClose }) {
       >
         <div className="mobile-head">
           <Link to="/" className="mobile-logo" aria-label="Metro Jewellers">
-            <img src="/black-logo.png" alt="Metro Jewellers" />
+            <img src="/white-logo.png" alt="Metro Jewellers" />
           </Link>
           <button className="mobile-close" onClick={onClose} aria-label="Close menu">
             <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden="true">

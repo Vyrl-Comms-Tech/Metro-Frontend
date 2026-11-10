@@ -49,7 +49,9 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 20px 10px 24px;
-  border-bottom: 1px solid var(--brand-line-soft);
+  /* brand green, matching the mobile header, with the white logo and a white close icon */
+  background: var(--brand-green);
+  color: var(--brand-white);
 }
 
 .mobile-menu .mobile-logo img {

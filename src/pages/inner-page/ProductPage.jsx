@@ -9,7 +9,7 @@ import {
   ScrollText,
   Share2,
   Star,
-} from "lucide-react";
+} from "lucide-react";         
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import Breadcrumb from "../../components/Breadcrumb";

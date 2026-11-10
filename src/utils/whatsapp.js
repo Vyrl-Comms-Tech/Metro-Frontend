@@ -12,13 +12,13 @@ export const contactEnquiry = ({ name, email, phone, message }) =>
     message,
   ].join('\n')
 
-export const productEnquiry = ({ name, type, metal, price, ringSize, engraving, url }) =>
+export const productEnquiry = ({ name, type, metal, ringSize, engraving, url }) =>
   [
     'Hello Metro Jewellers, I would like to enquire about:',
     name,
     `Diamond type: ${type}`,
     `Metal: ${metal}`,
-    ...(price ? [`Price: ${price}`] : []),
+    // ...(price ? [`Price: ${price}`] : []),
     ...(ringSize ? [`Ring size: ${ringSize}`] : []),
     ...(engraving ? [`Engraving: ${engraving}`] : []),
     url,
