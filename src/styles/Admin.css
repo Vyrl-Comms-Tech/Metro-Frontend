@@ -859,6 +859,13 @@
   opacity: 0.65;
 }
 
+.admin .ad-brand img {
+  display: block;
+  width: 100%;
+  max-width: 130px;
+  height: auto;
+}
+
 .admin .ad-nav {
   gap: 5px;
 }
@@ -1349,6 +1356,10 @@
   .admin.collapsed .ad-brand {
     margin-inline: 0;
     text-align: center;
+  }
+
+  .admin.collapsed .ad-brand img {
+    margin-inline: auto;
   }
 
   .admin.collapsed .ad-brand span {

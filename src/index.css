@@ -1,6 +1,6 @@
 :root {
   /* shared section rhythm: top/bottom padding, side gutter, gap under section headings */
-  --section-y: 72px;
+  --section-y: 50px;
   --section-x: 24px;
   --section-head-gap: 44px;
   --site-gutter: clamp(16px, 4vw, 56px);

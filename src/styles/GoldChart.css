@@ -21,7 +21,7 @@
   border: 1px solid var(--brand-line-soft);
   border-radius: 20px;
   background: var(--brand-white);
-  box-shadow: 0 8px 24px var(--brand-shadow);
+  /* box-shadow: 0 8px 24px var(--brand-shadow); */
 }
 
 .gold .gold-bar .gold-title {
@@ -200,7 +200,7 @@
   border: 1px solid var(--brand-line-soft);
   border-radius: 14px;
   background: var(--brand-white);
-  box-shadow: 0 4px 10px var(--brand-shadow);
+  /* box-shadow: 0 4px 10px var(--brand-shadow); */
 }
 
 /* header row */
