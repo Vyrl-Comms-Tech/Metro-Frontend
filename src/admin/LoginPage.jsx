@@ -36,8 +36,7 @@ export default function LoginPage() {
     <main className="login">
       <form className="login-card" onSubmit={submit} noValidate>
         <div className="login-brand">
-          <span>METRO</span>
-          <small>JEWELLERS</small>
+          <img src="/black-logo.png" alt="Metro Jewellers" />
         </div>
 
         <h1>Admin sign in</h1>
