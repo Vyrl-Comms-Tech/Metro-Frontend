@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, ChevronUp, Mail, Phone } from "lucide-react";
 import { useSite } from "../context/siteContext";
+import axiosClient from "../utils/axiosClient";
 import "../styles/Footer.css";
 
 const COLUMNS = [
@@ -178,13 +179,23 @@ function FooterLink({ link }) {
 function Newsletter({ text, instagram }) {
   const [email, setEmail] = useState("");
   const [done, setDone] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
-    if (!email.trim()) return;
-    // TODO: send `email` to the mailing-list backend
-    setDone(true);
-    setEmail("");
+    if (!email.trim() || sending) return;
+    setSending(true);
+    setError("");
+    try {
+      await axiosClient.post("/subscribers", { email });
+      setDone(true);
+      setEmail("");
+    } catch (err) {
+      setError(err.message || "Something went wrong. Please try again.");
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -200,13 +211,19 @@ function Newsletter({ text, instagram }) {
           onChange={(e) => {
             setEmail(e.target.value);
             setDone(false);
+            setError("");
           }}
           aria-label="Email address"
         />
-        <button type="submit" aria-label="Subscribe">
+        <button type="submit" aria-label="Subscribe" disabled={sending}>
           <ArrowRight size={18} strokeWidth={1.7} aria-hidden="true" />
         </button>
       </form>
+      {error && (
+        <p className="ft-thanks" role="alert">
+          {error}
+        </p>
+      )}
       {done && (
         <p className="ft-thanks" role="status">
           Thank you for subscribing!

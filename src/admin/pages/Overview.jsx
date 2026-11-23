@@ -11,6 +11,7 @@ const SHORTCUTS = [
   { label: "FAQs", description: "Manage answers to common questions", to: "/admin/faqs" },
   { label: "Instagram reels", description: "Manage videos shown on the home page", to: "/admin/reels" },
   { label: "Enquiries", description: "Read messages sent from the Contact Us page", to: "/admin/enquiries" },
+  { label: "Newsletter", description: "See who subscribed from the website footer", to: "/admin/subscribers" },
 ];
 
 // total records in one API collection, "-" until it loads
@@ -26,6 +27,7 @@ export default function Overview() {
   const faqs = useTotal("faqs");
   const reels = useTotal("reels");
   const enquiries = useTotal("enquiries");
+  const subscribers = useTotal("subscribers");
 
   const stats = [
     { label: "Products", value: products, to: "/admin/products" },
@@ -33,6 +35,7 @@ export default function Overview() {
     { label: "FAQs", value: faqs, to: "/admin/faqs" },
     { label: "Instagram reels", value: reels, to: "/admin/reels" },
     { label: "Enquiries", value: enquiries, to: "/admin/enquiries" },
+    { label: "Subscribers", value: subscribers, to: "/admin/subscribers" },
   ];
 
   return (

@@ -46,6 +46,11 @@ const LINKS = [
     label: "Enquiries",
     icon: "M4 6h16v12H4zM4 7l8 6 8-6",
   },
+  {
+    to: "/admin/subscribers",
+    label: "Newsletter",
+    icon: "M4 6h16v12H4zM4 7l8 6 8-6M9 21h6",
+  },
 ];
 
 const Icon = ({ d }) => (
