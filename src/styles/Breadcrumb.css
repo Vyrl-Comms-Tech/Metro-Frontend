@@ -48,7 +48,7 @@
 }
 
 .crumbs li[aria-current] {
-  opacity: 0.75;
+  opacity: 0.96;
 }
 
 @media (max-width: 900px) {

@@ -16,7 +16,7 @@ import Breadcrumb from "../../components/Breadcrumb";
 import ProductArt from "../../components/collection/ProductArt";
 import { previewProductById } from "../../data/previewProducts";
 import { METALS, TYPES } from "../../data/collections";
-import { productEnquiry, whatsappLink } from "../../utils/whatsapp";
+import { formatPrice, productEnquiry, whatsappLink } from "../../utils/whatsapp";
 import { useSite } from "../../context/siteContext";
 import { useWishlist } from "../../context/wishlistContext";
 import RelatedProducts from "../../components/RelatedProducts";
@@ -245,7 +245,7 @@ function ProductView({ product, slug }) {
   );
   const discountLink = whatsappLink(
     content.contact.whatsapp,
-    `Hello, could you check the best price for ${variantName} (${selectedType ?? ""}, ${selectedMetal ?? ""}, ${variant.productCode ?? id})? ${window.location.href}`,
+    `Hello, could you check the best price for ${variantName} (${selectedType ?? ""}, ${selectedMetal ?? ""}, ${variant.productCode ?? id})${formatPrice(price) ? `, listed at ${formatPrice(price)}` : ""}? ${window.location.href}`,
   );
 
   const share = async () => {
@@ -332,6 +332,10 @@ function ProductView({ product, slug }) {
                 const own = types.find((t) => sameMetal(t, type));
                 const available = own !== undefined;
                 const on = available && sameMetal(own, selectedType);
+                // the price of this type in the metal that is picked (any metal if it is not made in that one)
+                const ofType = variants.filter((item) => sameMetal(item.type ?? product.type, type));
+                const match = ofType.find((item) => sameMetal(item.metal ?? product.metal, selectedMetal)) ?? ofType[0];
+                const typePrice = formatPrice(match?.price ?? (on ? price : undefined));
                 return (
                   <button
                     key={type}
@@ -343,6 +347,7 @@ function ProductView({ product, slug }) {
                     onClick={() => available && choose("type", own)}
                   >
                     <span>{type}</span>
+                    {typePrice && <span>{typePrice}</span>}
                   </button>
                 );
               })}
@@ -424,13 +429,18 @@ function ProductView({ product, slug }) {
               >
                 CHECK FOR DISCOUNT
               </a> */}
+              {formatPrice(price) && (
+                <p className="pd-price-note">
+                  Note: the price may vary with the current gold rate and the final design.
+                </p>
+              )}
               <a
                 className="pd-add"
                 href={enquiry}
                 target="_blank"
                 rel="noreferrer"
               >
-                CHECKOUT
+                CHECKOUT{formatPrice(price) && ` (${formatPrice(price)})`}
               </a>
             </div>
           )}

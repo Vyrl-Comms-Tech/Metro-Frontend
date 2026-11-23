@@ -55,7 +55,7 @@
   display: flex;
   flex-direction: column;
   background: var(--brand-white);
-  border: 1px solid #e8e5df;
+  border: 1px solid var(--brand-line-soft);
   border-radius: 4px;
   transition:
     border-color 0.25s,
@@ -69,8 +69,8 @@
 }
 
 .recent-gemstones .rg-card:hover {
-  border-color: #d6d0c5;
-  box-shadow: 0 16px 34px rgba(17, 17, 17, 0.08);
+  border-color: var(--brand-line);
+  box-shadow: 0 16px 34px color-mix(in srgb, var(--brand-black) 8%, transparent);
   transform: translateY(-4px);
 }
 
@@ -86,7 +86,7 @@
   position: relative;
   aspect-ratio: 1 / 1;
   overflow: hidden;
-  background: #f5f3f0;
+  background: var(--brand-surface);
 }
 
 .recent-gemstones .rg-image-wrap img {
@@ -114,12 +114,12 @@
   border-radius: 50%;
   background: var(--brand-white);
   color: var(--brand-text);
-  box-shadow: 0 3px 12px rgba(17, 17, 17, 0.12);
+  box-shadow: 0 3px 12px color-mix(in srgb, var(--brand-black) 12%, transparent);
   cursor: pointer;
 }
 
 .recent-gemstones .rg-wish.is-saved {
-  color: #333;
+  color: var(--brand-text);
 }
 
 /* hover colours only for a mouse: on a touch screen a tap would leave the button looking hovered */
@@ -169,7 +169,7 @@
   padding: 13px 34px;
   border: 1px solid var(--brand-green);
   border-radius: 3px;
-  background: var(--brand-green);
+  background: var(--brand-green-dark);
   color: var(--brand-white);
   font-size: 13px;
   font-weight: 500;
@@ -177,7 +177,7 @@
   text-decoration: none;
   text-transform: uppercase;
   --fill: var(--brand-white);
-  transition: color 0.35s ease;
+  transition: color 0.2s ease 0.1s;
 }
 
 @media (hover: hover) {
@@ -207,11 +207,6 @@
 
 /* laptops only: slightly narrower cards with shorter images (desktop stays as is) */
 @media (min-width: 901px) and (max-width: 1600px) {
-  .recent-gemstones .rg-grid {
-    max-width: 1180px;
-    margin-inline: auto;
-  }
-
   /* stones listing page: slightly narrower cards, and the toolbar (Sort By) is held to the same width so it lines up with the cards' right edge */
   .recent-gemstones.rg-embedded .rg-grid,
   .col-main:has(.rg-embedded) .col-toolbar {

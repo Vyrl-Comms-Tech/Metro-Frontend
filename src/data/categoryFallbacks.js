@@ -1,5 +1,3 @@
-// Temporary catalogue categories shown until they are available from the API.
-// A subcategory is { title, options }; options is its own third-level list.
 const FALLBACK_CATEGORIES = [
   {
     title: 'Gemstones',

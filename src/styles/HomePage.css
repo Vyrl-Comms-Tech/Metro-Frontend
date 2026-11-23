@@ -1,17 +1,19 @@
 .home-page {
   --section-x: var(--site-gutter);
+  --section-max: 1600px; /* one content width for every home section */
 }
 
-.home-page > :is(.recent-gemstones, .categories, .gallery-grid) {
-  width: 100%;
-  max-width: 1600px;
-}
-
-/* laptops only: narrower (desktop keeps the full 1600px above) */
+/* laptops: narrower */
 @media (max-width: 1600px) {
-  .home-page > :is(.recent-gemstones, .categories, .gallery-grid) {
-    max-width: 1380px;
+  .home-page {
+    --section-max: 1380px;
   }
+}
+
+.home-page > :is(.recent-gemstones, .categories, .gallery-grid, .reels, .faq) {
+  width: 100%;
+  max-width: var(--section-max);
+  margin-inline: auto;
 }
 
 .home-page .faq > .faq-list {

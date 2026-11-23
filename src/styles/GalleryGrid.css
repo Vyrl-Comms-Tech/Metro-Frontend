@@ -68,7 +68,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: var(--brand-green);
+  background: var(--brand-green-dark);
   opacity: 0;
   transition: opacity 0.3s;
 }

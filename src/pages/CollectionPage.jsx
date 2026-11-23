@@ -16,6 +16,7 @@ import Banner from "../components/collection/Banner";
 import CheckGroup from "../components/collection/CheckGroup";
 import Chevron from "../components/collection/Chevron";
 import ProductArt from "../components/collection/ProductArt";
+import ProductPrice from "../components/ProductPrice";
 import CollectionSkeleton from "../components/collection/CollectionSkeleton";
 import ProductSkeleton from "../components/collection/ProductSkeleton";
 import RangeGroup from "../components/collection/RangeGroup";
@@ -465,6 +466,7 @@ function CollectionView({ collection, items, facets, groups, paging, filterState
                   <h3>
                     <Link to={productPath(p)}>{p.name}</Link>
                   </h3>
+                  <ProductPrice price={p.price} compareAtPrice={p.compareAtPrice} />
                 </article>
               ))}
               {paging?.loadingMore && <ProductSkeleton count={3} />}

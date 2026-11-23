@@ -49,13 +49,13 @@
   height: 75px;
   padding: 0;
   border: 1px solid var(--brand-line);
-  background: #f7f7f7;
+  background: var(--brand-surface);
   cursor: pointer;
   overflow: hidden;
 }
 
 .product .pd-thumbs button.on {
-  border-color: #222;
+  border-color: var(--brand-black);
 }
 
 .product .pd-thumbs img {
@@ -67,8 +67,8 @@
 .product .pd-stage {
   position: relative;
   aspect-ratio: 1 / 1;
-  background: #f8f8f8;
-  border: 1px solid #dedede;
+  background: var(--brand-surface);
+  border: 1px solid var(--brand-line);
   /* sideways swipes change the image; vertical drags still scroll the page */
   touch-action: pan-y;
 }
@@ -134,7 +134,7 @@
 
 @media (hover: hover) {
   .product .pd-nav:hover {  
-    background: var(--brand-green);  
+    background: var(--brand-green-dark);  
     color: var(--brand-white);
   }
 }
@@ -142,7 +142,7 @@
 /* touch screens have no hover, so the arrows are filled all the time */
 @media (hover: none) {
   .product .pd-nav {
-    background: var(--brand-green);
+    background: var(--brand-green-dark);
     color: var(--brand-white);
   }
 }
@@ -212,10 +212,10 @@
 .product .pd-metal-options button,
 .product .pd-carat-options button {
   min-height: 40px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--brand-line);
   border-radius: 3px;
-  background: #fff;
-  color: #222;
+  background: var(--brand-white);
+  color: var(--brand-black);
   font: inherit;
   font-size: 13px;
   cursor: pointer;
@@ -230,16 +230,20 @@
   text-align: left;
 }
 
-.product .pd-type-options button span:last-child {
-  color: #000;
+.product .pd-type-options button span:last-child:not(:first-child) {
+  color: var(--brand-subtle);
   white-space: nowrap;
   font-weight: 500;
+}
+
+.product .pd-type-options button.on span:last-child:not(:first-child) {
+  color: var(--brand-gold);
 }
 
 .product .pd-type-options button.on,
 .product .pd-metal-options button.on,
 .product .pd-carat-options button.on {
-  border-color: #111;
+  border-color: var(--brand-black);
 }
 
 .product .pd-options {
@@ -262,7 +266,7 @@
   overflow-x: auto;
   padding-bottom: 8px;
   scrollbar-width: thin;
-  scrollbar-color: #c4c4c4 transparent;
+  scrollbar-color: var(--brand-line) transparent;
 }
 
 .product .pd-carat-options::-webkit-scrollbar {
@@ -270,7 +274,7 @@
 }
 
 .product .pd-carat-options::-webkit-scrollbar-thumb {
-  background: #c4c4c4;
+  background: var(--brand-line);
   border-radius: 4px;
 }
 
@@ -279,22 +283,22 @@
   min-width: 52px;
   height: 40px;
   padding: 0 10px;
-  border-color: #d4d4d4;
+  border-color: var(--brand-line);
   border-radius: 4px;
-  color: #9a9a9a;
+  color: var(--brand-subtle);
   transition: border-color 0.15s, color 0.15s;
 }
 
 @media (hover: hover) {
   .product .pd-carat-options button:hover {  
-    border-color: #888;  
-    color: #444;  
+    border-color: var(--brand-subtle);  
+    color: var(--brand-text);  
   }
 }
 
 .product .pd-carat-options button.on {
-  border-color: #111;
-  color: #111;
+  border-color: var(--brand-black);
+  color: var(--brand-black);
 }
 
 .product .pd-metal-options button {
@@ -317,9 +321,9 @@
   height: 16px;
   flex: 0 0 16px;
   font-weight: 500;
-  border: 1px solid #ddd;
+  border: 1px solid var(--brand-line);
   border-radius: 50%;
-  background: linear-gradient(135deg, #fafafa, #a5a5a5 55%, #f8f8f8);
+  background: linear-gradient(135deg, var(--brand-surface), var(--brand-subtle) 55%, var(--brand-surface));
 }
 
 .product .pd-metal-swatch.yellow {
@@ -331,7 +335,7 @@
 }
 
 .product .pd-metal-swatch.platinum {
-  background: linear-gradient(135deg, #fff, #8f969e 55%, #e7e9eb);
+  background: linear-gradient(135deg, var(--brand-white), #8f969e 55%, #e7e9eb);
 }
 
 .product .pd-ring-size {
@@ -343,10 +347,10 @@
 .product .pd-ring-size select,
 .product .pd-engraving {
   height: 42px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--brand-line);
   border-radius: 3px;
-  background: #fff;
-  color: #222;
+  background: var(--brand-white);
+  color: var(--brand-black);
   font: inherit;
   font-size: 13px;
 }
@@ -371,13 +375,13 @@
 }
 
 .product .pd-select select:disabled {
-  color: #999;
-  background: #f5f5f5;
+  color: var(--brand-subtle);
+  background: var(--brand-surface);
   cursor: not-allowed;
 }
 
 .product .pd-select select:disabled + svg {
-  color: #bbb;
+  color: var(--brand-subtle);
 }
 
 .product .pd-engraving {
@@ -404,12 +408,12 @@
   height: 30px;
   border: 0;
   background: none;
-  color: #222;
+  color: var(--brand-black);
   cursor: pointer;
 }
 
 .product .pd-engraving button:disabled {
-  color: #bbb;
+  color: var(--brand-subtle);
   cursor: not-allowed;
 }
 
@@ -427,37 +431,46 @@
   display: grid;
   place-items: center;
   min-height: 44px;
-  border: 1px solid #000;
+  border: 1px solid var(--brand-black);
   border-radius: 3px;
   font: inherit;
   font-size: 14px;
   text-decoration: none;
   cursor: pointer;
-  transition: color 0.35s ease;
+  transition: color 0.2s ease 0.1s, border-color 0.35s ease;
 }
 
 /* .product .pd-discount {
-  --fill: #fff;
-  background: #000;
-  color: #fff;
+  --fill: var(--brand-white);
+  background: var(--brand-black);
+  color: var(--brand-white);
 } */
 
 /* @media (hover: hover) {
   .product .pd-discount:hover {  
-    color: #000;  
+    color: var(--brand-black);  
   }
 } */
 
 .product .pd-add {
-  --fill: #000;
-  background: #fff;
-  color: #000;
+  --fill: var(--brand-green);
+  background: var(--brand-white);
+  color: var(--brand-black);
 }
 
 @media (hover: hover) {
-  .product .pd-add:hover {  
-    color: #fff;  
+  .product .pd-add:hover {
+    border-color: var(--brand-green);
+    color: var(--brand-white);
   }
+}
+
+.product .pd-price-note {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--brand-danger);
+  font-weight: 500;
 }
 
 .product .pd-added {
@@ -474,11 +487,11 @@
 /* accordion: product details, guarantee, hint, shipping */
 .product .pd-details {
   margin-top: 31px;
-  border-top: 1px solid #ccc;
+  border-top: 1px solid var(--brand-line);
 }
 
 .product .pd-detail {
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid var(--brand-line);
 }
 
 .product .pd-detail-head {

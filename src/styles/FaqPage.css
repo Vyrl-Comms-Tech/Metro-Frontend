@@ -58,8 +58,8 @@
 }
 
 .faqpage .faqpage-nav a:hover {
-  background: var(--brand-green);
-  border-color: var(--brand-green);
+  background: var(--brand-green-dark);
+  border-color: var(--brand-green-dark);
   color: var(--brand-white);
 }
 
@@ -83,7 +83,7 @@
   content: "";
   width: 28px;
   height: 2px;
-  background: var(--brand-green);
+  background: var(--brand-green-dark);
 }
 
 /* help box */

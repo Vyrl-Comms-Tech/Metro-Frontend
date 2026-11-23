@@ -7,6 +7,8 @@ export default function Modal({
   onClose,
   onSave,
   saveLabel = "Save",
+  savingLabel = "Saving…",
+  danger = false,
   children,
 }) {
   const [saving, setSaving] = useState(false);
@@ -103,8 +105,8 @@ export default function Modal({
           <button type="button" className="ad-btn ghost" onClick={onClose} disabled={saving}>
             Cancel
           </button>
-          <button type="submit" className="ad-btn" disabled={saving}>
-            {saving ? "Saving…" : saveLabel}
+          <button type="submit" className={`ad-btn${danger ? " ad-btn-danger" : ""}`} disabled={saving} aria-busy={saving}>
+            {saving ? savingLabel : saveLabel}
           </button>
         </footer>
       </form>

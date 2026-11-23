@@ -10,9 +10,7 @@ export default function Categories() {
     [],
   );
   const loaded = !loading || Boolean(error);
-  // tolerate either { items: [...] } or a bare array from the API
   const categories = Array.isArray(data?.items) ? data.items : Array.isArray(data) ? data : [];
-  // only collections the admin has switched on for the home page
   const featuredCategories = categories.filter((c) => c.active !== false && c.showOnHome !== false);
   const ref = useRef(null);
   const [seen, setSeen] = useState(false);
@@ -48,7 +46,7 @@ export default function Categories() {
         <p className="cat-empty">Collections are coming soon.</p>
       )}
 
-      <div className={`cat-grid ${seen ? "is-in" : ""}`}>
+      <div className={`cat-grid ${seen ? "is-in" : ""}`} data-count={Math.min(featuredCategories.length, 5)}>
         {featuredCategories.map((c, i) => (
           <Link
             key={c.slug}

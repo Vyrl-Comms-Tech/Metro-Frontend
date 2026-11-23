@@ -62,7 +62,7 @@ export default function CategoryModal({ category, nextOrder, onClose, onSaved })
           </Field>
           <div className="ad-subs">
             <span className="ad-subs-title">
-              Subcategories <em className="ad-optional">(optional)</em>
+              Subcategories <em className="ad-optional"></em>
             </span>
             {form.subCategories.map((row, i) => (
               <div className="ad-sub-row" key={i}>

@@ -266,8 +266,8 @@
 
 @media (hover: hover) {
   .reels .reels-controls > button:hover {
-    background: var(--brand-green);
-    border-color: var(--brand-green);
+    background: var(--brand-green-dark);
+    border-color: var(--brand-green-dark);
     color: var(--brand-white);
   }
 }
@@ -298,7 +298,7 @@
 .reels .reels-controls .reels-dots button.on {
   width: 24px;
   border-radius: 4px;
-  background: var(--brand-green);
+  background: var(--brand-green-dark);
 }
 
 @media (max-width: 1200px) {

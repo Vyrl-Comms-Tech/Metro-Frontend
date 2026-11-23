@@ -8,15 +8,18 @@
   /* brand colours: white primary, deep forest green secondary */
   --brand-white: #fff;
   --brand-black: #111;
-  --brand-green: #00351d;
+  /* --brand-green: #00351d; */
+  --brand-green: #002515;
+  --brand-green-dark: var(--brand-green);
+
   --brand-green-light: #7fc9a0;
   --brand-green-tint: #eef4f0;
   --brand-sand: #ecc89c;
-  --brand-sale: #00351d;
+  --brand-sale: #002515;
   --brand-whatsapp: #25d366;
   --brand-gold: #b8902f;
   --brand-success: #1a7f4b;
-  --brand-danger: #c93b3b;
+  --brand-danger: #ee0c0c;
 
   /* neutrals */
   --brand-text: #333;
@@ -29,9 +32,9 @@
   --brand-surface-alt: #e8e8e8;
 
   /* banner + placeholder tones */
-  --brand-banner-1: #00351d;
-  --brand-banner-2: #0a4a2c;
-  --brand-banner-3: #002a17;
+  --brand-banner-1: #002515;
+  --brand-banner-2: #002515;
+  --brand-banner-3: #002515;
   --brand-card-1: #eef4f0;
   --brand-card-2: #c9d9cf;
 

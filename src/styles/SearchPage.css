@@ -60,5 +60,5 @@
   margin: 48px 0 80px;
   padding: 0 24px;
   text-align: center;
-  color: #666;
+  color: var(--brand-muted);
 }

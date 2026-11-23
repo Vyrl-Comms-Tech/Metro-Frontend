@@ -3,7 +3,7 @@
   place-items: center;
   min-height: 100svh;
   padding: 24px 16px;
-  background: #10352200;
+  background: transparent;
 }
 
 .login-card {
@@ -13,7 +13,7 @@
   border-radius: 12px;
   background: var(--brand-white);
   color: var(--brand-black);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 24px 60px color-mix(in srgb, var(--brand-black) 30%, transparent);
 }
 
 .login-brand {
@@ -48,7 +48,7 @@
   padding: 10px 12px;
   border: 1px solid var(--brand-danger);
   border-radius: 7px;
-  background: #fdf0f0;
+  background: color-mix(in srgb, var(--brand-danger) 8%, var(--brand-white));
   color: var(--brand-danger);
   font-size: 13px;
 }
@@ -112,7 +112,7 @@
   margin-top: 6px;
   border: 0;
   border-radius: 7px;
-  background: var(--brand-green);
+  background: var(--brand-green-dark);
   color: var(--brand-white);
   font: inherit;
   font-size: 14px;
@@ -145,7 +145,7 @@
   display: grid;
   place-items: center;
   min-height: 100svh;
-  background: #f7f8f6;
+  background: var(--brand-surface);
   color: var(--brand-muted);
   font-size: 14px;
 }

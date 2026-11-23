@@ -6,6 +6,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import ProductArt from './collection/ProductArt'
+import ProductPrice from './ProductPrice'
 import axiosClient from '../utils/axiosClient'
 import { productPath } from '../utils/productPath'
 import { useWishlist } from '../context/wishlistContext'
@@ -77,6 +78,7 @@ export default function RelatedProducts({ mainCategory, subCategory, currentSlug
                 <h3>
                   <Link to={productPath(p)}>{p.name}</Link>
                 </h3>
+                <ProductPrice price={p.price} compareAtPrice={p.compareAtPrice} />
               </article>
             </SwiperSlide>
           )

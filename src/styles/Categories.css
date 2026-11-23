@@ -1,5 +1,6 @@
 .categories {
-  max-width: 1300px; /* same as Recently Added Gemstones */
+  max-width: 1300px;
+  /* same as Recently Added Gemstones */
   margin: 0 auto;
   padding: var(--section-y) var(--section-x);
   color: var(--brand-black);
@@ -47,7 +48,29 @@
 .categories .cat-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 20px;
+  gap: 40px;
+}
+
+/* the row fits the number of collections: 3 or 4 share one row, 2 make two equal columns, 1 stays centred */
+@media (min-width: 901px) {
+  .categories .cat-grid[data-count="1"] {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 420px;
+    margin-inline: auto;
+  }
+
+  .categories .cat-grid[data-count="2"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .categories .cat-grid[data-count="3"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.categories .cat-grid {
+  grid-auto-rows: 1fr;
+  /* every card the same height */
 }
 
 .categories .cat-card {
@@ -85,7 +108,7 @@
 /* card image */
 .categories .cat-card .cat-img {
   position: relative;
-  aspect-ratio: 1.3;
+  aspect-ratio: 1.9;
   overflow: hidden;
   background-image: url('/category-triptych.png');
   background-position: var(--panel-position) center;
@@ -159,8 +182,8 @@
 }
 
 .categories .cat-card:hover .cat-arrow {
-  background: var(--brand-green);
-  border-color: var(--brand-green);
+  background: var(--brand-green-dark);
+  border-color: var(--brand-green-dark);
   color: var(--brand-white);
   transform: translateX(3px);
 }
@@ -169,7 +192,8 @@
 /* laptops (up to 1600px): a fuller photo and a compact text area under it */
 @media (max-width: 1600px) {
   .categories {
-    max-width: 1160px; /* laptops: narrower, matches Recently Added Gemstones */
+    max-width: 1160px;
+    /* laptops: narrower, matches Recently Added Gemstones */
   }
 
   .categories .cat-grid {
@@ -177,7 +201,7 @@
   }
 
   .categories .cat-card .cat-img {
-    aspect-ratio: 1.20;
+    aspect-ratio: 2;
   }
 
   .categories .cat-card .cat-body {
@@ -209,13 +233,13 @@
   }
 
   .categories .cat-card .cat-img {
-    aspect-ratio: 1.5;
+    aspect-ratio: 2;
   }
 }
 
 @media (max-width: 560px) {
   .categories .cat-card .cat-img {
-    aspect-ratio: 1.5;
+    aspect-ratio: 2;
   }
 
   .categories .cat-head h2 {

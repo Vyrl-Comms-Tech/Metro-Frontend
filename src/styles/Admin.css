@@ -73,17 +73,17 @@
   font: inherit;
   font-size: 14px;
   line-height: 1;
-  color: #fff;
-  background: #d32f2f;
-  border: 1px solid #d32f2f;
+  color: var(--brand-white);
+  background: var(--brand-danger);
+  border: 1px solid var(--brand-danger);
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s;
 }
 
 .admin .ad-side .ad-site-link:hover {
-  background: #b71c1c;
-  border-color: #b71c1c;
+  background: color-mix(in srgb, var(--brand-danger) 80%, var(--brand-black));
+  border-color: color-mix(in srgb, var(--brand-danger) 80%, var(--brand-black));
 }
 
 .admin .ad-backdrop {
@@ -827,12 +827,12 @@
 /* Shared dashboard surface */
 .admin {
   grid-template-columns: 252px minmax(0, 1fr);
-  background: #f7f8f6;
+  background: var(--brand-surface);
 }
 
 .admin .ad-side {
   padding: 28px 16px 20px;
-  background: #103522;
+  background: var(--brand-green);
   overflow-y: auto;
 }
 
@@ -874,12 +874,12 @@
   min-height: 42px;
   padding: 11px 14px;
   border-radius: 7px;
-  color: #d9e6dc;
+  color: var(--brand-card-2);
   font-size: 13px;
 }
 
 .admin .ad-nav a.active {
-  background: #ecf4ee;
+  background: var(--brand-green-tint);
   color: var(--brand-green);
   font-weight: 600;
 }
@@ -943,9 +943,9 @@
 
 .admin .ad-card,
 .admin .ad-stats a {
-  border: 1px solid #e4e9e4;
+  border: 1px solid var(--brand-line-soft);
   border-radius: 10px;
-  box-shadow: 0 1px 3px rgba(15, 35, 22, 0.03);
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--brand-black) 3%, transparent);
 }
 
 .admin .ad-btn {
@@ -1035,7 +1035,7 @@
 
 .admin .ad-table th {
   padding: 13px 14px;
-  background: #f8faf8;
+  background: var(--brand-surface);
   color: var(--brand-text-soft);
   font-size: 11px;
   letter-spacing: 0.06em;
@@ -1048,7 +1048,7 @@
 }
 
 .admin .ad-table tbody tr:hover {
-  background: #fafcfb;
+  background: var(--brand-surface);
 }
 
 .admin .ad-table td.ad-cell-main {
@@ -1120,7 +1120,7 @@
 }
 
 .admin .ad-modal .ad-modal-backdrop {
-  background: rgba(9, 24, 15, 0.5);
+  background: color-mix(in srgb, var(--brand-black) 50%, transparent);
 }
 
 .admin .ad-modal .ad-modal-box {
@@ -1128,7 +1128,7 @@
   max-height: min(90svh, 840px);
   border: 1px solid var(--brand-line-soft);
   border-radius: 10px;
-  box-shadow: 0 24px 70px rgba(9, 24, 15, 0.2);
+  box-shadow: 0 24px 70px color-mix(in srgb, var(--brand-black) 20%, transparent);
 }
 
 .admin .ad-modal-box header,
@@ -1223,7 +1223,7 @@
 .admin .ad-modal-box select,
 .admin .ad-modal-box textarea {
   min-height: 40px;
-  border-color: #d8dfd9;
+  border-color: var(--brand-line-soft);
   border-radius: 5px;
   font-size: 13px;
 }
@@ -1236,7 +1236,7 @@
 .admin .ad-modal-box select:focus-visible,
 .admin .ad-modal-box textarea:focus-visible {
   border-color: var(--brand-green);
-  outline: 2px solid rgba(0, 53, 29, 0.12);
+  outline: 2px solid color-mix(in srgb, var(--brand-green) 12%, transparent);
   outline-offset: 0;
 }
 
@@ -1247,9 +1247,9 @@
   gap: 12px;
   min-height: 72px;
   padding: 12px 14px;
-  border: 1px dashed #bacbbf;
+  border: 1px dashed var(--brand-card-2);
   border-radius: 6px;
-  background: #fafcfb;
+  background: var(--brand-surface);
   cursor: pointer;
   transition: border-color 0.2s, background 0.2s;
 }
@@ -1325,7 +1325,7 @@
   line-height: 1;
   color: var(--brand-white-strong);
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: 1px solid color-mix(in srgb, var(--brand-white) 25%, transparent);
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.2s;
@@ -1402,7 +1402,7 @@
   justify-content: space-between;
   gap: 16px;
   padding: 13px 15px;
-  border: 1px solid var(--brand-line-soft, #e3e8e4);
+  border: 1px solid var(--brand-line-soft);
   border-radius: 8px;
   cursor: pointer;
   transition: border-color 0.2s, background 0.2s;
@@ -1410,7 +1410,7 @@
 
 .admin .ad-modal-box label.ad-category-setting:hover {
   border-color: var(--brand-green);
-  background: #f7f8f6;
+  background: var(--brand-surface);
 }
 
 .admin .ad-modal-box .ad-category-setting strong,
@@ -1425,7 +1425,7 @@
 }
 
 .admin .ad-modal-box .ad-category-setting small {
-  color: var(--brand-muted, #6b7a70);
+  color: var(--brand-muted);
   font-size: 12px;
   line-height: 1.4;
 }
@@ -1440,7 +1440,7 @@
 }
 
 .admin .ad-optional {
-  color: var(--brand-muted, #6b7a70);
+  color: var(--brand-muted);
   font-size: 11px;
   font-style: normal;
   font-weight: 400;
@@ -1454,7 +1454,7 @@
 .admin .ad-variants-hint {
   margin: 0 0 12px;
   font-size: 13px;
-  color: var(--brand-muted, #666);
+  color: var(--brand-muted);
 }
 
 .admin .ad-variant {
@@ -1548,7 +1548,7 @@
 
 .admin .ad-filters select.on {
   border-color: var(--brand-green);
-  background-color: #f3f8f4;
+  background-color: var(--brand-green-tint);
 }
 
 .admin .ad-filters .ad-btn {
@@ -1579,7 +1579,7 @@
   border: 1px solid var(--brand-line-soft);
   border-radius: 8px;
   background: var(--brand-white);
-  box-shadow: 0 12px 32px rgba(9, 24, 15, 0.14);
+  box-shadow: 0 12px 32px color-mix(in srgb, var(--brand-black) 14%, transparent);
   color: var(--brand-black);
   font-size: 13px;
   line-height: 1.5;
@@ -1610,8 +1610,8 @@
 
 /* read-only product view */
 .ad-view-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 24px; margin: 0 0 12px; }
-.ad-view-list div { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--brand-line-soft, #e5e5e5); font-size: 13px; }
-.ad-view-list dt { color: var(--brand-muted, #777); }
+.ad-view-list div { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--brand-line-soft); font-size: 13px; }
+.ad-view-list dt { color: var(--brand-muted); }
 .ad-view-list dd { margin: 0; text-align: right; overflow-wrap: anywhere; }
 .ad-view-title { margin: 14px 0 6px; font-size: 13px; font-weight: 600; }
 .ad-view-text { margin: 0 0 12px; font-size: 13px; line-height: 1.6; white-space: pre-line; }
@@ -1620,8 +1620,8 @@
 /* bulk delete */
 .admin .ad-select-cell { width: 36px; }
 .admin .ad-select-cell input,
-.admin .ad-table th input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; accent-color: var(--brand-green, #0b3d2e); }
-.admin .ad-bulk { display: flex; align-items: center; gap: 12px; margin: 0 0 12px; padding: 10px 14px; border: 1px solid var(--brand-line-soft, #e5e5e5); border-radius: 6px; background: #fafaf7; font-size: 13px; }
+.admin .ad-table th input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; accent-color: var(--brand-green); }
+.admin .ad-bulk { display: flex; align-items: center; gap: 12px; margin: 0 0 12px; padding: 10px 14px; border: 1px solid var(--brand-line-soft); border-radius: 6px; background: #fafaf7; font-size: 13px; }
 .admin .ad-bulk span { flex: 1; font-weight: 500; }
-.admin .ad-btn.ad-btn-danger { border-color: #b42318; background: #b42318; color: #fff; }
-.admin .ad-btn.ad-btn-danger:hover { background: #8f1c12; border-color: #8f1c12; }
+.admin .ad-btn.ad-btn-danger { border-color: var(--brand-danger); background: var(--brand-danger); color: var(--brand-white); }
+.admin .ad-btn.ad-btn-danger:hover { background: color-mix(in srgb, var(--brand-danger) 80%, var(--brand-black)); border-color: color-mix(in srgb, var(--brand-danger) 80%, var(--brand-black)); }

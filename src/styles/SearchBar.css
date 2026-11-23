@@ -2,7 +2,7 @@
 .site-header .search-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: color-mix(in srgb, var(--brand-black) 45%, transparent);
   animation: search-fade 0.2s ease-out;
 }
 
@@ -166,7 +166,7 @@
   padding: 24px 24px 8px;
   background: var(--brand-white);
   border: 1px solid var(--brand-line-soft);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 12px 30px color-mix(in srgb, var(--brand-black) 12%, transparent);
 }
 
 .site-header .hd-search .hd-search-drop .search-results {

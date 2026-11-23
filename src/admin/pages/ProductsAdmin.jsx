@@ -3,6 +3,7 @@ import { useSite } from "../../context/siteContext";
 import { GEMSTONES, METALS, PENDANT_TYPES, SHAPES, TYPES } from "../../data/collections";
 import ProductArt from "../../components/collection/ProductArt";
 import PageHeader from "../components/PageHeader";
+import ConfirmModal from "../components/ConfirmModal";
 import ProductModal from "../components/ProductModal";
 import ProductViewModal from "../components/ProductViewModal";
 import DataTable from "../components/DataTable";
@@ -29,7 +30,7 @@ export default function ProductsAdmin() {
   const [reload, setReload] = useState(0);
   const [actionError, setActionError] = useState("");
   const [selected, setSelected] = useState([]); // ids ticked for bulk delete
-  const [deleting, setDeleting] = useState(false);
+  const [confirm, setConfirm] = useState(null); // { message, run } for the delete confirmation dialog
 
   useEffect(() => {
     const t = setTimeout(() => {
@@ -73,17 +74,13 @@ export default function ProductsAdmin() {
   const totalVariants = data?.totalVariants ?? 0;
   const breakdown = data?.variantBreakdown ?? []; // [{ variants: 4, products: 75 }]: 75 products have 4 variations
 
+  // errors are thrown so the confirm dialog can show them and stay open
   const remove = async (p) => {
-    if (!window.confirm(`Remove "${p.name}"?`)) return;
     setActionError("");
-    try {
-      await axiosClient.delete(`/products/remove/${p.id}`);
-      // step back a page if that was the last product on it
-      if (items.length === 1 && page > 1) setPage(page - 1);
-      else setReload((n) => n + 1);
-    } catch (err) {
-      setActionError(err.message);
-    }
+    await axiosClient.delete(`/products/remove/${p.id}`);
+    // step back a page if that was the last product on it
+    if (items.length === 1 && page > 1) setPage(page - 1);
+    else setReload((n) => n + 1);
   };
 
   // the ticks belong to the rows on screen: a new page, search or filter starts again
@@ -96,20 +93,12 @@ export default function ProductsAdmin() {
   const toggleAll = () => setSelected(allTicked ? [] : items.map((p) => p.id));
 
   const removeSelected = async () => {
-    if (!window.confirm(`Remove ${selected.length} selected ${selected.length === 1 ? "product" : "products"}? This cannot be undone.`)) return;
     setActionError("");
-    setDeleting(true);
-    try {
-      await axiosClient.post("/products/bulk-delete", { ids: selected });
-      // step back a page if every product on it was removed
-      if (selected.length >= items.length && page > 1) setPage(page - 1);
-      else setReload((n) => n + 1);
-      setSelected([]);
-    } catch (err) {
-      setActionError(err.message);
-    } finally {
-      setDeleting(false);
-    }
+    await axiosClient.post("/products/bulk-delete", { ids: selected });
+    // step back a page if every product on it was removed
+    if (selected.length >= items.length && page > 1) setPage(page - 1);
+    else setReload((n) => n + 1);
+    setSelected([]);
   };
 
   const columns = [
@@ -128,7 +117,7 @@ export default function ProductsAdmin() {
     { key: 'category', label: 'Category' },
     { key: 'price', label: 'From (AED)', render: (p) => (p.price != null ? p.price.toLocaleString() : '') },
     { key: 'variants', label: 'Variants', render: (p) => p.variants?.length ?? 0 },
-    { key: 'actions', label: '', cellClassName: 'ad-actions-cell', render: (p) => <TableActions name={p.name} onView={() => setViewing(p)} onEdit={() => setEditing(p)} onRemove={() => remove(p)} /> },
+    { key: 'actions', label: '', cellClassName: 'ad-actions-cell', render: (p) => <TableActions name={p.name} onView={() => setViewing(p)} onEdit={() => setEditing(p)} onRemove={() => setConfirm({ message: `Remove "${p.name}"? This cannot be undone.`, run: () => remove(p) })} /> },
   ];
 
   return (
@@ -243,11 +232,20 @@ export default function ProductsAdmin() {
         {selected.length > 0 && (
           <div className="ad-bulk" role="status">
             <span>{selected.length} selected</span>
-            <button type="button" className="ad-btn ghost" onClick={() => setSelected([])} disabled={deleting}>
+            <button type="button" className="ad-btn ghost" onClick={() => setSelected([])}>
               Clear
             </button>
-            <button type="button" className="ad-btn ad-btn-danger" onClick={removeSelected} disabled={deleting}>
-              {deleting ? "Deleting…" : "Delete selected"}
+            <button
+              type="button"
+              className="ad-btn ad-btn-danger"
+              onClick={() =>
+                setConfirm({
+                  message: `Remove ${selected.length} selected ${selected.length === 1 ? "product" : "products"}? This cannot be undone.`,
+                  run: removeSelected,
+                })
+              }
+            >
+              Delete selected
             </button>
           </div>
         )}
@@ -272,6 +270,15 @@ export default function ProductsAdmin() {
           </button>
         </div>
       </section>
+
+      {confirm && (
+        <ConfirmModal
+          title="Delete products"
+          message={confirm.message}
+          onConfirm={confirm.run}
+          onClose={() => setConfirm(null)}
+        />
+      )}
 
       {viewing && (
         <ProductViewModal

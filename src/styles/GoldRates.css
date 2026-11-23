@@ -1,0 +1,212 @@
+.gold-rates-section {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: var(--section-y) var(--section-x);
+}
+
+.gold-rates {
+  padding: clamp(22px, 2.6vw, 32px) clamp(18px, 2.9vw, 36px) clamp(16px, 1.6vw, 20px);
+  border-radius: 6px;
+  color: var(--brand-white);
+  background:
+    radial-gradient(circle at 50% 55%, var(--brand-banner-2) 0%, transparent 60%),
+    linear-gradient(135deg, var(--brand-banner-3) 0%, var(--brand-green) 50%, var(--brand-banner-3) 100%);
+}
+
+.gold-rates-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.gold-rates h2 {
+  margin: 0;
+  font-size: clamp(18px, 1.8vw, 22px);
+  font-weight: 700;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.gold-rates-unit {
+  margin: 14px 0 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--brand-sand);
+}
+
+.gold-rates-wallet {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.gold-rates-wallet-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.gold-rates-wallet-btns {
+  display: flex;
+  gap: 18px;
+}
+
+.gold-rates-wallet-btns button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--brand-white);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.gold-rates-wallet-icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+}
+
+.gold-rates-wallet-icon.apple {
+  background: var(--brand-black);
+}
+
+.gold-rates-wallet-icon.android {
+  background: var(--brand-white);
+}
+
+.gold-rates-list {
+  margin: clamp(20px, 2.3vw, 28px) 0 0;
+  padding: 0 clamp(14px, 1.9vw, 24px);
+  list-style: none;
+  border: 1px solid color-mix(in srgb, var(--brand-sand) 45%, transparent);
+  border-radius: 4px;
+}
+
+.gold-rates-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: clamp(14px, 1.5vw, 18px) 0;
+  font-size: clamp(14px, 1.4vw, 17px);
+  font-weight: 700;
+  text-transform: uppercase;
+  border-bottom: 1px solid color-mix(in srgb, var(--brand-sand) 30%, transparent);
+}
+
+.gold-rates-list strong {
+  color: var(--brand-sand);
+}
+
+.gold-rates-list li:last-child {
+  border-bottom: 0;
+}
+
+.gold-rates-list strong {
+  font-weight: 700;
+}
+
+.gold-rates-updated {
+  margin: 14px 0 0;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* large laptops: narrower card and a little smaller text */
+@media (max-width: 1536px) {
+  .gold-rates-section {
+    max-width: 1100px;
+  }
+
+  .gold-rates h2 {
+    font-size: 19px;
+  }
+
+  .gold-rates-unit {
+    margin-top: 10px;
+    font-size: 11px;
+  }
+
+  .gold-rates-list {
+    margin-top: 22px;
+  }
+
+  .gold-rates-list li {
+    padding: 13px 0;
+    font-size: 15px;
+  }
+
+  .gold-rates-updated {
+    margin-top: 10px;
+    font-size: 11px;
+  }
+}
+
+/* laptops */
+@media (max-width: 1280px) {
+  .gold-rates-section {
+    max-width: 980px;
+  }
+}
+
+/* tablets */
+@media (max-width: 900px) {
+  .gold-rates-section {
+    max-width: 720px;
+  }
+
+  .gold-rates-head {
+    gap: 16px;
+  }
+}
+
+/* phones */
+@media (max-width: 560px) {
+  .gold-rates {
+    border-radius: 6px;
+  }
+
+  .gold-rates-head {
+    flex-direction: column;
+  }
+
+  .gold-rates-wallet {
+    align-items: flex-start;
+  }
+
+  /* let the heading wrap by width instead of the forced line break */
+  .gold-rates h2 br {
+    display: none;
+  }
+
+  .gold-rates-unit {
+    margin-top: 10px;
+  }
+
+  .gold-rates-list li {
+    gap: 10px;
+  }
+}
+
+/* small phones */
+@media (max-width: 380px) {
+  .gold-rates-list li {
+    font-size: 13px;
+  }
+
+  .gold-rates-updated {
+    font-size: 11px;
+  }
+}

@@ -95,3 +95,19 @@
     font-size: 13px;
   }
 }
+
+@media (max-width: 500px) {
+
+  body .hero .hero-copy .hero-btn,
+  body .faq-all,
+  body .wishlist .wl-browse,
+  body .recent-gemstones .rg-view-all {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 30px;
+    padding: 10px 15px;
+    font-size: 12.5px;
+  }
+}
+

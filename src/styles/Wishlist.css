@@ -56,7 +56,7 @@
   display: inline-block;
   padding: 14px 32px;
   border-radius: 3px;
-  background: var(--brand-green);
+  background: var(--brand-green-dark);
   color: var(--brand-white);
   font-size: 13px;
   letter-spacing: 0.06em;

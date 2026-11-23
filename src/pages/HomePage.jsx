@@ -1,7 +1,7 @@
 import Hero from '../components/Hero'
 import Categories from '../components/Categories'
 import RecentGemstones from '../components/RecentGemstones'
-import GoldChart from '../components/GoldChart'
+import GoldRates from '../components/GoldRates'
 import Reels from '../components/Reels'
 import Faq from '../components/Faq'
 import GalleryGrid from '../components/GalleryGrid'
@@ -11,7 +11,7 @@ export default function HomePage() {
   return (
     <main className="home-page">
       <Hero />
-      <GoldChart />
+      <GoldRates />
       <RecentGemstones />
       <Categories />
       <GalleryGrid limit={12} />

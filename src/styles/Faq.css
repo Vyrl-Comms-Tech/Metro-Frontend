@@ -123,7 +123,7 @@
 /* shared button (home "View All FAQs", FAQ page "Contact Us") */
 .faq-all {
   display: inline-block;
-  padding: 14px 36px;
+  padding: 12px 36px;
   border: 1px solid var(--brand-black);
   border-radius: 3px;
   font-size: 13px;
@@ -134,11 +134,12 @@
   background: transparent;
   text-decoration: none;
   --fill: var(--brand-green);
-  transition: color 0.35s ease;
+  transition: color 0.2s ease 0.1s, border-color 0.35s ease;
 }
 
 @media (hover: hover) {
-  .faq-all:hover {  
+  .faq-all:hover {
+    border-color: var(--brand-green);
     color: var(--brand-white);  
   }
 }

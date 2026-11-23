@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { columnLink } from './menuData'
 import { useNav } from './useNav'
@@ -14,10 +14,12 @@ const Icon = ({ children }) => (
   </svg>
 )
 
+const WHITE_SECTIONS = ['.hero', '.gold-rates-section', '.col-banner', '.faqpage-banner', '.terms-banner']
+
 function CtaBlock({ text, button }) {
   return (
     <div className="mm-cta">
-      <p>{text}</p>
+      <p>{text}</p>z
       <a href="#" className="btn-dark">{button}</a>
     </div>
   )
@@ -99,6 +101,8 @@ export default function Header() {
   const { count } = useWishlist()
   const nav = useNav()
   const timer = useRef(null)
+  const headerRef = useRef(null)
+  const [onWhite, setOnWhite] = useState(true)
   const closeMenu = useCallback(() => setMenuOpen(false), [])
   const closeSearch = useCallback(() => setSearchOpen(false), [])
 
@@ -113,21 +117,44 @@ export default function Header() {
     timer.current = setTimeout(() => setActive(null), 120)
   }
 
+  // which section is right under the header decides if it is white or green
+  useEffect(() => {
+    let frame = 0
+    const check = () => {
+      frame = 0
+      const el = headerRef.current
+      if (!el) return
+      const y = Math.min(el.getBoundingClientRect().bottom + 2, window.innerHeight - 1)
+      const under = document.elementFromPoint(window.innerWidth / 2, y)
+      setOnWhite(Boolean(under?.closest(WHITE_SECTIONS.join(','))))
+    }
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(check) }
+    check()
+    window.addEventListener('scroll', schedule, { passive: true })
+    window.addEventListener('resize', schedule)
+    // pages load their content after the header is mounted (and the header stays across pages), so look again whenever the page changes
+    const observer = new MutationObserver(schedule)
+    observer.observe(document.body, { childList: true, subtree: true })
+    return () => {
+      window.removeEventListener('scroll', schedule)
+      window.removeEventListener('resize', schedule)
+      observer.disconnect()
+      cancelAnimationFrame(frame)
+    }
+  }, [])
+
   const current = active !== null ? nav[active] : null
 
   return (
-    <header className="site-header" onMouseLeave={close} onMouseEnter={() => clearTimeout(timer.current)}>
+    <header ref={headerRef} className={`site-header${onWhite ? ' is-light' : ''}`} onMouseLeave={close} onMouseEnter={() => clearTimeout(timer.current)}>
       <div className="hd-top">
         <div className="hd-left">
           <button className="icon-btn hd-menu-btn" aria-label="Open menu" aria-expanded={menuOpen} onClick={() => setMenuOpen(true)}>
             <Icon><path d="M4 7h16M4 12h16M4 17h16" /></Icon>
           </button>
           <Link to="/" className="logo" aria-label="Metro Jewellers">
-            {/* the header is green on phones and tablets, so they get the white logo */}
-            <picture>
-              <source media="(max-width: 900px)" srcSet="/white-logo.png" />
-              <img src="/black-logo.png" alt="Metro Jewellers" />
-            </picture>
+            <img className="logo-dark" src="/black-logo.svg" alt="Metro Jewellers" />
+            <img className="logo-light" src="/white-logo.svg" alt="" aria-hidden="true" />
           </Link>
         </div>
 

@@ -7,6 +7,7 @@ import CheckGroup from '../components/collection/CheckGroup'
 import Chevron from '../components/collection/Chevron'
 import ProductArt from '../components/collection/ProductArt'
 import ProductSkeleton from '../components/collection/ProductSkeleton'
+import ProductPrice from '../components/ProductPrice'
 import SearchSuggestions from '../components/SearchSuggestions'
 import axiosClient from '../utils/axiosClient'
 import { productPath } from '../utils/productPath'
@@ -241,6 +242,7 @@ export default function SearchPage() {
                     <h3>
                       <Link to={productPath(p)}>{p.name}</Link>
                     </h3>
+                    <ProductPrice price={p.price} compareAtPrice={p.compareAtPrice} />
                     <p className="search-card-foot">
                       <Link to={productPath(p)}>View Details →</Link>
                     </p>

@@ -12,13 +12,17 @@ export const contactEnquiry = ({ name, email, phone, message }) =>
     message,
   ].join('\n')
 
-export const productEnquiry = ({ name, type, metal, ringSize, engraving, url }) =>
+// "AED 71,036" like the price on the product page; empty when the product has no price
+export const formatPrice = (price) =>
+  price == null || price === '' ? '' : `AED ${Number(price).toLocaleString('en-US', { maximumFractionDigits: 2 })}`
+
+export const productEnquiry = ({ name, type, metal, price, ringSize, engraving, url }) =>
   [
     'Hello Metro Jewellers, I would like to enquire about:',
     name,
     `Diamond type: ${type}`,
     `Metal: ${metal}`,
-    // ...(price ? [`Price: ${price}`] : []),
+    ...(formatPrice(price) ? [`Price: ${formatPrice(price)}`] : []),
     ...(ringSize ? [`Ring size: ${ringSize}`] : []),
     ...(engraving ? [`Engraving: ${engraving}`] : []),
     url,

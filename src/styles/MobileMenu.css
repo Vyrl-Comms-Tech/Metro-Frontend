@@ -48,10 +48,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 20px 10px 24px;
+  padding: 10px 20px 10px 20px;
   /* brand green, matching the mobile header, with the white logo and a white close icon */
-  background: var(--brand-green);
+  background: var(--brand-green-dark);
   color: var(--brand-white);
+  position: relative;
+  top: -1px;
 }
 
 .mobile-menu .mobile-logo img {
@@ -70,6 +72,8 @@
   background: none;
   color: inherit;
   cursor: pointer;
+  position: relative;
+  right: -15px;
 }
 
 /* top-level items */

@@ -16,7 +16,7 @@ export default function CategoriesAdmin() {
   const toggleActive = async (c) => {
     setActionError("");
     try {
-      await axiosClient.patch(`/categories/${c.id}/status`, { active: !(c.active ?? true) });
+      await axiosClient.patch(`/categories/${c.id}/status`, { active: c.active === false });
       reload();
     } catch (err) {
       setActionError(err.message);

@@ -238,9 +238,9 @@
     right: 10px;
     bottom: 15px;
     width: 30px;
-    height: 28px;
+    height: 30px;
     min-width: 30px;
-    min-height: 28px;
+    min-height: 30px;
   }
   .footer .ft-bottom p {
     font-size: 14px;
@@ -255,8 +255,11 @@
   }
 }
 
+
+
+
 /* small phones: one column, so nothing is squeezed */
-@media (max-width: 400px) {
+@media (max-width: 500px) {
   .footer .ft-grid {
     grid-template-columns: 1fr;
   }
