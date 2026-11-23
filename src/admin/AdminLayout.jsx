@@ -81,7 +81,7 @@ export default function AdminLayout() {
     >
       <aside className="ad-side">
         <div className="ad-brand">
-          <img src="/white-logo.svg" alt="Metro Jewellers" />
+          <img src="/metro-logo-white-v.png" alt="Metro Jewellers" />
         </div>
 
         <nav

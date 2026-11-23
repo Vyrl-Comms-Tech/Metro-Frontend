@@ -24,7 +24,7 @@
   --hd-pad: clamp(24px, 4.5vw, 72px);
   --hd-top-h: 110px;
   /* logo row height */
-  --hd-nav-h: 72px;
+  --hd-nav-h: 60px;
   /* nav bar height */
 }
 

@@ -21,8 +21,8 @@ const MAIN_CATEGORY = { gemstone: /^gemstones?$/, 'loose-diamond': /^loose-diamo
 const NO_FILTERS = { gemstone: [], type: [], shape: [] }
 const SORTS = [
   { value: 'best', label: 'Best selling' },
-  { value: 'carat-asc', label: 'Carat: small to large' },
-  { value: 'carat-desc', label: 'Carat: large to small' },
+  { value: 'price-asc', label: 'Price: low to high' },
+  { value: 'price-desc', label: 'Price: high to low' },
 ]
 
 // the stone's own facts for the filters (the sample stones are named by their stone)
@@ -45,15 +45,15 @@ const boundsOf = (values, step) => {
   const max = Math.ceil(Math.max(...nums) / step) * step
   return min === max ? null : { min: Number(min.toFixed(2)), max: Number(max.toFixed(2)), step: step >= 1 ? step : 0.1 }
 }
-const ticksOf = ({ min, max }) => {
-  const count = Math.min(10, Math.max(2, Math.round(max - min)))
-  return Array.from({ length: count + 1 }, (_, i) => Number((min + ((max - min) * i) / count).toFixed(2)))
+const ticksOf = ({ min, max }, decimals) => {
+  const count = decimals ? 5 : Math.min(10, Math.max(2, Math.round(max - min)))
+  return Array.from({ length: count + 1 }, (_, i) => Number((min + ((max - min) * i) / count).toFixed(decimals ? 1 : 2)))
 }
 
 // the Gemstone, Loose Diamond and Diamonds pages: a banner, filters on the left and a grid of stone cards (same look as the collections).
 // Stones added in the dashboard show here; the samples stay until the first one is added.
 export default function StonePage({ page }) {
-  const { title, stones: samples } = STONE_PAGES[page]
+  const { title } = STONE_PAGES[page]
   const { publicCategories, loaded } = useSite()
   const mainCategory = publicCategories.find((category) => MAIN_CATEGORY[page].test(category.slug))?.slug
   const { data, loading } = useAsync(
@@ -64,7 +64,7 @@ export default function StonePage({ page }) {
     [mainCategory],
   )
   const added = data?.items ?? []
-  const stones = added.length ? added : samples
+  const stones = added
 
   const [filters, setFilters] = useState(NO_FILTERS)
   const [caratRange, setCaratRange] = useState(null) // null = the whole range
@@ -74,7 +74,7 @@ export default function StonePage({ page }) {
   useDrawerLock(showFilters, closeFilters)
   const [groupsOpen] = useState(() => !onDrawerScreen()) // in the filter panel every group starts closed
 
-  const caratBounds = useMemo(() => boundsOf(stones.map((s) => s.carat), 1), [stones])
+  const caratBounds = useMemo(() => boundsOf(stones.map((s) => s.carat), page === 'gemstone' ? 0.1 : 1), [stones, page])
   const carat = caratRange ?? (caratBounds && [caratBounds.min, caratBounds.max])
 
   const toggle = (key, value) =>
@@ -82,12 +82,14 @@ export default function StonePage({ page }) {
 
   const groups = useMemo(
     () =>
-      GROUPS.map((group) => {
-        const options = unique(stones.map(FACETS[group.key]))
-        const counts = Object.fromEntries(options.map((o) => [o, stones.filter((s) => FACETS[group.key](s) === o).length]))
-        return { ...group, options, counts }
-      }).filter((group) => group.options.length > 0),
-    [stones],
+      GROUPS.filter((group) => !(page === 'gemstone' && group.key === 'type')) // gemstones aren't split into Natural / Lab Grown
+        .map((group) => {
+          const options = unique(stones.map(FACETS[group.key]))
+          const counts = Object.fromEntries(options.map((o) => [o, stones.filter((s) => FACETS[group.key](s) === o).length]))
+          return { ...group, options, counts }
+        })
+        .filter((group) => group.options.length > 0),
+    [stones, page],
   )
 
   const shown = useMemo(() => {
@@ -157,7 +159,7 @@ export default function StonePage({ page }) {
             ))}
 
             {caratBounds && (
-              <RangeGroup title="Carat weight" defaultOpen={groupsOpen} bounds={caratBounds} ticks={ticksOf(caratBounds)} value={carat} onChange={setCaratRange} />
+              <RangeGroup title="Carat weight" defaultOpen={groupsOpen} bounds={caratBounds} ticks={ticksOf(caratBounds, page === 'gemstone')} value={carat} onChange={setCaratRange} />
             )}
           </div>
           <DrawerFoot count={shown.length} label={shown.length === 1 ? 'stone' : 'stones'} active={active} onReset={clear} onClose={closeFilters} />
@@ -192,9 +194,9 @@ export default function StonePage({ page }) {
                 {shown.map((stone) => (
                   <StoneCard
                     key={stone.id}
-                    stone={stone}
-                    to={added.length ? productPath(stone, stone.variants?.[0]) : '/contact-us'}
-                    linkLabel={added.length ? 'View Details' : 'Enquire'}
+                    stone={page === 'gemstone' ? { ...stone, type: undefined, variants: undefined } : stone}
+                    to={productPath(stone, stone.variants?.[0])}
+                    linkLabel="View Details"
                   />
                 ))}
               </div>

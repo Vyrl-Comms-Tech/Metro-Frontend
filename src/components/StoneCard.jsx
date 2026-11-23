@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Heart } from 'lucide-react'
 import { useWishlist } from '../context/wishlistContext'
+import ProductPrice from './ProductPrice'
 
 const placeholder = '/gemstone-placeholder.png'
 
@@ -21,6 +22,7 @@ export default function StoneCard({ stone, to, linkLabel = 'View Details' }) {
         <div className="rg-body">
           {details && <p className="rg-meta">{details}</p>}
           <h3>{title}</h3>
+          <ProductPrice price={stone.price} compareAtPrice={stone.compareAtPrice} />
         </div>
       </Link>
       <button

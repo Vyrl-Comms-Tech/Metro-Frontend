@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import { DEFAULT_CONTENT } from '../data/siteDefaults'
-import { withCategoryFallbacks } from '../data/categoryFallbacks'
+import { LOADING_CATEGORIES } from '../data/categoryFallbacks'
 import { SiteContext } from './siteContext'
 import axiosClient from '../utils/axiosClient'
 import { useAsync } from '../utils/useAsync'
@@ -18,14 +18,15 @@ export default function SiteProvider({ children }) {
     const res = data
     const categories = Array.isArray(res?.items) ? res.items : Array.isArray(res) ? res : []
 
-    console.log("categories", categories)
+    const loaded = Boolean(data) || Boolean(error)
     return {
       categories,
-      publicCategories: categories.filter(
-        (category) => category.active === true
-      ),
+      // until the real categories arrive the menu shows the matching fallback, so it does not pop in
+      publicCategories: loaded
+        ? categories.filter((category) => category.active === true)
+        : LOADING_CATEGORIES,
       content: DEFAULT_CONTENT,
-      loaded: Boolean(data) || Boolean(error),
+      loaded,
       error,
       reload,
     }

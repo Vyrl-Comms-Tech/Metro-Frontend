@@ -40,6 +40,12 @@ const SUBCATEGORY_PAGES = {
   rings: { title: "Rings" },
 };
 
+// filters a page does not show, by collection slug (the keys are the ones in data/collectionFilters.js)
+const HIDDEN_FILTERS = {
+  bracelets: ["gemstone", "width", "carat"],
+  necklaces: ["width", "carat"],
+};
+
 // the wedding rings are a category of Rings of their own, listed one card per ring (not per metal): View All Rings leaves them out
 const WEDDING = "Wedding Rings";
 const WEDDING_GROUPS = ["gender", "category", "ringCovering", "style", "metal"];
@@ -297,7 +303,9 @@ function CollectionView({ collection, items, facets, groups, paging, filterState
   );
 
 
-  const checkGroups = facets
+  const hiddenFilters = HIDDEN_FILTERS[collection.slug] ?? [];
+  const rangeGroups = RANGE_GROUPS.filter((g) => !hiddenFilters.includes(g.key));
+  const checkGroups = (facets
     ? CHECK_GROUPS.map((g) => ({ ...g, facet: facetOf(g, facets) }))
       .filter((g) => g.facet.length > 0 && (!groups || groups.includes(g.key)))
       .map((g) => ({
@@ -309,7 +317,8 @@ function CollectionView({ collection, items, facets, groups, paging, filterState
       ...g,
       options: optionsFor(g, collection),
       counts: counts[g.key],
-    }));
+    }))
+  ).filter((g) => !hiddenFilters.includes(g.key));
 
   const active = countActive(filters, ranges);
   const visible = paging ? products : products.slice(0, shown);
@@ -371,7 +380,7 @@ function CollectionView({ collection, items, facets, groups, paging, filterState
               />
             ))}
 
-            {RANGE_GROUPS.map((g) => (
+            {rangeGroups.map((g) => (
               <RangeGroup
                 key={g.key}
                 defaultOpen={groupsOpen}

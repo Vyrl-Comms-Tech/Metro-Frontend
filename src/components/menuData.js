@@ -39,7 +39,7 @@ export const NAV = [
     menu: {
       type: 'contact',
       explore: ['About Metro Jewellers', 'Diamond Education', 'Celebrity Clients', 'Frequently Asked Questions', 'Blog', 'Our Partners'],
-      contact: ['Contact Us Form', 'Office 3107, Floor 31', 'Mazaya Tower AA1', 'Jumeirah Lake Towers', 'Dubai, UAE', '+971 58 568 0840', 'info@metrojewellers.com'],
+      contact: ['Contact Us Form', 'Ground Floor, Building 1', 'Sikka 49 Street, Old Gold Souk', 'Al Ras, Deira, Dubai, UAE', '(Opposite Mubarak Bin Abdullah Sweets)', '+971 58 568 0840', 'info@metrojewellers.com'],
       hours: [
         ['Monday', '8.30AM - 5.00PM'], ['Tuesday', '8.30AM - 5.00PM'], ['Wednesday', '8.30AM - 5.00PM'],
         ['Thursday', '8.30AM - 5.00PM'], ['Friday', '8.30AM - 5.00PM'], ['Saturday', 'Closed'], ['Sunday', 'Closed'],

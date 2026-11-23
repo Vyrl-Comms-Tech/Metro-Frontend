@@ -6,7 +6,7 @@ export const DEFAULT_CONTENT = {
     whatsapp: '971585680840',
     email: 'info@metrojewellers.com',
     phone: '+971 58 568 0840',
-    address: 'Office 3107, Floor 31\nMazaya Tower AA1\nJumeirah Lake Towers\nDubai, UAE',
+    address: 'Ground Floor, Building 1\nSikka 49 Street, Old Gold Souk\nAl Ras, Deira, Dubai, UAE\n(Opposite Mubarak Bin Abdullah Sweets)',
   },
   hours: { weekdays: '8.30AM - 5.00PM', weekend: 'Closed' },
   footer: {

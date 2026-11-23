@@ -30,6 +30,14 @@ const FALLBACK_CATEGORIES = [
   },
 ]
 
+// shown while the categories are loading, so the header menu is not empty. It has the same entries, titles and order
+// as the live data, so nothing changes on screen when the real categories arrive
+const bySlug = (slug) => FALLBACK_CATEGORIES.find((category) => category.slug === slug)
+export const LOADING_CATEGORIES = [
+  bySlug('jewellery'),
+  { ...bySlug('gemstones'), title: 'Gemstone', slug: 'gemstone' },
+].map((category) => ({ ...category, id: `fallback-${category.slug}`, active: true, showOnHome: true }))
+
 // `hidden` = slugs of inactive categories, which must not come back through the fallbacks
 export function withCategoryFallbacks(categories = [], hidden = []) {
   const bySlug = new Map(categories.map((category) => [category.slug, category]))

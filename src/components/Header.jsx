@@ -19,7 +19,7 @@ const WHITE_SECTIONS = ['.hero', '.gold-rates-section', '.col-banner', '.faqpage
 function CtaBlock({ text, button }) {
   return (
     <div className="mm-cta">
-      <p>{text}</p>z
+      <p>{text}</p>
       <a href="#" className="btn-dark">{button}</a>
     </div>
   )
@@ -153,8 +153,8 @@ export default function Header() {
             <Icon><path d="M4 7h16M4 12h16M4 17h16" /></Icon>
           </button>
           <Link to="/" className="logo" aria-label="Metro Jewellers">
-            <img className="logo-dark" src="/black-logo.svg" alt="Metro Jewellers" />
-            <img className="logo-light" src="/white-logo.svg" alt="" aria-hidden="true" />
+            <img className="logo-dark" src="/metro-logo.png" alt="Metro Jewellers" />
+            <img className="logo-light" src="/metro-logo-white-v.png" alt="" aria-hidden="true" />
           </Link>
         </div>
 
