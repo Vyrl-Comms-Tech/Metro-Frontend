@@ -88,17 +88,6 @@ export const PREVIEW_PRODUCTS = [
     preview: true,
   },
   {
-    id: 'preview-jewellery-bracelets',
-    name: 'Diamond Bracelet',
-    mainCategory: 'jewellery',
-    category: 'Bracelets',
-    metal: '18k Yellow Gold',
-    gemstone: 'Diamond',
-    description: 'Preview of our diamond bracelets. Product details and availability will be updated when the collection is added.',
-    images: [publicImage('d4.jpg')],
-    preview: true,
-  },
-  {
     id: 'preview-jewellery-exclusive',
     name: 'Exclusive Diamond Piece',
     mainCategory: 'jewellery',

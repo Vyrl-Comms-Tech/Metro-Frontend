@@ -275,7 +275,7 @@ function ProductView({ product, slug }) {
             ]
             : []),
           // Jewellery > Earrings (the sub category pages)
-          ...(["Rings", "Earrings", "Bracelets", "Necklaces"].includes(product.subCategory)
+          ...(["Rings", "Earrings", "Necklaces"].includes(product.subCategory)
             ? [{ label: product.subCategory, to: `/collections/${product.subCategory.toLowerCase()}` }]
             : []),
           { label: variantName },

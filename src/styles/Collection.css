@@ -7,7 +7,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  height: 300px;
+  height: 400px;
   /* the title starts on the same edge as the header and the page content */
   padding: 0 max(var(--site-gutter), calc((100% - 1600px) / 2 + var(--site-gutter)));
   overflow: hidden;
@@ -44,6 +44,25 @@
   object-fit: cover;
   -webkit-mask-image: linear-gradient(to right, transparent, var(--brand-black) 45%);
   mask-image: linear-gradient(to right, transparent, var(--brand-black) 45%);
+}
+
+/* These artwork files include the title, so display the whole composition. */
+.collection .col-banner-full .col-banner-img {
+  width: 100%;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.collection .col-banner-full h1 {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* chevron (filter groups + sort select) */
@@ -484,6 +503,24 @@
     width: 70%;
     opacity: 0.85;
     object-position: 70% center;
+  }
+
+  .collection .col-banner-full .col-banner-img {
+    position: static;
+    display: block;
+    width: 100%;
+    height: auto;
+    opacity: 1;
+    object-fit: contain;
+  }
+
+  .collection .col-banner-full {
+    height: auto;
+    padding: 0;
+  }
+
+  .collection .col-banner-full picture {
+    display: block;
   }
 
   .collection .col-layout {

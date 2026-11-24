@@ -11,7 +11,6 @@ const COLUMNS = [
     links: [
       { label: "Recently Made Rings", to: "/collections/engagement-rings" },
       { label: "Diamond Studs", to: "/collections/earrings" },
-      { label: "Tennis Bracelets", to: "/collections/bracelets" },
       { label: "Wedding Rings", to: "/collections/wedding-rings" },
       { label: "Jewellery", to: "/collections/jewellery" },
     ],

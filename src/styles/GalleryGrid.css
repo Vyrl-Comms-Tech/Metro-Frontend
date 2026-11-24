@@ -48,6 +48,23 @@
   background: var(--brand-white);
 }
 
+.gallery-grid .gg-tile-skeleton {
+  background: var(--brand-green-tint);
+}
+
+.gallery-grid .gg-tile-skeleton::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, var(--brand-white-glow), transparent);
+  transform: translateX(-100%);
+  animation: gg-skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes gg-skeleton-shimmer {
+  to { transform: translateX(100%); }
+}
+
 .gallery-grid .gg-tile {
   position: relative;
   display: block;
@@ -111,6 +128,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .gallery-grid .gg-tile-skeleton::before {
+    animation: none;
+  }
+
   .gallery-grid .gg-tile img,
   .gallery-grid .gg-tile video,
   .gallery-grid .gg-tile::after {

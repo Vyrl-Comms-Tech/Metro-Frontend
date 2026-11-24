@@ -6,7 +6,6 @@ import '../styles/SearchBar.css'
 
 const POPULAR = [
   { label: 'Earrings', to: '/collections/earrings' },
-  { label: 'Bracelets', to: '/collections/bracelets' },
   { label: 'Necklaces', to: '/collections/necklaces' },
 ]
 

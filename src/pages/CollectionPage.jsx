@@ -34,7 +34,6 @@ const PER_PAGE = window.matchMedia("(max-width: 1000px)").matches ? 16 : 15;
 
 
 const SUBCATEGORY_PAGES = {
-  bracelets: { title: "Bracelets" },
   necklaces: { title: "Necklaces" },
   earrings: { title: "Earrings" },
   rings: { title: "Rings" },
@@ -42,7 +41,6 @@ const SUBCATEGORY_PAGES = {
 
 // filters a page does not show, by collection slug (the keys are the ones in data/collectionFilters.js)
 const HIDDEN_FILTERS = {
-  bracelets: ["gemstone", "width", "carat"],
   necklaces: ["width", "carat"],
 };
 

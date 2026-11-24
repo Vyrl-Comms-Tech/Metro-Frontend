@@ -24,7 +24,6 @@ const FALLBACK_CATEGORIES = [
       { title: 'Earrings', options: ['Diamond Studs', 'Diamond Hoops', 'Fashion Drops', 'Fashion Studs', 'Letter Studs'] },
       { title: 'Necklaces', options: ['Diamond Pendants', 'Fashion Pendants', 'English Letter Pendants', 'Arabic Letter Pendants'] },
       { title: 'Rings', options: ['Plain', 'Diamond', 'Exclusive Engagement Rings', 'Eternity Rings', 'Gemstone Rings', 'Fashion Rings', 'Constellation Rings', 'Fancy Coloured Diamond Rings'] },
-      { title: 'Bracelets', options: ['Tennis Bracelets', 'Letter Bracelets'] },
     ],
     description: 'Explore the full collection',
   },

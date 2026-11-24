@@ -31,13 +31,6 @@ export default function Hero() {
       to: '/collections/earrings',
       className: 'hero-slide-earrings',
     },
-    {
-      heading: 'Bracelets made to shine',
-      buttonText: 'Shop Bracelets',
-      image: '/hero-bracelets.png',
-      to: '/collections/bracelets',
-      className: 'hero-slide-bracelets',
-    },
   ]
 
   useEffect(() => {

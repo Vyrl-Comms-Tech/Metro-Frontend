@@ -27,7 +27,6 @@ export const NAV = [
           options: ['Exclusive Engagement Rings', 'Wedding Rings', 'Eternity Rings', 'Gemstone Rings', 'Fashion Rings', 'Constellation Rings', 'Fancy Coloured Diamond Rings'],
         },
         { title: 'Earrings', options: ['Diamond Studs', 'Diamond Hoops', 'Fashion Drops', 'Fashion Studs', 'Letter Studs'] },
-        { title: 'Bracelets', options: ['Tennis Bracelets', 'Letter Bracelets'] },
         { title: 'Necklaces', options: ['Diamond Pendants', 'Fashion Pendants', 'English Letter Pendants', 'Arabic Letter Pendants'] },
       ],
     },

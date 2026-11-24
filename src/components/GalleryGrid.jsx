@@ -1,17 +1,14 @@
-import { useSite } from '../context/siteContext'
 import axiosClient from '../utils/axiosClient'
 import { useAsync } from '../utils/useAsync'
 import '../styles/GalleryGrid.css'
 
-export default function GalleryGrid({ limit = 12}) {
-  const { content } = useSite()
-  // const href = content.footer?.instagram || '#'
-  const { data } = useAsync(() => axiosClient.get('/custom-jewellery', { params: { limit, active: true } }), [limit])
+export default function GalleryGrid({ limit = 12 }) {
+  const { data, loading } = useAsync(() => axiosClient.get('/custom-jewellery', { params: { limit, active: true } }), [limit])
 
   const tiles = (data?.items ?? []).map((i) => ({ key: i.id, src: i.image, video: i.video, alt: i.title || 'Custom jewellery' }))
 
   // nothing added in the admin yet
-  if (tiles.length === 0) return null
+  if (!loading && tiles.length === 0) return null
 
   return (
     <section className="gallery-grid" aria-labelledby="gallery-title">
@@ -21,8 +18,12 @@ export default function GalleryGrid({ limit = 12}) {
         <p>Real pieces and real moments from the Metro Jewellers family.</p>
       </header>
 
-      <div className="gg-grid">
-        {tiles.map((t) => (
+      <div className="gg-grid" aria-busy={loading} role={loading ? 'status' : undefined} aria-label={loading ? 'Loading custom jewellery' : undefined}>
+        {loading ? (
+          Array.from({ length: limit }, (_, index) => (
+            <div className="gg-tile gg-tile-skeleton" key={index} aria-hidden="true" />
+          ))
+        ) : tiles.map((t) => (
           // <a className="gg-tile" key={t.key} href={href} target="_blank" rel="noreferrer" aria-label={t.alt}>
           <a className="gg-tile" key={t.key} target="_blank" rel="noreferrer" aria-label={t.alt}>
             {t.video ? (
