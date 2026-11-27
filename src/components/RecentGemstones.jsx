@@ -8,7 +8,7 @@ import axiosClient from '../utils/axiosClient'
 import { useAsync } from '../utils/useAsync'
 import { useSite } from '../context/siteContext'
 import { productPath } from '../utils/productPath'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 
 // placeholder cards, shown until the gemstones arrive from the server
 function StoneSkeletons({ count = 5 }) {
@@ -26,7 +26,7 @@ function StoneSkeletons({ count = 5 }) {
 }
 
 export default function RecentGemstones() {
-  const { publicCategories } = useSite()
+  const { publicCategories, loaded } = useSite()
   const [limit, setLimit] = useState(
     window.innerWidth <= 768 ? 6 : 5
   );
@@ -48,11 +48,14 @@ export default function RecentGemstones() {
 
 
   const mainCategory = publicCategories.find((category) => /^gemstones?$/.test(category.slug))?.slug
-  const { data } = useAsync(
+  const { data, loading } = useAsync(
     () => (mainCategory ? axiosClient.get('/products/getAll', { params: { mainCategory, limit: limit } }) : Promise.resolve(null)),
     [mainCategory],
   )
   const gemstones = data?.items ?? []
+
+  // hide the section once loading has finished with nothing to show
+  if (loaded && !loading && !gemstones.length) return null
 
   return (
     <section className="recent-gemstones" aria-labelledby="recent-gemstones-title">
